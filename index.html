@@ -114,30 +114,65 @@
         </div>
     </section>
 
-    <footer>
-        <div class="container footer-content">
-            <div class="footer-col">
-                <h3>WisdomHub<span class="dot">.</span></h3>
-                <p>Making education easy and accessible for everyone.</p>
-            </div>
-            <div class="footer-col">
-                <h4>Quick Links</h4>
-                <a href="#">Universities</a>
-                <a href="#">Secondary</a>
-                <a href="#">AI Tools</a>
-            </div>
-            <div class="footer-col">
-                <h4>Support</h4>
-                <a href="#">Contact Us</a>
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms & Conditions</a>
-            </div>
+<footer>
+    <div class="container footer-content">
+        <div class="footer-col">
+            <h3>WisdomHub<span class="dot">.</span></h3>
+            <p>Making education easy and accessible for everyone.</p>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 WisdomHub. All rights reserved.</p>
+        <div class="footer-col">
+            <h4>Quick Links</h4>
+            <a href="#">Universities</a>
+            <a href="#">Secondary</a>
+            <a href="#">AI Tools</a>
         </div>
-    </footer>
+        <div class="footer-col">
+            <h4>Support</h4>
+            <a href="#">Contact Us</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms & Conditions</a>
+        </div>
+    </div>
+    
+    <div class="footer-bottom">
+        <p>&copy; 2026 WisdomHub. All rights reserved.</p>
+        <p id="realtime-clock" class="clock-text"></p>
+    </div>
+</footer>
+
 
     <script src="js/main.js"></script>
+<script>
+    function updateFooterClock() {
+        const clockElement = document.getElementById('realtime-clock');
+        const now = new Date();
+
+        // Configure Date Format (e.g., "Mon, Jan 25, 2026")
+        const dateOptions = { 
+            weekday: 'short', 
+            year: 'numeric', 
+            month: 'short', 
+            day: 'numeric' 
+        };
+        
+        // Configure Time Format (e.g., "11:24:16 PM")
+        const timeOptions = { 
+            hour: '2-digit', 
+            minute: '2-digit', 
+            second: '2-digit' 
+        };
+
+        const dateString = now.toLocaleDateString('en-US', dateOptions);
+        const timeString = now.toLocaleTimeString('en-US', timeOptions);
+
+        // Update the HTML
+        clockElement.textContent = `${dateString} | ${timeString}`;
+    }
+
+    // Update immediately, then every second
+    updateFooterClock();
+    setInterval(updateFooterClock, 1000);
+</script>
+
 </body>
 </html>
