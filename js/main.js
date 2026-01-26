@@ -3,10 +3,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const mobileBtn = document.querySelector('.mobile-menu-btn');
     const navLinks = document.querySelector('.nav-links');
 
-    if (mobileBtn) {
+    if (mobileBtn && navLinks) {
         mobileBtn.addEventListener('click', () => {
-            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
-            if (navLinks.style.display === 'flex') {
+            const isVisible = navLinks.style.display === 'flex';
+            navLinks.style.display = isVisible ? 'none' : 'flex';
+            
+            if (!isVisible) {
                 navLinks.style.flexDirection = 'column';
                 navLinks.style.position = 'absolute';
                 navLinks.style.top = '70px';
@@ -15,24 +17,40 @@ document.addEventListener('DOMContentLoaded', () => {
                 navLinks.style.background = '#fff';
                 navLinks.style.padding = '1rem';
                 navLinks.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+                navLinks.style.zIndex = '1000';
             }
         });
     }
 
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (event) => {
+        if (navLinks && navLinks.style.display === 'flex' && 
+            !navLinks.contains(event.target) && 
+            event.target !== mobileBtn) {
+            navLinks.style.display = 'none';
+        }
+    });
+
     // Sticky Navbar Shadow on Scroll
     window.addEventListener('scroll', () => {
         const navbar = document.querySelector('.navbar');
-        if (window.scrollY > 0) {
-            navbar.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
-        } else {
-            navbar.style.boxShadow = '0 2px 10px rgba(0,0,0,0.05)';
+        if (navbar) {
+            navbar.style.boxShadow = window.scrollY > 0 
+                ? '0 2px 10px rgba(0,0,0,0.1)' 
+                : '0 2px 10px rgba(0,0,0,0.05)';
         }
     });
+
+    // Initialize contact form validation if form exists on page
+    validateContactForm();
 });
 
 // Search Functionality
 function searchMaterials() {
-    const query = document.getElementById('searchInput').value.toLowerCase();
+    const searchInput = document.getElementById('searchInput');
+    if (!searchInput) return;
+    
+    const query = searchInput.value.toLowerCase().trim();
     const cards = document.querySelectorAll('.card');
     
     if (!query) {
@@ -49,9 +67,12 @@ function searchMaterials() {
         if (title.includes(query) || desc.includes(query)) {
             card.style.display = 'block';
             card.style.border = '2px solid var(--primary-color)';
+            card.style.backgroundColor = '#f0f7ff'; // Light blue highlight
             found = true;
         } else {
             card.style.display = 'none';
+            card.style.border = '1px solid transparent';
+            card.style.backgroundColor = ''; // Reset background
         }
     });
 
@@ -61,6 +82,76 @@ function searchMaterials() {
         cards.forEach(card => {
             card.style.display = 'block';
             card.style.border = '1px solid transparent';
+            card.style.backgroundColor = '';
         });
+        searchInput.focus();
     }
 }
+
+// Contact Form Validation
+function validateContactForm() {
+    const form = document.getElementById('contactForm');
+    if (!form) return;
+    
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const message = document.getElementById('message').value.trim();
+        const subject = document.getElementById('subject').value;
+        
+        // Simple validation
+        if (!name || !email || !message) {
+            alert('Please fill in all required fields.');
+            return;
+        }
+        
+        if (!isValidEmail(email)) {
+            alert('Please enter a valid email address.');
+            return;
+        }
+        
+        // Show success message
+        const successMessage = document.createElement('div');
+        successMessage.innerHTML = `
+            <div style="background-color: #d4edda; color: #155724; padding: 1rem; border-radius: 6px; margin: 1rem 0;">
+                <strong>Thank you for your message!</strong><br>
+                We will respond within 24 hours.
+            </div>
+        `;
+        
+        // Insert success message before form
+        form.parentNode.insertBefore(successMessage, form);
+        
+        // Reset form
+        form.reset();
+        
+        // Remove success message after 5 seconds
+        setTimeout(() => {
+            successMessage.remove();
+        }, 5000);
+        
+        // In a real application, you would send the data to a server here
+        // Example: fetch('/api/contact', { method: 'POST', body: new FormData(form) })
+        
+        console.log('Form submitted:', { name, email, subject, message });
+    });
+}
+
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+// Add search on Enter key press
+document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                searchMaterials();
+            }
+        });
+    }
+});
