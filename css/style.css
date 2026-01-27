@@ -516,3 +516,118 @@ footer {
         font-size: 2rem;
     }
 }
+/* Active link styling in navbar */
+.nav-links a.active {
+    color: var(--primary-color);
+    font-weight: 600;
+    position: relative;
+}
+
+.nav-links a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--primary-color);
+    border-radius: 2px;
+}
+
+/* Grid layouts for content pages */
+.content-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.content-card {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: var(--transition);
+}
+
+.content-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Subject tags */
+.subject-tag {
+    display: inline-block;
+    background: var(--bg-light);
+    color: var(--text-dark);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    margin: 0.25rem;
+}
+
+/* Quiz question styling */
+.quiz-question {
+    background: white;
+    border-left: 4px solid var(--primary-color);
+    padding: 1rem 1.5rem;
+    margin: 1rem 0;
+    border-radius: 0 8px 8px 0;
+}
+
+.quiz-option {
+    background: var(--bg-light);
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.quiz-option:hover {
+    background: #e5e7eb;
+}
+
+.quiz-option.correct {
+    background: #d4edda;
+    border-left: 4px solid #28a745;
+}
+
+.quiz-option.incorrect {
+    background: #f8d7da;
+    border-left: 4px solid #dc3545;
+}
+
+/* Year badge */
+.year-badge {
+    background: var(--primary-color);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* Resource counter */
+.resource-count {
+    background: var(--bg-light);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+/* Mobile adjustments for new content */
+@media (max-width: 768px) {
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .content-card {
+        padding: 1rem;
+    }
+    
+    .nav-links a.active::after {
+        display: none;
+    }
+}
