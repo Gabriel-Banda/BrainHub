@@ -1,11 +1,11 @@
-# WisdomHub
+# BrainHub
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 ![Status](https://img.shields.io/badge/Status-Active-success)
 ![Made With](https://img.shields.io/badge/Made%20with-HTML%2C%20CSS%2C%20JS-blue)
 ![Open Source](https://img.shields.io/badge/Open%20Source-Yes-brightgreen)
 ![Contributions](https://img.shields.io/badge/Contributions-Welcome-orange)
 
-**WisdomHub** is an open-source platform built to help students easily access learning resources and study materials **for free**. The project includes a responsive web interface (HTML/CSS/JavaScript) that delivers educational content in a clean, accessible format.
+**BrainHub** is an open-source platform built to help students easily access learning resources and study materials **for free**. The project includes a responsive web interface (HTML/CSS/JavaScript) that delivers educational content in a clean, accessible format.
 
 ## 🚀 Features
 
@@ -35,4 +35,4 @@ For questions or support, open an issue or reach out via the repository’s issu
 
 ##
 
-<i>🎓 Thanks for exploring WisdomHub! Helping students access what they need to learn isn't just development — it's impact. 🎯</i>
+<i>🎓 Thanks for exploring BrainHub! Helping students access what they need to learn isn't just development — it's impact. 🎯</i>

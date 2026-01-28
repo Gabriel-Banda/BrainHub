@@ -1,6 +1,6 @@
-# Contributing to WisdomHub
+# Contributing to BrainHub
 
-Thank you for your interest in contributing to **WisdomHub**!  
+Thank you for your interest in contributing to **BrainHub**!  
 This project exists to make education more accessible, and every improvement helps students learn better.
 
 ---
