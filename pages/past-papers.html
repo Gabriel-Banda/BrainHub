@@ -1,202 +1,425 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Past Exam Papers | BrainHub</title>
-    <meta name="description" content="Access past examination papers with solutions for effective exam preparation.">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
-<body>
-
+    <meta
+      name="description"
+      content="Access past examination papers with solutions for effective exam preparation."
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
     <nav class="navbar">
-        <div class="container nav-container">
-            <a href="../index.html" class="logo">BrainHub<span class="dot">.</span></a>
-            <button class="mobile-menu-btn" aria-label="Toggle navigation">
-                <i class="fas fa-bars"></i>
-            </button>
-            <ul class="nav-links">
-                <li><a href="../index.html">Home</a></li>
-                <li><a href="universities.html">Universities</a></li>
-                <li><a href="secondary.html">Secondary</a></li>
-                <li><a href="past-papers.html" class="active">Past Papers</a></li>
-                <li><a href="quizzes.html">Quizzes</a></li>
-                <li><a href="about.html">About</a></li>
-            </ul>
-        </div>
+      <div class="container nav-container">
+        <a href="../index.html" class="logo"
+          >BrainHub<span class="dot">.</span></a
+        >
+        <button class="mobile-menu-btn" aria-label="Toggle navigation">
+          <i class="fas fa-bars"></i>
+        </button>
+        <ul class="nav-links">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="universities.html">Universities</a></li>
+          <li><a href="secondary.html">Secondary</a></li>
+          <li><a href="past-papers.html" class="active">Past Papers</a></li>
+          <li><a href="quizzes.html">Quizzes</a></li>
+          <li><a href="about.html">About</a></li>
+        </ul>
+      </div>
     </nav>
 
     <main class="container">
-        <a href="../index.html" class="back-home">
-            <i class="fas fa-arrow-left"></i> Back to Home
-        </a>
-        
-        <div class="policy-content">
-            <div class="content-header">
-                <h1>Past Examination Papers</h1>
-                <p class="subtitle">Practice with real exam papers and solutions</p>
-            </div>
+      <a href="../index.html" class="back-home">
+        <i class="fas fa-arrow-left"></i> Back to Home
+      </a>
 
-            <div class="content-section">
-                <h2>Why Practice with Past Papers?</h2>
-                <p>Research shows that students who practice with past papers score significantly higher in exams. Our collection provides:</p>
-                <ul>
-                    <li><strong>Familiarity with exam format</strong> and question styles</li>
-                    <li><strong>Time management practice</strong> under exam conditions</li>
-                    <li><strong>Identification of key topics</strong> that frequently appear</li>
-                    <li><strong>Self-assessment opportunities</strong> with detailed solutions</li>
-                    <li><strong>Confidence building</strong> through repeated practice</li>
-                </ul>
-            </div>
-
-            <div class="content-section">
-                <h2>Browse by Examination Body</h2>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
-                    <div style="background: white; border: 2px solid var(--primary-color); border-radius: 10px; padding: 1.5rem; text-align: center;">
-                        <div style="background: #eff6ff; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
-                            <i class="fas fa-graduation-cap" style="color: var(--primary-color); font-size: 1.5rem;"></i>
-                        </div>
-                        <h3 style="margin: 0.5rem 0;">ECZ</h3>
-                        <p style="margin: 0; font-size: 0.9rem;">Examinations Council of Zambia (Grades 9 & 12)</p>
-                    </div>
-                    
-                    <div style="background: white; border: 2px solid #10b981; border-radius: 10px; padding: 1.5rem; text-align: center;">
-                        <div style="background: #ecfdf5; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
-                            <i class="fas fa-university" style="color: #10b981; font-size: 1.5rem;"></i>
-                        </div>
-                        <h3 style="margin: 0.5rem 0;">University Exams</h3>
-                        <p style="margin: 0; font-size: 0.9rem;">Undergraduate and postgraduate examinations</p>
-                    </div>
-                    
-                    <div style="background: white; border: 2px solid #f97316; border-radius: 10px; padding: 1.5rem; text-align: center;">
-                        <div style="background: #fff7ed; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
-                            <i class="fas fa-certificate" style="color: #f97316; font-size: 1.5rem;"></i>
-                        </div>
-                        <h3 style="margin: 0.5rem 0;">Professional</h3>
-                        <p style="margin: 0; font-size: 0.9rem;">Professional certification and licensing exams</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="content-section">
-                <h2>Recent Additions</h2>
-                <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 8px; margin-top: 1rem;">
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-                        <div style="background: white; padding: 1rem; border-radius: 6px;">
-                            <div style="display: flex; justify-content: space-between; align-items: start;">
-                                <h4 style="margin: 0 0 0.5rem;">Mathematics Paper 2</h4>
-                                <span style="background: #10b981; color: white; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">2025</span>
-                            </div>
-                            <p style="margin: 0; font-size: 0.9rem; color: var(--text-light);">Grade 12 ECZ Examination</p>
-                        </div>
-                        
-                        <div style="background: white; padding: 1rem; border-radius: 6px;">
-                            <div style="display: flex; justify-content: space-between; align-items: start;">
-                                <h4 style="margin: 0 0 0.5rem;">Chemistry Final</h4>
-                                <span style="background: var(--primary-color); color: white; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">2024</span>
-                            </div>
-                            <p style="margin: 0; font-size: 0.9rem; color: var(--text-light);">University of Zambia Year 2</p>
-                        </div>
-                        
-                        <div style="background: white; padding: 1rem; border-radius: 6px;">
-                            <div style="display: flex; justify-content: space-between; align-items: start;">
-                                <h4 style="margin: 0 0 0.5rem;">Biology Paper 1</h4>
-                                <span style="background: #f97316; color: white; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">2025</span>
-                            </div>
-                            <p style="margin: 0; font-size: 0.9rem; color: var(--text-light);">Grade 9 ECZ Examination</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="content-section">
-                <h2>How to Use Past Papers Effectively</h2>
-                <ol>
-                    <li><strong>Simulate exam conditions:</strong> Time yourself and avoid distractions</li>
-                    <li><strong>Complete the entire paper</strong> before checking solutions</li>
-                    <li><strong>Review incorrect answers</strong> and understand your mistakes</li>
-                    <li><strong>Focus on weak areas</strong> identified through practice</li>
-                    <li><strong>Practice regularly</strong> but avoid cramming</li>
-                    <li><strong>Use mark schemes</strong> to understand grading criteria</li>
-                </ol>
-            </div>
-
-            <div class="content-section contact-info">
-                <h3>Search Past Papers</h3>
-                <div style="background: white; padding: 1.5rem; border-radius: 8px; margin-top: 1rem;">
-                    <p style="margin-bottom: 1rem;">Find specific papers by subject, year, or examination body:</p>
-                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                        <input type="text" placeholder="Enter subject or course name" style="flex: 1; padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 6px; min-width: 200px;">
-                        <select style="padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 6px;">
-                            <option>Select Year</option>
-                            <option>2025</option>
-                            <option>2024</option>
-                            <option>2023</option>
-                            <option>2022</option>
-                        </select>
-                        <button style="background: var(--primary-color); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 6px; cursor: pointer;">Search Papers</button>
-                    </div>
-                </div>
-            </div>
+      <div class="policy-content">
+        <div class="content-header">
+          <h1>Past Examination Papers</h1>
+          <p class="subtitle">Practice with real exam papers and solutions</p>
         </div>
+
+        <div class="content-section">
+          <h2>Why Practice with Past Papers?</h2>
+          <p>
+            Research shows that students who practice with past papers score
+            significantly higher in exams. Our collection provides:
+          </p>
+          <ul>
+            <li>
+              <strong>Familiarity with exam format</strong> and question styles
+            </li>
+            <li>
+              <strong>Time management practice</strong> under exam conditions
+            </li>
+            <li>
+              <strong>Identification of key topics</strong> that frequently
+              appear
+            </li>
+            <li>
+              <strong>Self-assessment opportunities</strong> with detailed
+              solutions
+            </li>
+            <li>
+              <strong>Confidence building</strong> through repeated practice
+            </li>
+          </ul>
+        </div>
+
+        <div class="content-section">
+          <h2>Browse by Examination Body</h2>
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+              gap: 1.5rem;
+              margin-top: 1rem;
+            "
+          >
+            <div
+              style="
+                background: white;
+                border: 2px solid var(--primary-color);
+                border-radius: 10px;
+                padding: 1.5rem;
+                text-align: center;
+              "
+            >
+              <div
+                style="
+                  background: #eff6ff;
+                  width: 60px;
+                  height: 60px;
+                  border-radius: 50%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  margin: 0 auto 1rem;
+                "
+              >
+                <i
+                  class="fas fa-graduation-cap"
+                  style="color: var(--primary-color); font-size: 1.5rem"
+                ></i>
+              </div>
+              <h3 style="margin: 0.5rem 0">ECZ</h3>
+              <p style="margin: 0; font-size: 0.9rem">
+                Examinations Council of Zambia (Grades 9 & 12)
+              </p>
+            </div>
+
+            <div
+              style="
+                background: white;
+                border: 2px solid #10b981;
+                border-radius: 10px;
+                padding: 1.5rem;
+                text-align: center;
+              "
+            >
+              <div
+                style="
+                  background: #ecfdf5;
+                  width: 60px;
+                  height: 60px;
+                  border-radius: 50%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  margin: 0 auto 1rem;
+                "
+              >
+                <i
+                  class="fas fa-university"
+                  style="color: #10b981; font-size: 1.5rem"
+                ></i>
+              </div>
+              <h3 style="margin: 0.5rem 0">University Exams</h3>
+              <p style="margin: 0; font-size: 0.9rem">
+                Undergraduate and postgraduate examinations
+              </p>
+            </div>
+
+            <div
+              style="
+                background: white;
+                border: 2px solid #f97316;
+                border-radius: 10px;
+                padding: 1.5rem;
+                text-align: center;
+              "
+            >
+              <div
+                style="
+                  background: #fff7ed;
+                  width: 60px;
+                  height: 60px;
+                  border-radius: 50%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  margin: 0 auto 1rem;
+                "
+              >
+                <i
+                  class="fas fa-certificate"
+                  style="color: #f97316; font-size: 1.5rem"
+                ></i>
+              </div>
+              <h3 style="margin: 0.5rem 0">Professional</h3>
+              <p style="margin: 0; font-size: 0.9rem">
+                Professional certification and licensing exams
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="content-section">
+          <h2>Recent Additions</h2>
+          <div
+            style="
+              background: var(--bg-light);
+              padding: 1.5rem;
+              border-radius: 8px;
+              margin-top: 1rem;
+            "
+          >
+            <div
+              style="
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 1rem;
+              "
+            >
+              <div style="background: white; padding: 1rem; border-radius: 6px">
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: start;
+                  "
+                >
+                  <h4 style="margin: 0 0 0.5rem">Mathematics Paper 2</h4>
+                  <span
+                    style="
+                      background: #10b981;
+                      color: white;
+                      padding: 0.2rem 0.5rem;
+                      border-radius: 4px;
+                      font-size: 0.8rem;
+                    "
+                    >2025</span
+                  >
+                </div>
+                <p
+                  style="margin: 0; font-size: 0.9rem; color: var(--text-light)"
+                >
+                  Grade 12 ECZ Examination
+                </p>
+              </div>
+
+              <div style="background: white; padding: 1rem; border-radius: 6px">
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: start;
+                  "
+                >
+                  <h4 style="margin: 0 0 0.5rem">Chemistry Final</h4>
+                  <span
+                    style="
+                      background: var(--primary-color);
+                      color: white;
+                      padding: 0.2rem 0.5rem;
+                      border-radius: 4px;
+                      font-size: 0.8rem;
+                    "
+                    >2024</span
+                  >
+                </div>
+                <p
+                  style="margin: 0; font-size: 0.9rem; color: var(--text-light)"
+                >
+                  University of Zambia Year 2
+                </p>
+              </div>
+
+              <div style="background: white; padding: 1rem; border-radius: 6px">
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: start;
+                  "
+                >
+                  <h4 style="margin: 0 0 0.5rem">Biology Paper 1</h4>
+                  <span
+                    style="
+                      background: #f97316;
+                      color: white;
+                      padding: 0.2rem 0.5rem;
+                      border-radius: 4px;
+                      font-size: 0.8rem;
+                    "
+                    >2025</span
+                  >
+                </div>
+                <p
+                  style="margin: 0; font-size: 0.9rem; color: var(--text-light)"
+                >
+                  Grade 9 ECZ Examination
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="content-section">
+          <h2>How to Use Past Papers Effectively</h2>
+          <ol>
+            <li>
+              <strong>Simulate exam conditions:</strong> Time yourself and avoid
+              distractions
+            </li>
+            <li>
+              <strong>Complete the entire paper</strong> before checking
+              solutions
+            </li>
+            <li>
+              <strong>Review incorrect answers</strong> and understand your
+              mistakes
+            </li>
+            <li>
+              <strong>Focus on weak areas</strong> identified through practice
+            </li>
+            <li><strong>Practice regularly</strong> but avoid cramming</li>
+            <li>
+              <strong>Use mark schemes</strong> to understand grading criteria
+            </li>
+          </ol>
+        </div>
+
+        <div class="content-section contact-info">
+          <h3>Search Past Papers</h3>
+          <div
+            style="
+              background: white;
+              padding: 1.5rem;
+              border-radius: 8px;
+              margin-top: 1rem;
+            "
+          >
+            <p style="margin-bottom: 1rem">
+              Find specific papers by subject, year, or examination body:
+            </p>
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap">
+              <input
+                type="text"
+                placeholder="Enter subject or course name"
+                style="
+                  flex: 1;
+                  padding: 0.75rem;
+                  border: 2px solid #e5e7eb;
+                  border-radius: 6px;
+                  min-width: 200px;
+                "
+              />
+              <select
+                style="
+                  padding: 0.75rem;
+                  border: 2px solid #e5e7eb;
+                  border-radius: 6px;
+                "
+              >
+                <option>Select Year</option>
+                <option>2025</option>
+                <option>2024</option>
+                <option>2023</option>
+                <option>2022</option>
+              </select>
+              <button
+                style="
+                  background: var(--primary-color);
+                  color: white;
+                  border: none;
+                  padding: 0.75rem 1.5rem;
+                  border-radius: 6px;
+                  cursor: pointer;
+                "
+              >
+                Search Papers
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </main>
 
     <footer>
-        <div class="container footer-content">
-            <div class="footer-col">
-                <h3>BrainHub<span class="dot">.</span></h3>
-                <p>Making education easy and accessible for everyone.</p>
-            </div>
-            <div class="footer-col">
-                <h4>Quick Links</h4>
-                <a href="../index.html">Home</a>
-                <a href="universities.html">Universities</a>
-                <a href="secondary.html">Secondary</a>
-                <a href="past-papers.html" class="active">Past Papers</a>
-                <a href="quizzes.html">Quizzes</a>
-                <a href="about.html">About Us</a>
-                            <h4>AI Tools</h4>
-            <a href="http://chatgpt.com/">ChatGPT</a>
-            <a href="https://chat.deepseek.com/">DeepSeek AI</a>
-            </div>
-            <div class="footer-col">
-                <h4>Support</h4>
-                <a href="contact.html">Contact Us</a>
-                <a href="privacy-policy.html">Privacy Policy</a>
-                <a href="terms.html">Terms & Conditions</a>
-            </div>
+      <div class="container footer-content">
+        <div class="footer-col">
+          <h3>BrainHub<span class="dot">.</span></h3>
+          <p>Making education easy and accessible for everyone.</p>
         </div>
-        
-        <div class="footer-bottom">
-            <p>&copy; 2026 BrainHub. All rights reserved.</p>
-            <p id="realtime-clock" class="clock-text"></p>
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <a href="../index.html">Home</a>
+          <a href="universities.html">Universities</a>
+          <a href="secondary.html">Secondary</a>
+          <a href="past-papers.html" class="active">Past Papers</a>
+          <a href="quizzes.html">Quizzes</a>
+          <a href="about.html">About Us</a>
+          <h4>AI Tools</h4>
+          <a href="http://chatgpt.com/">ChatGPT</a>
+          <a href="https://chat.deepseek.com/">DeepSeek AI</a>
         </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <a href="contact.html">Contact Us</a>
+          <a href="privacy-policy.html">Privacy Policy</a>
+          <a href="terms.html">Terms & Conditions</a>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 BrainHub. All rights reserved.</p>
+        <p id="realtime-clock" class="clock-text"></p>
+      </div>
     </footer>
 
     <script src="../js/main.js"></script>
     <script>
-        function updateFooterClock() {
-            const clockElement = document.getElementById('realtime-clock');
-            const now = new Date();
-            const dateOptions = { 
-                weekday: 'short', 
-                year: 'numeric', 
-                month: 'short', 
-                day: 'numeric' 
-            };
-            const timeOptions = { 
-                hour: '2-digit', 
-                minute: '2-digit', 
-                second: '2-digit' 
-            };
-            const dateString = now.toLocaleDateString('en-US', dateOptions);
-            const timeString = now.toLocaleTimeString('en-US', timeOptions);
-            clockElement.textContent = `${dateString} | ${timeString}`;
-        }
-        updateFooterClock();
-        setInterval(updateFooterClock, 1000);
+      function updateFooterClock() {
+        const clockElement = document.getElementById("realtime-clock");
+        const now = new Date();
+        const dateOptions = {
+          weekday: "short",
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        };
+        const timeOptions = {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        };
+        const dateString = now.toLocaleDateString("en-US", dateOptions);
+        const timeString = now.toLocaleTimeString("en-US", timeOptions);
+        clockElement.textContent = `${dateString} | ${timeString}`;
+      }
+      updateFooterClock();
+      setInterval(updateFooterClock, 1000);
     </script>
-</body>
+  </body>
 </html>

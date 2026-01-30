@@ -87,6 +87,24 @@ function searchMaterials() {
         searchInput.focus();
     }
 }
+// Search Button Event Listener
+const searchInput = document.getElementById('searchInput');
+const searchBtn = document.querySelector('.search-box button');
+
+function performSearch() {
+    const query = searchInput.value.toLowerCase();
+    if (query.includes('grade') || query.includes('ecz') || query.includes('secondary')) {
+        window.location.href = 'pages/secondary.html';
+    } else if (query.includes('university') || query.includes('unza') || query.includes('cbu')) {
+        window.location.href = 'pages/universities.html';
+    } else if (query.includes('quiz') || query.includes('test')) {
+        window.location.href = 'pages/quizzes.html';
+    } else {
+        alert("Try searching for 'Secondary', 'University', or 'Quizzes'");
+    }
+}
+
+if(searchBtn) searchBtn.addEventListener('click', performSearch);
 
 // Contact Form Validation
 function validateContactForm() {
@@ -132,8 +150,6 @@ function validateContactForm() {
             successMessage.remove();
         }, 5000);
         
-        // In a real application, you would send the data to a server here
-        // Example: fetch('/api/contact', { method: 'POST', body: new FormData(form) })
         
         console.log('Form submitted:', { name, email, subject, message });
     });

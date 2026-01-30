@@ -1,180 +1,216 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BrainHub | Access Study Materials & Past Papers</title>
-    <meta name="description" content="BrainHub is a learning platform offering university notes, past papers, quizzes, and flashcards. No login required.">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
-<body>
-
+    <meta
+      name="description"
+      content="BrainHub is a learning platform offering university notes, past papers, quizzes, and flashcards. No login required."
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
     <nav class="navbar">
-        <div class="container nav-container">
-            <a href="index.html" class="logo">BrainHub<span class="dot">.</span></a>
-            <button class="mobile-menu-btn" aria-label="Toggle navigation">
-                <i class="fas fa-bars"></i>
-            </button>
-            <ul class="nav-links">
-                <li><a href="pages/universities.html">Universities</a></li>
-                <li><a href="pages/secondary.html">Secondary</a></li>
-                <li><a href="pages/quizzes.html">Quizzes</a></li>
-                <li><a href="#flashcards">Flashcards</a></li>
-                <li><a href="pages/about.html">About</a></li>
-                //<li><a href="#" class="btn-primary">Download App</a></li>//
-            </ul>
-        </div>
+      <div class="container nav-container">
+        <a href="index.html" class="logo">BrainHub<span class="dot">.</span></a>
+        <button class="mobile-menu-btn" aria-label="Toggle navigation">
+          <i class="fas fa-bars"></i>
+        </button>
+        <ul class="nav-links">
+          <li><a href="pages/universities.html">Universities</a></li>
+          <li><a href="pages/secondary.html">Secondary</a></li>
+          <li><a href="pages/quizzes.html">Quizzes</a></li>
+          <li><a href="#flashcards">Flashcards</a></li>
+          <li><a href="pages/about.html">About</a></li>
+          <!-- <li><a href="#" class="btn-primary">Download App</a></li>-->
+        </ul>
+      </div>
     </nav>
 
     <header class="hero">
-        <div class="container hero-content">
-            <h1>Everything you need to study in one clean place.</h1>
-            <p>Access university notes, past papers, quizzes, and AI tools without a login.</p>
-            
-            <div class="search-box">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" id="searchInput" placeholder="Search for courses, universities, or topics...">
-                <button onclick="searchMaterials()">Search</button>
-            </div>
+      <div class="container hero-content">
+        <h1>Everything you need to study in one clean place.</h1>
+        <p>
+          Access university notes, past papers, quizzes, and AI tools without a
+          login.
+        </p>
 
-            <div class="hero-stats">
-                <div class="stat-item">
-                    <i class="fas fa-user-graduate"></i>
-                    <span>50+ Learners</span>
-                </div>
-                <div class="stat-item">
-                    <i class="fas fa-book-open"></i>
-                    <span>100+ Resources</span>
-                </div>
-                <div class="stat-item">
-                    <i class="fas fa-check-circle"></i>
-                    <span>No Login Needed</span>
-                </div>
-            </div>
+        <div class="search-box">
+          <i class="fas fa-search search-icon"></i>
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search for courses, universities, or topics..."
+          />
+          <button onclick="searchMaterials()">Search</button>
         </div>
+
+        <div class="hero-stats">
+          <div class="stat-item">
+            <i class="fas fa-user-graduate"></i>
+            <span>50+ Learners</span>
+          </div>
+          <div class="stat-item">
+            <i class="fas fa-book-open"></i>
+            <span>100+ Resources</span>
+          </div>
+          <div class="stat-item">
+            <i class="fas fa-check-circle"></i>
+            <span>No Login Needed</span>
+          </div>
+        </div>
+      </div>
     </header>
 
     <section class="features container">
-        <div class="section-header">
-            <h2>Study Materials</h2>
-            <p>Select a category to start learning.</p>
+      <div class="section-header">
+        <h2>Study Materials</h2>
+        <p>Select a category to start learning.</p>
+      </div>
+
+      <div class="grid-container">
+        <div class="card" id="universities">
+          <div class="icon-box blue-bg">
+            <i class="fas fa-university"></i>
+          </div>
+          <h3>University Notes</h3>
+          <p>
+            Curated materials for every course, organized by program and
+            university.
+          </p>
+          <a href="pages/universities.html" class="link-btn"
+            >Browse Universities <i class="fas fa-arrow-right"></i
+          ></a>
         </div>
-        
-        <div class="grid-container">
-            <div class="card" id="universities">
-                <div class="icon-box blue-bg">
-                    <i class="fas fa-university"></i>
-                </div>
-                <h3>University Notes</h3>
-                <p>Curated materials for every course, organized by program and university.</p>
-                <a href="pages/universities.html" class="link-btn">Browse Universities <i class="fas fa-arrow-right"></i></a>
-            </div>
 
-            <div class="card" id="secondary">
-                <div class="icon-box green-bg">
-                    <i class="fas fa-school"></i>
-                </div>
-                <h3>Secondary Education</h3>
-                <p>Browse grades, subjects, tests, labs, and past exam papers.</p>
-                <a href="pages/secondary.html" class="link-btn">View Subjects <i class="fas fa-arrow-right"></i></a>
-            </div>
-
-            <div class="card" id="past-papers">
-                <div class="icon-box orange-bg">
-                    <i class="fas fa-file-alt"></i>
-                </div>
-                <h3>Past Papers</h3>
-                <p>Real exam papers with solutions to practice confidently before exams.</p>
-                <a href="pages/past-papers.html" class="link-btn">Find Papers <i class="fas fa-arrow-right"></i></a>
-            </div>
-
-            <div class="card" id="quizzes">
-                <div class="icon-box purple-bg">
-                    <i class="fas fa-stopwatch"></i>
-                </div>
-                <h3>Topic Quizzes</h3>
-                <p>Rapid-fire questions to test concepts as you go. Instant feedback.</p>
-                <a href="pages/quizzes.html" class="link-btn">Start Quizzing <i class="fas fa-arrow-right"></i></a>
-            </div>
+        <div class="card" id="secondary">
+          <div class="icon-box green-bg">
+            <i class="fas fa-school"></i>
+          </div>
+          <h3>Secondary Education</h3>
+          <p>Browse grades, subjects, tests, labs, and past exam papers.</p>
+          <a href="pages/secondary.html" class="link-btn"
+            >View Subjects <i class="fas fa-arrow-right"></i
+          ></a>
         </div>
+
+        <div class="card" id="past-papers">
+          <div class="icon-box orange-bg">
+            <i class="fas fa-file-alt"></i>
+          </div>
+          <h3>Past Papers</h3>
+          <p>
+            Real exam papers with solutions to practice confidently before
+            exams.
+          </p>
+          <a href="pages/past-papers.html" class="link-btn"
+            >Find Papers <i class="fas fa-arrow-right"></i
+          ></a>
+        </div>
+
+        <div class="card" id="quizzes">
+          <div class="icon-box purple-bg">
+            <i class="fas fa-stopwatch"></i>
+          </div>
+          <h3>Topic Quizzes</h3>
+          <p>
+            Rapid-fire questions to test concepts as you go. Instant feedback.
+          </p>
+          <a href="pages/quizzes.html" class="link-btn"
+            >Start Quizzing <i class="fas fa-arrow-right"></i
+          ></a>
+        </div>
+      </div>
     </section>
 
-    <section class="cta-section">
-        <div class="container cta-content">
-            <div class="cta-text">
-                <h2>Take your studies offline</h2>
-                <p>Download the BrainHub app for an offline-friendly, fast, and focused experience. Access materials anywhere.</p>
-                <div class="app-buttons">
-                    <button class="store-btn"><i class="fab fa-google-play"></i> Google Play</button>
-                    <button class="store-btn"><i class="fab fa-apple"></i> App Store</button>
-                </div>
-            </div>
+    <!--<section class="cta-section">
+      <div class="container cta-content">
+        <div class="cta-text">
+          <h2>Take your studies offline</h2>
+          <p>
+            Download the BrainHub app for an offline-friendly, fast, and focused
+            experience. Access materials anywhere.
+          </p>
+          <div class="app-buttons">
+            <button class="store-btn">
+              <i class="fab fa-google-play"></i> Google Play
+            </button>
+            <button class="store-btn">
+              <i class="fab fa-apple"></i> App Store
+            </button>
+          </div>
         </div>
-    </section>
+      </div>
+    </section> -->
 
-<footer>
-    <div class="container footer-content">
+    <footer>
+      <div class="container footer-content">
         <div class="footer-col">
-            <h3>BrainHub<span class="dot">.</span></h3>
-            <p>Making education easy and accessible for everyone.</p>
+          <h3>BrainHub<span class="dot">.</span></h3>
+          <p>Making education easy and accessible for everyone.</p>
         </div>
         <div class="footer-col">
-            <h4>Quick Links</h4>
-            <a href="pages/universities.html">Universities</a>
-            <a href="pages/secondary.html">Secondary</a> <br>
-            <h4>AI Tools</h4>
-            <a href="http://chatgpt.com/">ChatGPT</a>
-            <a href="https://chat.deepseek.com/">DeepSeek AI</a>
+          <h4>Quick Links</h4>
+          <a href="pages/universities.html">Universities</a>
+          <a href="pages/secondary.html">Secondary</a> <br />
+          <h4>AI Tools</h4>
+          <a href="http://chatgpt.com/">ChatGPT</a>
+          <a href="https://chat.deepseek.com/">DeepSeek AI</a>
         </div>
         <div class="footer-col">
-            <h4>Support</h4>
-            <a href="pages/contact.html">Contact Us</a>
-            <a href="pages/privacy-policy.html">Privacy Policy</a>
-            <a href="pages/terms.html">Terms & Conditions</a>
+          <h4>Support</h4>
+          <a href="pages/contact.html">Contact Us</a>
+          <a href="pages/privacy-policy.html">Privacy Policy</a>
+          <a href="pages/terms.html">Terms & Conditions</a>
         </div>
-    </div>
-    
-    <div class="footer-bottom">
+      </div>
+
+      <div class="footer-bottom">
         <p>&copy; 2026 BrainHub. All rights reserved.</p>
         <p id="realtime-clock" class="clock-text"></p>
-    </div>
-</footer>
-
+      </div>
+    </footer>
 
     <script src="js/main.js"></script>
-<script>
-    function updateFooterClock() {
-        const clockElement = document.getElementById('realtime-clock');
+    <script>
+      function updateFooterClock() {
+        const clockElement = document.getElementById("realtime-clock");
         const now = new Date();
 
         // Configure Date Format (e.g., "Mon, Jan 25, 2026")
-        const dateOptions = { 
-            weekday: 'short', 
-            year: 'numeric', 
-            month: 'short', 
-            day: 'numeric' 
-        };
-        
-        // Configure Time Format (e.g., "11:24:16 PM")
-        const timeOptions = { 
-            hour: '2-digit', 
-            minute: '2-digit', 
-            second: '2-digit' 
+        const dateOptions = {
+          weekday: "short",
+          year: "numeric",
+          month: "short",
+          day: "numeric",
         };
 
-        const dateString = now.toLocaleDateString('en-US', dateOptions);
-        const timeString = now.toLocaleTimeString('en-US', timeOptions);
+        // Configure Time Format (e.g., "11:24:16 PM")
+        const timeOptions = {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        };
+
+        const dateString = now.toLocaleDateString("en-US", dateOptions);
+        const timeString = now.toLocaleTimeString("en-US", timeOptions);
 
         // Update the HTML
         clockElement.textContent = `${dateString} | ${timeString}`;
-    }
+      }
 
-    // Update immediately, then every second
-    updateFooterClock();
-    setInterval(updateFooterClock, 1000);
-</script>
-
-</body>
+      // Update immediately, then every second
+      updateFooterClock();
+      setInterval(updateFooterClock, 1000);
+    </script>
+  </body>
 </html>
