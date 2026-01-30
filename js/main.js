@@ -171,3 +171,43 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// Function to toggle bookmark
+function toggleBookmark(id, title, url) {
+    let bookmarks = JSON.parse(localStorage.getItem('brainhubBookmarks')) || [];
+    
+    // Check if item exists
+    const existingIndex = bookmarks.findIndex(item => item.id === id);
+    
+    if (existingIndex > -1) {
+        // Remove it
+        bookmarks.splice(existingIndex, 1);
+        alert(`${title} removed from saved items.`);
+    } else {
+        // Add it
+        bookmarks.push({ id, title, url });
+        alert(`${title} saved to your library!`);
+    }
+    
+    // Save back to local storage
+    localStorage.setItem('brainhubBookmarks', JSON.stringify(bookmarks));
+}
+
+// Function to load bookmarks (put this on a new 'saved.html' page)
+function loadBookmarks() {
+    const list = document.getElementById('saved-list');
+    const bookmarks = JSON.parse(localStorage.getItem('brainhubBookmarks')) || [];
+    
+    if (bookmarks.length === 0) {
+        list.innerHTML = '<p>No saved items yet.</p>';
+        return;
+    }
+    
+    list.innerHTML = bookmarks.map(item => `
+        <div class="card">
+            <h3>${item.title}</h3>
+            <a href="${item.url}" class="link-btn">View Resource</a>
+            <button onclick="toggleBookmark('${item.id}')" style="color: red;">Remove</button>
+        </div>
+    `).join('');
+}
