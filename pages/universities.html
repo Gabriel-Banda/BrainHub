@@ -8,9 +8,25 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
 </head>
 <body>
-
+<!-- Pomodoro Timer Widget -->
+<div class="pomodoro-widget" id="pomodoroWidget">
+  <div class="timer-header">
+    <h4><i class="fas fa-clock"></i> Study Timer</h4>
+    <button class="timer-close" id="timerClose"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="timer-display" id="timerDisplay">25:00</div>
+  <div class="timer-controls">
+    <button class="timer-btn" id="timerStart"><i class="fas fa-play"></i> Start</button>
+    <button class="timer-btn" id="timerPause"><i class="fas fa-pause"></i> Pause</button>
+    <button class="timer-btn" id="timerReset"><i class="fas fa-redo"></i> Reset</button>
+  </div>
+  <div class="timer-session">
+    <span>Sessions: <span id="sessionCount">0</span></span>
+  </div>
+</div>
     <nav class="navbar">
         <div class="container nav-container">
             <a href="../index.html" class="logo">BrainHub<span class="dot">.</span></a>
@@ -23,6 +39,7 @@
                 <li><a href="secondary.html">Secondary</a></li>
                 <li><a href="quizzes.html">Quizzes</a></li>
                 <li><a href="about.html">About</a></li>
+                <button id="theme-toggle" class="btn-primary"><i class="fas fa-moon"></i></button>
             </ul>
         </div>
     </nav>

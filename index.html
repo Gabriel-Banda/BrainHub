@@ -4,21 +4,30 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BrainHub | Access Study Materials & Past Papers</title>
-    <meta
-      name="description"
-      content="BrainHub is a learning platform offering university notes, past papers, quizzes, and flashcards. No login required."
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <meta name="description" content="BrainHub is a learning platform offering university notes, past papers, quizzes, and flashcards. No login required."/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="css/style.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
   </head>
   <body>
+    <!-- Pomodoro Timer Widget -->
+    <div class="pomodoro-widget" id="pomodoroWidget">
+      <div class="timer-header">
+        <h4><i class="fas fa-clock"></i> Study Timer</h4>
+        <button class="timer-close" id="timerClose"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="timer-display" id="timerDisplay">25:00</div>
+      <div class="timer-controls">
+        <button class="timer-btn" id="timerStart"><i class="fas fa-play"></i> Start</button>
+        <button class="timer-btn" id="timerPause"><i class="fas fa-pause"></i> Pause</button>
+        <button class="timer-btn" id="timerReset"><i class="fas fa-redo"></i> Reset</button>
+      </div>
+      <div class="timer-session">
+        <span>Sessions: <span id="sessionCount">0</span></span>
+      </div>
+    </div>
+
     <nav class="navbar">
       <div class="container nav-container">
         <a href="index.html" class="logo">BrainHub<span class="dot">.</span></a>
@@ -31,7 +40,9 @@
           <li><a href="pages/quizzes.html">Quizzes</a></li>
           <li><a href="#flashcards">Flashcards</a></li>
           <li><a href="pages/about.html">About</a></li>
-          <!-- <li><a href="#" class="btn-primary">Download App</a></li>-->
+          <button id="theme-toggle" class="btn-primary theme-toggle">
+            <i class="fas fa-moon" id="theme-icon"></i>
+          </button>
         </ul>
       </div>
     </nav>
@@ -77,7 +88,7 @@
         <p>Select a category to start learning.</p>
       </div>
 
-      <div class="grid-container">
+      <div class="grid-container" id="studyMaterials">
         <div class="card" id="universities">
           <div class="icon-box blue-bg">
             <i class="fas fa-university"></i>
@@ -132,36 +143,74 @@
       </div>
     </section>
 
-    <!--<section class="cta-section">
-      <div class="container cta-content">
-        <div class="cta-text">
-          <h2>Take your studies offline</h2>
-          <p>
-            Download the BrainHub app for an offline-friendly, fast, and focused
-            experience. Access materials anywhere.
-          </p>
-          <div class="app-buttons">
-            <button class="store-btn">
-              <i class="fab fa-google-play"></i> Google Play
-            </button>
-            <button class="store-btn">
-              <i class="fab fa-apple"></i> App Store
-            </button>
+    <!-- Flashcards Section -->
+    <section class="flashcards-section container" id="flashcards">
+      <div class="section-header">
+        <h2>Interactive Flashcards</h2>
+        <p>Test your knowledge with these flip cards. Click to reveal answers!</p>
+      </div>
+
+      <div class="flashcards-container">
+        <div class="flashcard" id="flashcard">
+          <div class="flashcard-inner">
+            <div class="flashcard-front">
+              <div class="flashcard-icon">
+                <i class="fas fa-question-circle"></i>
+              </div>
+              <h3 id="flashcard-question">What is the capital of Zambia?</h3>
+              <p class="flashcard-hint">Click the card to flip</p>
+            </div>
+            <div class="flashcard-back">
+              <div class="flashcard-icon">
+                <i class="fas fa-lightbulb"></i>
+              </div>
+              <h3>Answer</h3>
+              <p id="flashcard-answer">Lusaka</p>
+              <p class="flashcard-explanation" id="flashcard-explanation">Lusaka is the capital and largest city of Zambia.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flashcard-controls">
+          <button class="btn-secondary" id="prevCard">
+            <i class="fas fa-chevron-left"></i> Previous
+          </button>
+          <div class="flashcard-progress">
+            Card <span id="currentCard">1</span> of <span id="totalCards">5</span>
+          </div>
+          <button class="btn-primary" id="nextCard">
+            Next <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+
+        <div class="flashcard-topics">
+          <h4>Topics Available:</h4>
+          <div class="topic-tags">
+            <span class="topic-tag active">Geography</span>
+            <span class="topic-tag">Science</span>
+            <span class="topic-tag">Mathematics</span>
+            <span class="topic-tag">History</span>
+            <span class="topic-tag">General</span>
           </div>
         </div>
       </div>
-    </section> -->
+    </section>
 
     <footer>
       <div class="container footer-content">
         <div class="footer-col">
           <h3>BrainHub<span class="dot">.</span></h3>
           <p>Making education easy and accessible for everyone.</p>
+          <button class="timer-toggle" id="timerToggle">
+            <i class="fas fa-clock"></i> Show Timer
+          </button>
         </div>
         <div class="footer-col">
           <h4>Quick Links</h4>
           <a href="pages/universities.html">Universities</a>
-          <a href="pages/secondary.html">Secondary</a> <br />
+          <a href="pages/secondary.html">Secondary</a>
+          <a href="pages/quizzes.html">Quizzes</a>
+          <a href="#flashcards">Flashcards</a>
           <h4>AI Tools</h4>
           <a href="http://chatgpt.com/">ChatGPT</a>
           <a href="https://chat.deepseek.com/">DeepSeek AI</a>
@@ -180,31 +229,30 @@
       </div>
     </footer>
 
+    <!-- Audio for timer beep -->
+    <audio id="timerBeep" preload="auto">
+      <source src="https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3" type="audio/mpeg">
+    </audio>
+
     <script src="js/main.js"></script>
     <script>
+      // Real-time clock for footer
       function updateFooterClock() {
         const clockElement = document.getElementById("realtime-clock");
         const now = new Date();
-
-        // Configure Date Format (e.g., "Mon, Jan 25, 2026")
         const dateOptions = {
           weekday: "short",
           year: "numeric",
           month: "short",
           day: "numeric",
         };
-
-        // Configure Time Format (e.g., "11:24:16 PM")
         const timeOptions = {
           hour: "2-digit",
           minute: "2-digit",
           second: "2-digit",
         };
-
         const dateString = now.toLocaleDateString("en-US", dateOptions);
         const timeString = now.toLocaleTimeString("en-US", timeOptions);
-
-        // Update the HTML
         clockElement.textContent = `${dateString} | ${timeString}`;
       }
 
