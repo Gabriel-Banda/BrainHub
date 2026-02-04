@@ -4,29 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Browse Universities | BrainHub</title>
-    <meta name="description" content="Explore university study materials, courses, and programs from top institutions worldwide.">
+    <meta name="description" content="Explore university study materials, courses, and programs from top institutions in Zambia.">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
 </head>
 <body>
-<!-- Pomodoro Timer Widget -->
-<div class="pomodoro-widget" id="pomodoroWidget">
-  <div class="timer-header">
-    <h4><i class="fas fa-clock"></i> Study Timer</h4>
-    <button class="timer-close" id="timerClose"><i class="fas fa-times"></i></button>
-  </div>
-  <div class="timer-display" id="timerDisplay">25:00</div>
-  <div class="timer-controls">
-    <button class="timer-btn" id="timerStart"><i class="fas fa-play"></i> Start</button>
-    <button class="timer-btn" id="timerPause"><i class="fas fa-pause"></i> Pause</button>
-    <button class="timer-btn" id="timerReset"><i class="fas fa-redo"></i> Reset</button>
-  </div>
-  <div class="timer-session">
-    <span>Sessions: <span id="sessionCount">0</span></span>
-  </div>
-</div>
+    <div class="pomodoro-widget" id="pomodoroWidget">
+        <div class="timer-header">
+            <h4><i class="fas fa-clock"></i> Study Timer</h4>
+            <button class="timer-close" id="timerClose"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="timer-display" id="timerDisplay">25:00</div>
+        <div class="timer-controls">
+            <button class="timer-btn" id="timerStart"><i class="fas fa-play"></i> Start</button>
+            <button class="timer-btn" id="timerPause"><i class="fas fa-pause"></i> Pause</button>
+            <button class="timer-btn" id="timerReset"><i class="fas fa-redo"></i> Reset</button>
+        </div>
+        <div class="timer-session">
+            <span>Sessions: <span id="sessionCount">0</span></span>
+        </div>
+    </div>
+
     <nav class="navbar">
         <div class="container nav-container">
             <a href="../index.html" class="logo">BrainHub<span class="dot">.</span></a>
@@ -37,91 +37,153 @@
                 <li><a href="../index.html">Home</a></li>
                 <li><a href="universities.html" class="active">Universities</a></li>
                 <li><a href="secondary.html">Secondary</a></li>
+                <li><a href="past-papers.html">Past Papers</a></li>
                 <li><a href="quizzes.html">Quizzes</a></li>
                 <li><a href="about.html">About</a></li>
-                <button id="theme-toggle" class="btn-primary"><i class="fas fa-moon"></i></button>
+                <button id="theme-toggle" class="btn-primary" aria-label="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
             </ul>
         </div>
     </nav>
 
     <main class="container">
-        <a href="../index.html" class="back-home">
-            <i class="fas fa-arrow-left"></i> Back to Home
-        </a>
-        
-        <div class="policy-content">
-            <div class="content-header">
-                <h1>University Study Materials</h1>
-                <p class="subtitle">Access curated resources from top universities worldwide</p>
+        <div class="uni-page-header">
+            <div class="breadcrumbs">
+                <a href="../index.html">Home</a> <i class="fas fa-chevron-right" aria-hidden="true"></i> <span>Universities</span>
             </div>
-
-            <div class="content-section">
-                <h2>Featured Universities</h2>
-                <p>Browse study materials organized by institution. We partner with leading universities to provide comprehensive academic resources.</p>
-                
-                <div style="margin: 2rem 0; display: grid; gap: 1.5rem;">
-                    <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 8px;">
-                        <h3 style="color: var(--primary-color); margin-bottom: 0.5rem;">University of Zambia (UNZA)</h3>
-                        <p><strong>Available Programs:</strong> Medicine, Engineering, Law, Business, Sciences, Humanities</p>
-                        <p><strong>Resources:</strong> Lecture notes, past papers, lab manuals, research materials</p>
-                        <a href="#" style="color: var(--primary-color); font-weight: 600; margin-top: 0.5rem; display: inline-block;">View Courses →</a>
-                    </div>
-                    
-                    <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 8px;">
-                        <h3 style="color: var(--primary-color); margin-bottom: 0.5rem;">Copperbelt University (CBU)</h3>
-                        <p><strong>Available Programs:</strong> Mining Engineering, Environmental Studies, Information Technology, Economics</p>
-                        <p><strong>Resources:</strong> Engineering diagrams, case studies, project templates</p>
-                        <a href="#" style="color: var(--primary-color); font-weight: 600; margin-top: 0.5rem; display: inline-block;">View Courses →</a>
-                    </div>
-                    
-                    <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 8px;">
-                        <h3 style="color: var(--primary-color); margin-bottom: 0.5rem;">Mulungushi University</h3>
-                        <p><strong>Available Programs:</strong> Medicine, Commerce, Law, Engineering</p>
-                        <p><strong>Resources:</strong> Research papers, study guides, exam preparation materials</p>
-                        <a href="#" style="color: var(--primary-color); font-weight: 600; margin-top: 0.5rem; display: inline-block;">View Courses →</a>
-                    </div>
+            
+            <div class="header-actions">
+                <div class="title-group">
+                    <h1>University Resources</h1>
+                    <p class="subtitle">Select your institution to access resources.</p>
+                </div>
+                <div class="uni-search-box">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <input type="text" id="uniSearchInput" placeholder="Search universities..." aria-label="Search universities">
                 </div>
             </div>
+        </div>
 
-            <div class="content-section">
-                <h2>Academic Disciplines</h2>
-                <p>Explore materials by academic field. Each discipline includes comprehensive resources for undergraduate and postgraduate studies.</p>
-                
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1.5rem;">
-                    <div style="background: #eff6ff; padding: 1rem; border-radius: 6px; text-align: center;">
-                        <i class="fas fa-stethoscope" style="color: var(--primary-color); font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
-                        <h4 style="margin: 0.5rem 0;">Health Sciences</h4>
+        <div class="uni-grid" id="uniGrid">
+            
+            <a href="#" class="uni-card" data-keywords="UNZA University of Zambia Lusaka">
+                <div class="uni-card-content">
+                    <div class="uni-logo logo-green">
+                        <span>UN</span>
                     </div>
-                    <div style="background: #ecfdf5; padding: 1rem; border-radius: 6px; text-align: center;">
-                        <i class="fas fa-cogs" style="color: #10b981; font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
-                        <h4 style="margin: 0.5rem 0;">Engineering</h4>
-                    </div>
-                    <div style="background: #fff7ed; padding: 1rem; border-radius: 6px; text-align: center;">
-                        <i class="fas fa-balance-scale" style="color: #f97316; font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
-                        <h4 style="margin: 0.5rem 0;">Law</h4>
-                    </div>
-                    <div style="background: #f5f3ff; padding: 1rem; border-radius: 6px; text-align: center;">
-                        <i class="fas fa-chart-line" style="color: #8b5cf6; font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
-                        <h4 style="margin: 0.5rem 0;">Business</h4>
+                    <div class="uni-details">
+                        <h3>UNZA</h3>
+                        <p>View programs & courses</p>
                     </div>
                 </div>
-            </div>
+                <div class="uni-arrow">
+                    <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                </div>
+            </a>
 
-            <div class="content-section">
-                <h2>How to Access Materials</h2>
-                <ol>
-                    <li><strong>Select your university</strong> from the featured institutions</li>
-                    <li><strong>Choose your program</strong> and academic year</li>
-                    <li><strong>Browse available courses</strong> within your program</li>
-                    <li><strong>Download or view</strong> study materials, past papers, and resources</li>
-                    <li><strong>Save for offline access</strong> using our mobile app</li>
-                </ol>
-            </div>
+            <a href="#" class="uni-card" data-keywords="Mulungushi University Kabwe MU">
+                <div class="uni-card-content">
+                    <div class="uni-logo logo-blue">
+                        <span>MU</span>
+                    </div>
+                    <div class="uni-details">
+                        <h3>Mulungushi University</h3>
+                        <p>View programs & courses</p>
+                    </div>
+                </div>
+                <div class="uni-arrow">
+                    <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                </div>
+            </a>
 
-            <div class="content-section contact-info">
-                <h3>Contribute Materials</h3>
-                <p>Are you a lecturer, graduate, or current student with valuable study materials? Help other students by contributing your notes and resources. Contact us at <strong>contributions@BrainHub.com</strong> to learn how you can contribute.</p>
+            <a href="#" class="uni-card" data-keywords="CBU Copperbelt University Kitwe">
+                <div class="uni-card-content">
+                    <div class="uni-logo logo-orange">
+                        <span>CBU</span>
+                    </div>
+                    <div class="uni-details">
+                        <h3>CBU</h3>
+                        <p>View programs & courses</p>
+                    </div>
+                </div>
+                <div class="uni-arrow">
+                    <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                </div>
+            </a>
+
+            <a href="#" class="uni-card" data-keywords="Apex Medical University Lusaka AMU">
+                <div class="uni-card-content">
+                    <div class="uni-logo logo-purple">
+                        <span>AMU</span>
+                    </div>
+                    <div class="uni-details">
+                        <h3>Apex Medical University</h3>
+                        <p>View programs & courses</p>
+                    </div>
+                </div>
+                <div class="uni-arrow">
+                    <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                </div>
+            </a>
+
+            <a href="#" class="uni-card" data-keywords="LMMU Levy Mwanawasa Medical University">
+                <div class="uni-card-content">
+                    <div class="uni-logo logo-teal">
+                        <span>LM</span>
+                    </div>
+                    <div class="uni-details">
+                        <h3>LMMU</h3>
+                        <p>View programs & courses</p>
+                    </div>
+                </div>
+                <div class="uni-arrow">
+                    <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                </div>
+            </a>
+
+            <a href="#" class="uni-card" data-keywords="Mukuba University Kitwe MK">
+                <div class="uni-card-content">
+                    <div class="uni-logo logo-red">
+                        <span>MK</span>
+                    </div>
+                    <div class="uni-details">
+                        <h3>Mukuba University</h3>
+                        <p>View programs & courses</p>
+                    </div>
+                </div>
+                <div class="uni-arrow">
+                    <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                </div>
+            </a>
+
+             <a href="#" class="uni-card" data-keywords="Eden University Lusaka EU">
+                <div class="uni-card-content">
+                    <div class="uni-logo logo-yellow">
+                        <span>EU</span>
+                    </div>
+                    <div class="uni-details">
+                        <h3>Eden University</h3>
+                        <p>View programs & courses</p>
+                    </div>
+                </div>
+                <div class="uni-arrow">
+                    <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                </div>
+            </a>
+
+        </div>
+
+        <div id="noResults" class="no-results" style="display: none;">
+            <div class="no-results-content">
+                <i class="fas fa-search"></i>
+                <h3>No universities found</h3>
+                <p>We couldn't find any matches for your search.</p>
+                <button onclick="clearSearch()" class="btn-text">Clear search</button>
             </div>
+        </div>
+
+        <div class="content-section contact-info" style="margin-top: 3rem;">
+            <h3>Don't see your university?</h3>
+            <p>We are constantly adding new institutions. Contact us at <strong>support@brainhub.zm</strong> to request your university.</p>
         </div>
     </main>
 
@@ -155,26 +217,56 @@
 
     <script src="../js/main.js"></script>
     <script>
+        // Clock functionality
         function updateFooterClock() {
             const clockElement = document.getElementById('realtime-clock');
             const now = new Date();
-            const dateOptions = { 
-                weekday: 'short', 
-                year: 'numeric', 
-                month: 'short', 
-                day: 'numeric' 
-            };
-            const timeOptions = { 
-                hour: '2-digit', 
-                minute: '2-digit', 
-                second: '2-digit' 
-            };
-            const dateString = now.toLocaleDateString('en-US', dateOptions);
-            const timeString = now.toLocaleTimeString('en-US', timeOptions);
-            clockElement.textContent = `${dateString} | ${timeString}`;
+            const dateOptions = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+            const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            clockElement.textContent = `${now.toLocaleDateString('en-US', dateOptions)} | ${now.toLocaleTimeString('en-US', timeOptions)}`;
         }
         updateFooterClock();
         setInterval(updateFooterClock, 1000);
+
+        // Advanced Search Functionality
+        const searchInput = document.getElementById('uniSearchInput');
+        const gridContainer = document.getElementById('uniGrid');
+        const noResultsDiv = document.getElementById('noResults');
+
+        searchInput.addEventListener('keyup', function() {
+            const filter = this.value.toUpperCase().trim();
+            const cards = gridContainer.getElementsByClassName('uni-card');
+            let hasVisibleCards = false;
+
+            for (let i = 0; i < cards.length; i++) {
+                const keywords = cards[i].getAttribute('data-keywords').toUpperCase();
+                const visibleText = cards[i].querySelector('h3').textContent.toUpperCase();
+                
+                // Search both hidden keywords and visible text
+                if (keywords.indexOf(filter) > -1 || visibleText.indexOf(filter) > -1) {
+                    cards[i].style.display = "";
+                    hasVisibleCards = true;
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+
+            // Toggle "No Results" display
+            if (!hasVisibleCards && filter !== "") {
+                noResultsDiv.style.display = "block";
+                gridContainer.style.display = "none";
+            } else {
+                noResultsDiv.style.display = "none";
+                gridContainer.style.display = "grid";
+            }
+        });
+
+        function clearSearch() {
+            searchInput.value = '';
+            // Trigger the keyup event to reset the grid
+            searchInput.dispatchEvent(new Event('keyup'));
+            searchInput.focus();
+        }
     </script>
 </body>
 </html>
