@@ -1086,3 +1086,163 @@ footer {
         max-width: 100%;
     }
 }
+
+.logo-white {
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb; 
+    overflow: hidden;
+}
+
+.uni-logo img {
+    width: 50%;
+    height: 70%;
+    object-fit: cover; 
+    display: block;
+}
+/* ================= NEW ANIMATIONS ================= */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Apply animation to cards */
+.uni-card, .card {
+    animation: fadeInUp 0.6s ease backwards;
+}
+
+/* Stagger the animation for a cool effect */
+.uni-card:nth-child(1), .card:nth-child(1) { animation-delay: 0.1s; }
+.uni-card:nth-child(2), .card:nth-child(2) { animation-delay: 0.2s; }
+.uni-card:nth-child(3), .card:nth-child(3) { animation-delay: 0.3s; }
+.uni-card:nth-child(4), .card:nth-child(4) { animation-delay: 0.4s; }
+.uni-card:nth-child(5), .card:nth-child(5) { animation-delay: 0.5s; }
+
+/* ================= COURSE CARD STYLES ================= */
+/* This ensures the natural sciences cards look exactly like university cards */
+.uni-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.uni-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: var(--transition);
+    text-decoration: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.uni-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    border-color: var(--primary-color);
+}
+
+.uni-logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem; /* Adjusted for course codes */
+    flex-shrink: 0;
+}
+
+/* Code Badge Colors */
+.bg-physics { background: #e0f2fe; color: #0284c7; }
+.bg-math    { background: #ffedd5; color: #c2410c; }
+.bg-bio     { background: #dcfce7; color: #15803d; }
+.bg-chem    { background: #f3e8ff; color: #7e22ce; }
+.bg-lang    { background: #fee2e2; color: #b91c1c; }
+
+.uni-details {
+    flex: 1;
+}
+
+.uni-details h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--text-dark);
+}
+
+.uni-details p {
+    margin: 0.2rem 0 0;
+    font-size: 0.85rem;
+    color: var(--text-light);
+}
+
+.uni-arrow {
+    color: var(--text-light);
+}
+
+/* ================= RESOURCE CARDS (Notes/Exams/Tests) ================= */
+.resource-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.resource-card {
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    text-align: center;
+    transition: var(--transition);
+}
+
+.resource-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary-color);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+.resource-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--bg-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+
+.resource-card h3 {
+    margin-bottom: 0.5rem;
+    color: var(--text-dark);
+}
+
+.resource-card p {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Contact Form Success Message */
+.form-success {
+    background-color: #dcfce7;
+    color: #166534;
+    padding: 1rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    text-align: center;
+}

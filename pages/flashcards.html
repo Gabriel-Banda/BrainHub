@@ -1,0 +1,166 @@
+    <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flashcards | Access Study Materials & Past Papers</title>
+    <meta name="description" content="BrainHub is a learning platform offering university notes, past papers, quizzes, and flashcards. No login required."/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+    <link rel="icon" type="image/x-icon" href="/assets/images/favicon.png"/>
+  </head>
+  <body>
+    <!-- Pomodoro Timer Widget -->
+    <div class="pomodoro-widget" id="pomodoroWidget">
+      <div class="timer-header">
+        <h4><i class="fas fa-clock"></i> Study Timer</h4>
+        <button class="timer-close" id="timerClose"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="timer-display" id="timerDisplay">25:00</div>
+      <div class="timer-controls">
+        <button class="timer-btn" id="timerStart"><i class="fas fa-play"></i> Start</button>
+        <button class="timer-btn" id="timerPause"><i class="fas fa-pause"></i> Pause</button>
+        <button class="timer-btn" id="timerReset"><i class="fas fa-redo"></i> Reset</button>
+      </div>
+      <div class="timer-session">
+        <span>Sessions: <span id="sessionCount">0</span></span>
+      </div>
+    </div>
+
+    <nav class="navbar">
+      <div class="container nav-container">
+        <a href="/index.html" class="logo">BrainHub<span class="dot">.</span></a>
+        <button class="mobile-menu-btn" aria-label="Toggle navigation">
+          <i class="fas fa-bars"></i>
+        </button>
+        <ul class="nav-links">
+          <li><a href="universities.html">Universities</a></li>
+          <li><a href="secondary.html">Secondary</a></li>
+          <li><a href="quizzes.html">Quizzes</a></li>
+          <li><a href="flashcards.html">Flashcards</a></li>
+          <li><a href="about.html">About</a></li>
+          <button id="theme-toggle" class="btn-primary theme-toggle">
+            <i class="fas fa-moon" id="theme-icon"></i>
+          </button>
+        </ul>
+      </div>
+    </nav>
+    <!-- Flashcards Section -->
+    <section class="flashcards-section container" id="flashcards">
+      <div class="section-header">
+        <h2>Interactive Flashcards</h2>
+        <p>Test your knowledge with these flip cards. Click to reveal answers!</p>
+      </div>
+
+      <div class="flashcards-container">
+        <div class="flashcard" id="flashcard">
+          <div class="flashcard-inner">
+            <div class="flashcard-front">
+              <div class="flashcard-icon">
+                <i class="fas fa-question-circle"></i>
+              </div>
+              <h3 id="flashcard-question">What is the capital of Zambia?</h3>
+              <p class="flashcard-hint">Click the card to flip</p>
+            </div>
+            <div class="flashcard-back">
+              <div class="flashcard-icon">
+                <i class="fas fa-lightbulb"></i>
+              </div>
+              <h3>Answer</h3>
+              <p id="flashcard-answer">Lusaka</p>
+              <p class="flashcard-explanation" id="flashcard-explanation">Lusaka is the capital and largest city of Zambia.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flashcard-controls">
+          <button class="btn-secondary" id="prevCard">
+            <i class="fas fa-chevron-left"></i> Previous
+          </button>
+          <div class="flashcard-progress">
+            Card <span id="currentCard">1</span> of <span id="totalCards">5</span>
+          </div>
+          <button class="btn-primary" id="nextCard">
+            Next <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+
+        <div class="flashcard-topics">
+          <h4>Topics Available:</h4>
+          <div class="topic-tags">
+            <span class="topic-tag active">Geography</span>
+            <span class="topic-tag">Science</span>
+            <span class="topic-tag">Mathematics</span>
+            <span class="topic-tag">History</span>
+            <span class="topic-tag">General</span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer>
+      <div class="container footer-content">
+        <div class="footer-col">
+          <h3>BrainHub<span class="dot">.</span></h3>
+          <p>Making education easy and accessible for everyone.</p>
+          <button class="timer-toggle" id="timerToggle">
+            <i class="fas fa-clock"></i> Show Timer
+          </button>
+        </div>
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <a href="universities.html">Universities</a>
+          <a href="secondary.html">Secondary</a>
+          <a href="quizzes.html">Quizzes</a>
+          <a href="flashcards.html">Flashcards</a>
+          <h4>AI Tools</h4>
+          <a href="http://chatgpt.com/">ChatGPT</a>
+          <a href="https://chat.deepseek.com/">DeepSeek AI</a>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <a href="contact.html">Contact Us</a>
+          <a href="privacy-policy.html">Privacy Policy</a>
+          <a href="terms.html">Terms & Conditions</a>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 BrainHub. All rights reserved.</p>
+        <p id="realtime-clock" class="clock-text"></p>
+      </div>
+    </footer>
+
+    <!-- Audio for timer beep -->
+    <audio id="timerBeep" preload="auto">
+      <source src="https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="../js/main.js"></script>
+    <script>
+      // Real-time clock for footer
+      function updateFooterClock() {
+        const clockElement = document.getElementById("realtime-clock");
+        const now = new Date();
+        const dateOptions = {
+          weekday: "short",
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        };
+        const timeOptions = {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        };
+        const dateString = now.toLocaleDateString("en-US", dateOptions);
+        const timeString = now.toLocaleTimeString("en-US", timeOptions);
+        clockElement.textContent = `${dateString} | ${timeString}`;
+      }
+
+      // Update immediately, then every second
+      updateFooterClock();
+      setInterval(updateFooterClock, 1000);
+    </script>
+  </body>
+</html>

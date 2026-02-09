@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -6,7 +6,7 @@
     <title>Contact Us | BrainHub</title>
     <meta name="description" content="Get in touch with BrainHub team for support, partnerships, or inquiries."/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="../css/style.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
   </head>
@@ -29,117 +29,43 @@
 </div>
     <nav class="navbar">
       <div class="container nav-container">
-        <a href="/index.html" class="logo"
-          >BrainHub<span class="dot">.</span></a
-        >
-        <button class="mobile-menu-btn" aria-label="Toggle navigation">
-          <i class="fas fa-bars"></i>
-        </button>
+        <a href="../index.html" class="logo">BrainHub<span class="dot">.</span></a>
         <ul class="nav-links">
-          <li><a href="/index.html">Home</a></li>
-          <li><a href="index.html#universities">Universities</a></li>
-          <li><a href="index.html#secondary">Secondary</a></li>
-          <li><a href="index.html#quizzes">Quizzes</a></li>
-          <li><a href="index.html#flashcards">Flashcards</a></li>
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="universities.html">Universities</a></li>
           <li><a href="about.html">About</a></li>
-          <li><a href="#" class="btn-primary">Download App</a></li>
+          <!--<li><a href="#" class="btn-primary">Download App</a></li>-->
         </ul>
       </div>
     </nav>
 
     <main class="container">
-      <a href="/index.html" class="back-home">
-        <i class="fas fa-arrow-left"></i> Back to Home
-      </a>
+      <a href="../index.html" class="back-home"><i class="fas fa-arrow-left"></i> Back to Home</a>
 
       <div class="contact-content">
         <div class="content-header">
           <h1>Contact Us</h1>
-          <p class="subtitle">
-            We're here to help and answer any questions you might have
-          </p>
-        </div>
-
-        <div class="contact-info">
-          <h3>Get In Touch</h3>
-          <div class="contact-item">
-            <i class="fas fa-envelope"></i>
-            <div>
-              <strong>Email</strong>
-              <p>gabrieljoshuabanda81@gmail.com</p>
-            </div>
-          </div>
-          <div class="contact-item">
-            <i class="fas fa-phone"></i>
-            <div>
-              <strong>Phone</strong>
-              <p>+26 (0) 776681802</p>
-            </div>
-          </div>
-          <div class="contact-item">
-            <i class="fas fa-map-marker-alt"></i>
-            <div>
-              <strong>Address</strong>
-              <p>Plot 2474,<br />Mwalya Compound<br />Zambezi,<br />Zambia.</p>
-            </div>
-          </div>
-          <div class="contact-item">
-            <i class="fas fa-clock"></i>
-            <div>
-              <strong>Support Hours</strong>
-              <p>
-                Monday - Friday: 9:00 AM - 6:00 PM CAT<br />Saturday: 10:00 AM -
-                4:00 PM CAT<br />Sunday: Closed
-              </p>
-            </div>
-          </div>
+          <p class="subtitle">We'd love to hear from you.</p>
         </div>
 
         <div class="contact-form">
           <h3>Send Us a Message</h3>
-          <form id="contactForm">
+          
+          <form action="https://formspree.io/f/xzdazvwz" method="POST">
+            
             <div class="form-group">
-              <label for="name">Full Name *</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                required
-                placeholder="Enter your full name"
-              />
+              <label for="name">Full Name</label>
+              <input type="text" id="name" name="name" required placeholder="Enter your full name" />
             </div>
 
             <div class="form-group">
-              <label for="email">Email Address *</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                required
-                placeholder="Enter your email address"
-              />
+              <label for="email">Email Address</label>
+              <input type="email" id="email" name="email" required placeholder="Enter your email address" />
             </div>
 
             <div class="form-group">
-              <label for="subject">Subject</label>
-              <select id="subject" name="subject">
-                <option value="">Select a subject</option>
-                <option value="support">Technical Support</option>
-                <option value="content">Content Submission</option>
-                <option value="partnership">Partnership Inquiry</option>
-                <option value="feedback">Feedback & Suggestions</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="message">Message *</label>
-              <textarea
-                id="message"
-                name="message"
-                required
-                placeholder="Please provide details of your inquiry..."
-              ></textarea>
+              <label for="message">Message</label>
+              <textarea id="message" name="message" required placeholder="How can we help?"></textarea>
             </div>
 
             <button type="submit" class="submit-btn">Send Message</button>
@@ -150,7 +76,7 @@
           <h2>Frequently Asked Questions</h2>
           <p>
             <strong>Q: How can I contribute study materials?</strong><br />
-            A: Please email your materials to submissions@BrainHub.com with
+            A: Please fill the form above and we will get back to you shortly 😊 with
             details about the content and your contact information.
           </p>
 
@@ -168,71 +94,7 @@
         </div>
       </div>
     </main>
-
-    <footer>
-      <div class="container footer-content">
-        <div class="footer-col">
-          <h3>BrainHub<span class="dot">.</span></h3>
-          <p>Making education easy and accessible for everyone.</p>
-        </div>
-        <div class="footer-col">
-          <h4>Quick Links</h4>
-          <a href="/index.html">Home</a>
-          <a href="index.html#universities">Universities</a>
-          <a href="index.html#secondary">Secondary</a>
-          <a href="about.html">About Us</a>
-          <h4>AI Tools</h4>
-          <a href="http://chatgpt.com/">ChatGPT</a>
-          <a href="https://chat.deepseek.com/">DeepSeek AI</a>
-        </div>
-        <div class="footer-col">
-          <h4>Support</h4>
-          <a href="contact.html">Contact Us</a>
-          <a href="privacy-policy.html">Privacy Policy</a>
-          <a href="terms.html">Terms & Conditions</a>
-        </div>
-      </div>
-
-      <div class="footer-bottom">
-        <p>&copy; 2026 BrainHub. All rights reserved.</p>
-        <p id="realtime-clock" class="clock-text"></p>
-      </div>
-    </footer>
-
-    <script src="js/main.js"></script>
-    <script>
-      function updateFooterClock() {
-        const clockElement = document.getElementById("realtime-clock");
-        const now = new Date();
-        const dateOptions = {
-          weekday: "short",
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        };
-        const timeOptions = {
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit",
-        };
-        const dateString = now.toLocaleDateString("en-US", dateOptions);
-        const timeString = now.toLocaleTimeString("en-US", timeOptions);
-        clockElement.textContent = `${dateString} | ${timeString}`;
-      }
-
-      // Contact form submission
-      document
-        .getElementById("contactForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          alert(
-            "Thank you for your message! We will get back to you within 24 hours.",
-          );
-          this.reset();
-        });
-
-      updateFooterClock();
-      setInterval(updateFooterClock, 1000);
-    </script>
+    
+    <script src="../js/main.js"></script>
   </body>
 </html>

@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.png"/>
   </head>
   <body>
     <!-- Pomodoro Timer Widget -->
@@ -38,7 +38,7 @@
           <li><a href="pages/universities.html">Universities</a></li>
           <li><a href="pages/secondary.html">Secondary</a></li>
           <li><a href="pages/quizzes.html">Quizzes</a></li>
-          <li><a href="#flashcards">Flashcards</a></li>
+          <li><a href="pages/flashcards.html">Flashcards</a></li>
           <li><a href="pages/about.html">About</a></li>
           <button id="theme-toggle" class="btn-primary theme-toggle">
             <i class="fas fa-moon" id="theme-icon"></i>
@@ -143,59 +143,6 @@
       </div>
     </section>
 
-    <!-- Flashcards Section -->
-    <section class="flashcards-section container" id="flashcards">
-      <div class="section-header">
-        <h2>Interactive Flashcards</h2>
-        <p>Test your knowledge with these flip cards. Click to reveal answers!</p>
-      </div>
-
-      <div class="flashcards-container">
-        <div class="flashcard" id="flashcard">
-          <div class="flashcard-inner">
-            <div class="flashcard-front">
-              <div class="flashcard-icon">
-                <i class="fas fa-question-circle"></i>
-              </div>
-              <h3 id="flashcard-question">What is the capital of Zambia?</h3>
-              <p class="flashcard-hint">Click the card to flip</p>
-            </div>
-            <div class="flashcard-back">
-              <div class="flashcard-icon">
-                <i class="fas fa-lightbulb"></i>
-              </div>
-              <h3>Answer</h3>
-              <p id="flashcard-answer">Lusaka</p>
-              <p class="flashcard-explanation" id="flashcard-explanation">Lusaka is the capital and largest city of Zambia.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="flashcard-controls">
-          <button class="btn-secondary" id="prevCard">
-            <i class="fas fa-chevron-left"></i> Previous
-          </button>
-          <div class="flashcard-progress">
-            Card <span id="currentCard">1</span> of <span id="totalCards">5</span>
-          </div>
-          <button class="btn-primary" id="nextCard">
-            Next <i class="fas fa-chevron-right"></i>
-          </button>
-        </div>
-
-        <div class="flashcard-topics">
-          <h4>Topics Available:</h4>
-          <div class="topic-tags">
-            <span class="topic-tag active">Geography</span>
-            <span class="topic-tag">Science</span>
-            <span class="topic-tag">Mathematics</span>
-            <span class="topic-tag">History</span>
-            <span class="topic-tag">General</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <footer>
       <div class="container footer-content">
         <div class="footer-col">
@@ -210,7 +157,7 @@
           <a href="pages/universities.html">Universities</a>
           <a href="pages/secondary.html">Secondary</a>
           <a href="pages/quizzes.html">Quizzes</a>
-          <a href="#flashcards">Flashcards</a>
+          <a href="pages/flashcards.html">Flashcards</a>
           <h4>AI Tools</h4>
           <a href="http://chatgpt.com/">ChatGPT</a>
           <a href="https://chat.deepseek.com/">DeepSeek AI</a>

@@ -635,3 +635,11 @@ function toggleBookmark(id, title, url) {
   // Save back to local storage
   localStorage.setItem('brainhubBookmarks', JSON.stringify(bookmarks));
 }
+function generateBreadcrumb() {
+    const container = document.getElementById('dynamic-breadcrumb');
+    if (!container) return;
+
+    // Get path segments (filter out empty strings)
+    const path = window.location.pathname.split('/').filter(p => p.length > 0);
+    
+}
