@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BIO110 Test Papers | BrainHub</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="/index.html" class="logo">BrainHub<span class="dot">.</span></a>
+            <ul class="nav-links">
+                <li><a href="/index.html">Home</a></li>
+                <li><a href="/pages/universities.html" class="active">Universities</a></li>
+                <button id="theme-toggle" class="btn-primary theme-toggle"><i class="fas fa-moon" id="theme-icon"></i></button>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="uni-page-header">
+            <div class="breadcrumbs">
+                <a href="/index.html">Home</a> <i class="fas fa-chevron-right"></i>
+                <a href="/pages/universities.html">Universities</a> <i class="fas fa-chevron-right"></i>
+                <a href="/pages/universities/cbu.html">CBU</a> <i class="fas fa-chevron-right"></i>
+                <a href="/pages/universities/cbu/programs/natural-sciences.html">Natural Sciences</a> <i class="fas fa-chevron-right"></i>
+                <a href="/pages/universities/cbu/programs/natural-sciences/bio110/index.html">BIO110</a> <i class="fas fa-chevron-right"></i>
+                <span>Tests</span>
+            </div>
+            <h1>BIO110 Past Test Papers</h1>
+            <p class="subtitle">Select a paper to preview or download.</p>
+        </div>
+
+        <!-- Brick Wall Placeholder (hidden by default) -->
+        <div id="brickWall" class="brick-wall" style="display: none;">
+            <div class="brick-content">
+                <div class="brick-icon">
+                    <i class="fas fa-brick-wall"></i>
+                </div>
+                <h2>No Test Papers Yet</h2>
+                <p>We're currently gathering test papers for this course.<br>Please check back soon or explore other resources.</p>
+                <a href="/pages/universities/cbu/programs/natural-sciences.html" class="brick-btn">
+                    <i class="fas fa-arrow-left"></i> Back to Course
+                </a>
+            </div>
+        </div>
+
+        <!-- Document Viewer (hidden when empty) -->
+        <div class="doc-viewer" style="display: none;">
+            <div class="doc-list-panel">
+                <div class="doc-list-header">
+                    <span>Available Tests</span>
+                    <span id="docCount">0 files</span>
+                </div>
+                <div class="doc-list" id="docList"></div>
+                <button class="load-more-btn" id="loadMoreBtn">
+                    <i class="fas fa-plus-circle"></i> Load More
+                </button>
+            </div>
+
+            <div class="doc-preview-panel">
+                <div id="previewPlaceholder" class="preview-placeholder">
+                    <div class="preview-icon"><i class="fas fa-file-pdf"></i></div>
+                    <h3>Select an test paper</h3>
+                    <p>Choose a file from the list to see its details and download.</p>
+                </div>
+                <div id="previewActive" class="preview-active" style="display: none;"></div>
+            </div>
+        </div>
+    </main>
+
+    <script src="/js/main.js"></script>
+    <script>
+        (function() {
+            // Empty documents array – brick wall will appear
+            const documents = [];
+
+            // Initialize the document viewer (it will show brick wall)
+            if (typeof initDocumentViewer === 'function') {
+                initDocumentViewer(documents, 'tests');
+            } else {
+                console.error('initDocumentViewer function not found.');
+            }
+        })();
+    </script>
+</body>
+</html>

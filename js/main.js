@@ -58,6 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Initialize Pomodoro Timer
   initPomodoroTimer();
+  initWhatsNewModal();
 });
 
 // ==================== DARK MODE TOGGLE ====================
@@ -642,4 +643,223 @@ function generateBreadcrumb() {
     // Get path segments (filter out empty strings)
     const path = window.location.pathname.split('/').filter(p => p.length > 0);
     
+}
+// ==================== DOCUMENT VIEWER ====================
+function initDocumentViewer(documents, type) {
+  const docList = document.getElementById('docList');
+  const previewPlaceholder = document.getElementById('previewPlaceholder');
+  const previewActive = document.getElementById('previewActive');
+  const loadMoreBtn = document.getElementById('loadMoreBtn');
+
+  if (!docList) return;
+
+  let visibleCount = 5; // initial number of documents
+  let selectedDoc = null;
+
+  // Render document cards
+  function renderDocList() {
+    const docsToShow = documents.slice(0, visibleCount);
+    docList.innerHTML = docsToShow.map(doc => `
+      <div class="doc-card" data-id="${doc.id}">
+        <div class="doc-icon ${doc.iconClass}"><i class="fas ${doc.icon}"></i></div>
+        <div class="doc-info">
+          <div class="doc-title">${doc.title}</div>
+          <div class="doc-meta">
+            <span class="doc-type">${doc.type}</span>
+            <span class="doc-size"><i class="far fa-file"></i> ${doc.size}</span>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+    // Attach click listeners
+    document.querySelectorAll('.doc-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const id = card.dataset.id;
+        const doc = documents.find(d => d.id == id);
+        if (doc) selectDocument(doc);
+        // Update active state
+        document.querySelectorAll('.doc-card').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+      });
+    });
+
+    // Hide load more if all documents are shown
+    if (loadMoreBtn) {
+      loadMoreBtn.style.display = visibleCount >= documents.length ? 'none' : 'flex';
+    }
+  }
+
+  // Select a document and update preview
+  function selectDocument(doc) {
+    selectedDoc = doc;
+    previewPlaceholder.style.display = 'none';
+    previewActive.style.display = 'block';
+    previewActive.innerHTML = `
+      <div class="preview-doc-icon"><i class="fas ${doc.icon}"></i></div>
+      <div class="preview-doc-title">${doc.title}</div>
+      <div class="preview-doc-meta">
+        <span><i class="far fa-file-alt"></i> ${doc.type}</span>
+        <span><i class="far fa-save"></i> ${doc.size}</span>
+      </div>
+      <a href="${doc.url}" download class="download-btn">
+        <i class="fas fa-download"></i> Download
+      </a>
+    `;
+  }
+
+  // Load more button
+  if (loadMoreBtn) {
+    loadMoreBtn.addEventListener('click', () => {
+      visibleCount += 5;
+      renderDocList();
+    });
+  }
+
+  // Initial render
+  renderDocList();
+
+  // Optional: select first document by default
+  if (documents.length > 0) {
+    selectDocument(documents[0]);
+    // Also mark the first card as active after a short delay (to ensure DOM is ready)
+    setTimeout(() => {
+      const firstCard = document.querySelector('.doc-card');
+      if (firstCard) firstCard.classList.add('active');
+    }, 100);
+  }
+}
+// ==================== DOCUMENT VIEWER ====================
+function initDocumentViewer(documents, type) {
+  const docViewer = document.querySelector('.doc-viewer');
+  const brickWall = document.getElementById('brickWall');
+  const docList = document.getElementById('docList');
+  const previewPlaceholder = document.getElementById('previewPlaceholder');
+  const previewActive = document.getElementById('previewActive');
+  const loadMoreBtn = document.getElementById('loadMoreBtn');
+  const docCountSpan = document.getElementById('docCount');
+
+  // If no documents, show brick wall and hide viewer
+  if (!documents || documents.length === 0) {
+    if (docViewer) docViewer.style.display = 'none';
+    if (brickWall) brickWall.style.display = 'flex';
+    return;
+  }
+
+  // Otherwise hide brick wall and show viewer
+  if (brickWall) brickWall.style.display = 'none';
+  if (docViewer) docViewer.style.display = 'flex';
+
+  if (!docList) return;
+
+  let visibleCount = 5;
+  let selectedDoc = null;
+
+  if (docCountSpan) docCountSpan.textContent = documents.length + ' files';
+
+  function renderDocList() {
+    const docsToShow = documents.slice(0, visibleCount);
+    docList.innerHTML = docsToShow.map(doc => `
+      <div class="doc-card" data-id="${doc.id}">
+        <div class="doc-icon ${doc.iconClass}"><i class="fas ${doc.icon}"></i></div>
+        <div class="doc-info">
+          <div class="doc-title">${doc.title}</div>
+          <div class="doc-meta">
+            <span class="doc-type">${doc.type}</span>
+            <span class="doc-size"><i class="far fa-file"></i> ${doc.size}</span>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+    document.querySelectorAll('.doc-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const id = card.dataset.id;
+        const doc = documents.find(d => d.id == id);
+        if (doc) selectDocument(doc);
+        document.querySelectorAll('.doc-card').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+      });
+    });
+
+    if (loadMoreBtn) {
+      loadMoreBtn.style.display = visibleCount >= documents.length ? 'none' : 'flex';
+    }
+  }
+
+  function selectDocument(doc) {
+    selectedDoc = doc;
+    previewPlaceholder.style.display = 'none';
+    previewActive.style.display = 'block';
+    previewActive.innerHTML = `
+      <div class="preview-doc-icon"><i class="fas ${doc.icon}"></i></div>
+      <div class="preview-doc-title">${doc.title}</div>
+      <div class="preview-doc-meta">
+        <span><i class="far fa-file-alt"></i> ${doc.type}</span>
+        <span><i class="far fa-save"></i> ${doc.size}</span>
+      </div>
+      <a href="${doc.url}" download class="download-btn">
+        <i class="fas fa-download"></i> Download
+      </a>
+    `;
+  }
+
+  if (loadMoreBtn) {
+    loadMoreBtn.addEventListener('click', () => {
+      visibleCount += 5;
+      renderDocList();
+    });
+  }
+
+  renderDocList();
+
+  if (documents.length > 0) {
+    selectDocument(documents[0]);
+    setTimeout(() => {
+      const firstCard = document.querySelector('.doc-card');
+      if (firstCard) firstCard.classList.add('active');
+    }, 100);
+  }
+}
+// ==================== WHAT'S NEW MODAL ====================
+function initWhatsNewModal() {
+  const modal = document.getElementById('whatsNewModal');
+  const closeBtn = document.getElementById('closeModalBtn');
+  const gotItBtn = document.getElementById('gotItBtn');
+  const dontShowBtn = document.getElementById('dontShowAgainBtn');
+
+  if (!modal) return;
+
+  // Check if user has dismissed permanently
+  const dontShow = localStorage.getItem('brainhub-whatsnew-dismiss') === 'true';
+  if (dontShow) return;
+
+  // Show modal after a tiny delay to ensure smooth page load
+  setTimeout(() => {
+    modal.style.display = 'flex';
+  }, 300);
+
+  // Hide modal function
+  function hideModal() {
+    modal.style.display = 'none';
+  }
+
+  // Close on overlay click (optional)
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) hideModal();
+  });
+
+  // Close button
+  if (closeBtn) closeBtn.addEventListener('click', hideModal);
+
+  // Got it button – just close
+  if (gotItBtn) gotItBtn.addEventListener('click', hideModal);
+
+  // Don't show again – set localStorage and close
+  if (dontShowBtn) {
+    dontShowBtn.addEventListener('click', () => {
+      localStorage.setItem('brainhub-whatsnew-dismiss', 'true');
+      hideModal();
+    });
+  }
 }

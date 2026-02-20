@@ -36,7 +36,7 @@
         </button>
         <ul class="nav-links">
           <li><a href="pages/universities.html">Universities</a></li>
-          <li><a href="pages/secondary.html">Secondary</a></li>
+          <!--<li><a href="pages/secondary.html">Secondary</a></li>-->
           <li><a href="pages/quizzes.html">Quizzes</a></li>
           <li><a href="pages/flashcards.html">Flashcards</a></li>
           <li><a href="pages/about.html">About</a></li>
@@ -51,7 +51,7 @@
       <div class="container hero-content">
         <h1>Everything you need to study in one clean place.</h1>
         <p>
-          Access university notes, past papers, quizzes, and AI tools without a
+          Access university notes, <!--past papers, quizzes-->, and AI tools without a
           login.
         </p>
 
@@ -102,7 +102,7 @@
             >Browse Universities <i class="fas fa-arrow-right"></i
           ></a>
         </div>
-
+<!--
         <div class="card" id="secondary">
           <div class="icon-box green-bg">
             <i class="fas fa-school"></i>
@@ -140,8 +140,10 @@
             >Start Quizzing <i class="fas fa-arrow-right"></i
           ></a>
         </div>
+      -->
       </div>
     </section>
+    
 
     <footer>
       <div class="container footer-content">
@@ -207,5 +209,47 @@
       updateFooterClock();
       setInterval(updateFooterClock, 1000);
     </script>
+    <!-- What's New Modal -->
+<div id="whatsNewModal" class="modal-overlay" style="display: none;">
+  <div class="modal-container">
+    <button class="modal-close" id="closeModalBtn"><i class="fas fa-times"></i></button>
+    <div class="modal-header">
+      <div class="modal-icon">
+        <i class="fas fa-sparkles"></i>
+      </div>
+      <h2>What's New at BrainHub</h2>
+      <p class="modal-subtitle">We're constantly improving your learning experience</p>
+    </div>
+    <div class="modal-body">
+      <ul class="updates-list">
+        <li>
+          <span class="update-badge new">NEW</span>
+          <span class="update-text"><strong>Engineering Drawing (ED110)</strong> – Added notes, exams & tests pages</span>
+        </li>
+        <li>
+          <span class="update-badge update">UPDATE</span>
+          <span class="update-text"><strong>Brick wall placeholders</strong> – Stylish "no documents" pages for empty sections</span>
+        </li>
+        <li>
+          <span class="update-badge new">NEW</span>
+          <span class="update-text"><strong>Two‑panel document viewer</strong> – Browse & preview files with one click</span>
+        </li>
+        <li>
+          <span class="update-badge update">UPDATE</span>
+          <span class="update-text"><strong>Dark mode</strong> – Now adapts to your system preference</span>
+        </li>
+        <li>
+          <span class="update-badge fix">FIX</span>
+          <span class="update-text"><strong>Mobile navigation</strong> – Improved touch targets and animations</span>
+        </li>
+      </ul>
+      <p class="update-footer">We're working on more courses and features. Stay tuned!</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-primary" id="gotItBtn">Got it</button>
+      <button class="btn-secondary" id="dontShowAgainBtn">Don't show again</button>
+    </div>
+  </div>
+</div>
   </body>
 </html>

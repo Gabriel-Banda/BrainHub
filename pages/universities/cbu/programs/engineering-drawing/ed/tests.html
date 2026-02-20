@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ED 111 Test Papers | BrainHub</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="/index.html" class="logo">BrainHub<span class="dot">.</span></a>
+            <ul class="nav-links">
+                <li><a href="/index.html">Home</a></li>
+                <li><a href="/pages/universities.html" class="active">Universities</a></li>
+                <button id="theme-toggle" class="btn-primary theme-toggle"><i class="fas fa-moon" id="theme-icon"></i></button>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="uni-page-header">
+            <div class="breadcrumbs">
+                <a href="/index.html">Home</a> <i class="fas fa-chevron-right"></i>
+                <a href="/pages/universities.html">Universities</a> <i class="fas fa-chevron-right"></i>
+                <a href="/pages/universities/cbu.html">CBU</a> <i class="fas fa-chevron-right"></i>
+                <a href="/pages/universities/cbu/programs/engineering.html">Engineering</a> <i class="fas fa-chevron-right"></i>
+                <a href="/pages/universities/cbu/programs/engineering-drawing/index.html">Engineering Drawing</a> <i class="fas fa-chevron-right"></i>
+                <span>Test Papers</span>
+            </div>
+            <h1>ED111 Test Papers</h1>
+            <p class="subtitle">Select a document to preview or download.</p>
+        </div>
+
+        <!-- Two‑panel viewer -->
+        <div class="doc-viewer">
+            <!-- Left panel: document list -->
+            <div class="doc-list-panel">
+                <div class="doc-list-header">
+                    <span>Available Test Papers</span>
+                    <span id="docCount"></span>
+                </div>
+                <div class="doc-list" id="docList"></div>
+                <button class="load-more-btn" id="loadMoreBtn">
+                    <i class="fas fa-plus-circle"></i> Load More
+                </button>
+            </div>
+
+            <!-- Right panel: preview -->
+            <div class="doc-preview-panel">
+                <div id="previewPlaceholder" class="preview-placeholder">
+                    <div class="preview-icon"><i class="fas fa-file-pdf"></i></div>
+                    <h3>Select a document</h3>
+                    <p>Choose a file from the list to see its details and download.</p>
+                </div>
+                <div id="previewActive" class="preview-active" style="display: none;"></div>
+            </div>
+        </div>
+    </main>
+
+    <script src="/js/main.js"></script>
+    <script>
+        (function() {
+            // Document data for ED111 Test Papers
+            const documents = [
+                {
+                    id: 1,
+                    title: 'Task June 2024 SMMS – 111 - 211',
+                    type: 'PDF',
+                    size: '148 KB',
+                    icon: 'fa-file-pdf',
+                    iconClass: 'pdf',
+                    url: '../../../../../../assets/documents/cbu/ED/ED 111 - 211 Task June_ 2024_SMMS_CBU.pdf'
+                },
+                {
+                    id: 2,
+                    title: 'Test 1 May 2024 SMMS – 111 - 211',
+                    type: 'PDF',
+                    size: '107 KB',
+                    icon: 'fa-file-pdf',
+                    iconClass: 'pdf',
+                    url: '../../../../../../assets/documents/cbu/ED/ED 111 - ED 211_CBU_SMMS_Test 1_15_May_2024-1.pdf'
+                }
+            ];
+
+            // Update document count
+            document.getElementById('docCount').textContent = documents.length + ' files';
+
+            // Initialize the document viewer
+            if (typeof initDocumentViewer === 'function') {
+                initDocumentViewer(documents, 'tests');
+            } else {
+                console.error('initDocumentViewer function not found. Make sure main.js is loaded.');
+            }
+        })();
+    </script>
+</body>
+</html>
