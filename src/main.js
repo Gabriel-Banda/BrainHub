@@ -447,7 +447,7 @@ function initAIChatbot() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model: 'claude-haiku-4-5-20251001',
+          model: 'openrouter/free',
           max_tokens: 1000,
           system: `You are a helpful, friendly AI tutor on BrainHub, a free study platform for Zambian university students. Context: ${context}. Keep answers clear, concise and encouraging. Use simple language suitable for university students. When explaining concepts, use examples relevant to Zambia where possible.`,
           messages: history
