@@ -9,9 +9,10 @@
 
 ## 🚀 Features
 
-- 📚 **Free and Open Learning** — Students can access quality study materials at no cost.  
+- 📚 **Open Learning** — Students can access quality study materials.  
 - 💻 **Web-Based Platform** — Built with standard web technologies (HTML, CSS, JavaScript).  
 - 📱 **Responsive Design** — Works well on both mobile and desktop devices.  
+- 🤖 **Artificial Intelligence** - Created a BrainHub AI chatbot that effortlessly respond to any question ASAP. 
 - 🧩 **Modular Structure** — Easy to extend and customize with new pages and resources.  
 - 📄 **Legal & User-Focused Content** — Includes privacy policy, terms, contact, and more.
 
