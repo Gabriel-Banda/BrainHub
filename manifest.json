@@ -1,0 +1,47 @@
+{
+  "name": "BrainHub",
+  "short_name": "BrainHub",
+  "description": "Free university study materials, past papers, flashcards and AI tools for Zambian students.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/public/assets/images/android-icon-foreground.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/public/assets/images/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/public/assets/images/favicon.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["education", "productivity"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Universities",
+      "short_name": "Unis",
+      "description": "Browse university study materials",
+      "url": "/pages/universities.html",
+      "icons": [{ "src": "/public/assets/images/favicon.png", "sizes": "64x64" }]
+    },
+    {
+      "name": "Flashcards",
+      "short_name": "Cards",
+      "description": "Study with flashcards",
+      "url": "/pages/flashcards.html",
+      "icons": [{ "src": "/public/assets/images/favicon.png", "sizes": "64x64" }]
+    }
+  ]
+}

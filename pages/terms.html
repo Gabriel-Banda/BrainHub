@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terms &amp; Conditions | BrainHub</title>
+  <link rel="stylesheet" href="/src/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link rel="icon" type="image/x-icon" href="/public/assets/images/favicon.png" />
+</head>
+<body>
+<div id="progress-bar"></div>
+<button class="back-to-top"><i class="fas fa-arrow-up"></i></button>
+<nav class="navbar"><div class="container nav-container">
+  <a href="/index.html" class="logo">BrainHub<span class="dot">.</span></a>
+  <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+  <ul class="nav-links">
+    <li><a href="/index.html">Home</a></li>
+    <li><a href="universities.html">Universities</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><button id="theme-toggle" class="btn-primary theme-toggle"><i class="fas fa-moon" id="theme-icon"></i></button></li>
+  </ul>
+</div></nav>
+<main class="container">
+  <a href="/index.html" class="back-home"><i class="fas fa-arrow-left"></i> Back to Home</a>
+  <div class="policy-content">
+    <div class="content-header reveal"><h1>Terms &amp; Conditions</h1><p class="subtitle">Effective Date: January 26, 2026</p></div>
+    <div class="content-section reveal"><h2>1. Acceptance of Terms</h2><p>By accessing BrainHub, you agree to these Terms. If you disagree, please do not use the platform.</p></div>
+    <div class="content-section reveal"><h2>2. Use License</h2><p>You may access materials for personal, non-commercial use only. You may not modify, copy for commercial purposes, decompile, or transfer materials to others.</p></div>
+    <div class="content-section reveal"><h2>3. User Responsibilities</h2><ul><li>Use the platform for lawful purposes only</li><li>Do not upload malicious software or content</li><li>Respect intellectual property rights</li><li>Do not attempt to gain unauthorised access</li></ul></div>
+    <div class="content-section reveal"><h2>4. Content Disclaimer</h2><p>All materials are provided for educational purposes only. We make no warranties about completeness or accuracy. Rely on materials at your own risk.</p></div>
+    <div class="content-section reveal"><h2>5. Intellectual Property</h2><p>The platform and its original content are owned by BrainHub and protected by applicable intellectual property laws.</p></div>
+    <div class="content-section reveal"><h2>6. Limitations</h2><p>BrainHub is not liable for any damages arising from use of the platform or inability to access materials.</p></div>
+    <div class="content-section reveal"><h2>7. Modifications</h2><p>We may revise these terms at any time. Continued use of the platform constitutes acceptance of the updated terms.</p></div>
+    <div class="content-section reveal"><h2>8. Governing Law</h2><p>These terms are governed by the laws of Zambia.</p></div>
+    <div class="content-section reveal"><h2>9. Contact</h2><p>Email: <strong>gabrieljoshuabanda81@gmail.com</strong><br />Address: Plot 2474, Mwalya Compound, Zambezi, Zambia.</p></div>
+  </div>
+</main>
+<footer>
+  <div class="container footer-content">
+    <div class="footer-col"><h3>BrainHub<span class="dot">.</span></h3><p>Free education for everyone.</p></div>
+    <div class="footer-col"><h4>Platform</h4><a href="/index.html">Home</a><a href="universities.html">Universities</a></div>
+    <div class="footer-col"><h4>Support</h4><a href="contact.html">Contact Us</a><a href="privacy-policy.html">Privacy Policy</a><a href="terms.html">Terms</a></div>
+  </div>
+  <div class="footer-bottom"><p>&copy; 2026 BrainHub. All rights reserved.</p><p id="realtime-clock" class="clock-text"></p></div>
+</footer>
+<script src="/src/main.js"></script>
+
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{},Tawk_LoadStart=new Date();
+(function(){var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];s1.async=true;s1.src='https://embed.tawk.to/69a705c374e2141c34038ab5/1jiq6t1l1';s1.charset='UTF-8';s1.setAttribute('crossorigin','*');s0.parentNode.insertBefore(s1,s0);})();</script>
+
+<!-- AI Chatbot -->
+<button class="chat-toggle-btn" id="chatToggleBtn" aria-label="Open AI Tutor">
+  <i class="fas fa-robot"></i>
+  <span class="chat-badge">AI</span>
+</button>
+<div class="ai-chat-window" id="aiChatWindow">
+  <div class="chat-header">
+    <div class="chat-avatar"><i class="fas fa-robot"></i></div>
+    <div class="chat-header-info">
+      <h4>BrainHub AI Tutor</h4>
+      <span><span class="chat-status-dot"></span> Online · Ready to help</span>
+    </div>
+    <button class="chat-close-btn" id="chatCloseBtn"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="chat-messages" id="chatMessages"></div>
+  <div class="chat-input-area">
+    <input type="text" id="chatInput" placeholder="Ask anything about your course…" autocomplete="off" />
+    <button id="chatSendBtn"><i class="fas fa-paper-plane"></i></button>
+  </div>
+  <div class="chat-footer-note">Powered by Claude AI</div>
+</div>
+<nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+  <ul>
+    <li><a href="/index.html" data-page="home"><i class="fas fa-home"></i>Home</a></li>
+    <li><a href="/pages/universities.html" data-page="universities"><i class="fas fa-university"></i>Study</a></li>
+    <li><a href="/pages/flashcards.html" data-page="flashcards"><i class="fas fa-layer-group"></i>Cards</a></li>
+    <li><a href="/pages/quizzes.html" data-page="quizzes"><i class="fas fa-stopwatch"></i>Quizzes</a></li>
+    <li><button class="nav-ai-btn" onclick="document.getElementById('chatToggleBtn').click()"><i class="fas fa-robot"></i>AI Tutor</button></li>
+  </ul>
+</nav>
+
+</body>
+</html>

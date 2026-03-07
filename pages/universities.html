@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Browse Universities | BrainHub</title>
+  <meta name="description" content="Explore study materials, courses, and programs from top universities in Zambia." />
+  <link rel="stylesheet" href="/src/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link rel="icon" type="image/x-icon" href="/public/assets/images/favicon.png" />
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<button class="back-to-top" aria-label="Back to top"><i class="fas fa-arrow-up"></i></button>
+
+<div class="pomodoro-widget" id="pomodoroWidget">
+  <div class="timer-header">
+    <h4><i class="fas fa-clock"></i> Study Timer</h4>
+    <button class="timer-close" id="timerClose"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="timer-display" id="timerDisplay">25:00</div>
+  <div class="timer-controls">
+    <button class="timer-btn" id="timerStart"><i class="fas fa-play"></i> Start</button>
+    <button class="timer-btn" id="timerPause"><i class="fas fa-pause"></i> Pause</button>
+    <button class="timer-btn" id="timerReset"><i class="fas fa-redo"></i> Reset</button>
+  </div>
+  <div class="timer-session">Sessions: <span id="sessionCount">0</span></div>
+</div>
+
+<nav class="navbar">
+  <div class="container nav-container">
+    <a href="/index.html" class="logo">BrainHub<span class="dot">.</span></a>
+    <button class="mobile-menu-btn" aria-label="Toggle navigation"><i class="fas fa-bars"></i></button>
+    <ul class="nav-links">
+      <li><a href="/index.html">Home</a></li>
+      <li><a href="universities.html" class="active">Universities</a></li>
+      <li><a href="quizzes.html">Quizzes</a></li>
+      <li><a href="flashcards.html">Flashcards</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><button id="theme-toggle" class="btn-primary theme-toggle"><i class="fas fa-moon" id="theme-icon"></i></button></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="container">
+  <div class="uni-page-header">
+    <div class="breadcrumbs">
+      <a href="/index.html">Home</a>
+      <i class="fas fa-chevron-right"></i>
+      <span>Universities</span>
+    </div>
+    <div class="header-actions">
+      <div class="title-group">
+        <h1>University Resources</h1>
+        <p class="subtitle">Select your institution to access notes, past papers, and more.</p>
+      </div>
+      <div class="uni-search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" id="uniSearchInput" placeholder="Search universities…" aria-label="Search universities" />
+      </div>
+    </div>
+  </div>
+
+  <div class="uni-grid" id="uniGrid">
+    <a href="universities/cbu.html" class="uni-card reveal" data-keywords="CBU Copperbelt University Kitwe">
+      <div class="uni-logo logo-white">
+        <img src="/public/assets/images/uni-logos/CBU_Logo.png" alt="CBU Logo" />
+      </div>
+      <div class="uni-details">
+        <h3>CBU</h3>
+        <p>Copperbelt University</p>
+      </div>
+      <div class="uni-arrow"><i class="fas fa-arrow-right"></i></div>
+    </a>
+    <!-- More universities coming soon — they'll appear here -->
+  </div>
+
+  <div id="noResults" class="no-results" style="display:none;">
+    <div class="no-results-content">
+      <i class="fas fa-search"></i>
+      <h3>No universities found</h3>
+      <p>We couldn't find a match for your search.</p>
+      <button onclick="clearSearch()" class="btn-text">Clear search</button>
+    </div>
+  </div>
+
+  <div class="content-section" style="margin-top:3rem;">
+    <h3 style="font-family:var(--font-display);font-weight:700;color:var(--text-900);margin-bottom:0.5rem;">Don't see your university?</h3>
+    <p>We're constantly adding new institutions. <a href="contact.html" style="color:var(--primary);font-weight:600;">Contact us</a> to request your university or contribute materials.</p>
+  </div>
+</main>
+
+<footer>
+  <div class="container footer-content">
+    <div class="footer-col">
+      <h3>BrainHub<span class="dot">.</span></h3>
+      <p>Making quality education accessible and free for everyone.</p>
+      <button class="timer-toggle" id="timerToggle"><i class="fas fa-clock"></i> Study Timer</button>
+    </div>
+    <div class="footer-col">
+      <h4>Platform</h4>
+      <a href="/index.html">Home</a>
+      <a href="universities.html" class="active">Universities</a>
+      <a href="quizzes.html">Quizzes</a>
+      <a href="flashcards.html">Flashcards</a>
+      <h4>AI Tools</h4>
+      <a href="https://chat.openai.com/" target="_blank" rel="noopener">ChatGPT</a>
+      <a href="https://chat.deepseek.com/" target="_blank" rel="noopener">DeepSeek AI</a>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <a href="about.html">About Us</a>
+      <a href="contact.html">Contact Us</a>
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="terms.html">Terms &amp; Conditions</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 BrainHub. All rights reserved.</p>
+    <p id="realtime-clock" class="clock-text"></p>
+  </div>
+</footer>
+
+<audio id="timerBeep" preload="auto">
+  <source src="https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3" type="audio/mpeg">
+</audio>
+<script src="/src/main.js"></script>
+<nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+  <ul>
+    <li><a href="/index.html" data-page="home"><i class="fas fa-home"></i>Home</a></li>
+    <li><a href="/pages/universities.html" data-page="universities"><i class="fas fa-university"></i>Study</a></li>
+    <li><a href="/pages/flashcards.html" data-page="flashcards"><i class="fas fa-layer-group"></i>Cards</a></li>
+    <li><a href="/pages/quizzes.html" data-page="quizzes"><i class="fas fa-stopwatch"></i>Quizzes</a></li>
+    <li><button class="nav-ai-btn" onclick="document.getElementById('chatToggleBtn').click()"><i class="fas fa-robot"></i>AI Tutor</button></li>
+  </ul>
+</nav>
+<script>
+  const searchInput = document.getElementById('uniSearchInput');
+  const grid = document.getElementById('uniGrid');
+  const noResults = document.getElementById('noResults');
+
+  searchInput.addEventListener('keyup', function () {
+    const q = this.value.toUpperCase().trim();
+    const cards = grid.getElementsByClassName('uni-card');
+    let hasVisible = false;
+    Array.from(cards).forEach(card => {
+      const kw = card.getAttribute('data-keywords').toUpperCase();
+      const show = !q || kw.includes(q);
+      card.style.display = show ? '' : 'none';
+      if (show) hasVisible = true;
+    });
+    noResults.style.display = (!hasVisible && q) ? 'block' : 'none';
+  });
+
+  function clearSearch() {
+    searchInput.value = '';
+    searchInput.dispatchEvent(new Event('keyup'));
+    searchInput.focus();
+  }
+</script>
+
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];s1.async=true;s1.src='https://embed.tawk.to/69a705c374e2141c34038ab5/1jiq6t1l1';s1.charset='UTF-8';s1.setAttribute('crossorigin','*');s0.parentNode.insertBefore(s1,s0);})();
+</script>
+<!--End of Tawk.to Script-->
+
+<!-- AI Chatbot -->
+<button class="chat-toggle-btn" id="chatToggleBtn" aria-label="Open AI Tutor">
+  <i class="fas fa-robot"></i>
+  <span class="chat-badge">AI</span>
+</button>
+<div class="ai-chat-window" id="aiChatWindow">
+  <div class="chat-header">
+    <div class="chat-avatar"><i class="fas fa-robot"></i></div>
+    <div class="chat-header-info">
+      <h4>BrainHub AI Tutor</h4>
+      <span><span class="chat-status-dot"></span> Online · Ready to help</span>
+    </div>
+    <button class="chat-close-btn" id="chatCloseBtn"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="chat-messages" id="chatMessages"></div>
+  <div class="chat-input-area">
+    <input type="text" id="chatInput" placeholder="Ask anything about your course…" autocomplete="off" />
+    <button id="chatSendBtn"><i class="fas fa-paper-plane"></i></button>
+  </div>
+  <div class="chat-footer-note">Powered by Claude AI</div>
+</div>
+<nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+  <ul>
+    <li><a href="/index.html" data-page="home"><i class="fas fa-home"></i>Home</a></li>
+    <li><a href="/pages/universities.html" data-page="universities"><i class="fas fa-university"></i>Study</a></li>
+    <li><a href="/pages/flashcards.html" data-page="flashcards"><i class="fas fa-layer-group"></i>Cards</a></li>
+    <li><a href="/pages/quizzes.html" data-page="quizzes"><i class="fas fa-stopwatch"></i>Quizzes</a></li>
+    <li><button class="nav-ai-btn" onclick="document.getElementById('chatToggleBtn').click()"><i class="fas fa-robot"></i>AI Tutor</button></li>
+  </ul>
+</nav>
+</body>
+</html>

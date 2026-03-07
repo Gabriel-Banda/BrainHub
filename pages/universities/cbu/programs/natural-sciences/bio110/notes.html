@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BIO110 Lecture Notes | CBU | BrainHub</title>
+  <meta name="description" content="Free BIO110 Biology lecture notes for CBU Natural Sciences students. Download PDFs and study resources." />
+  <meta name="course-context" content="BIO110 Biology at CBU - Cell structure, genetics, cellular biology for Zambian university students" />
+  <link rel="stylesheet" href="/src/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link rel="icon" type="image/x-icon" href="/public/assets/images/favicon.png" />
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<button class="back-to-top" aria-label="Back to top"><i class="fas fa-arrow-up"></i></button>
+
+<div class="pomodoro-widget" id="pomodoroWidget">
+  <div class="timer-header">
+    <h4><i class="fas fa-clock"></i> Study Timer</h4>
+    <button class="timer-close" id="timerClose"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="timer-display" id="timerDisplay">25:00</div>
+  <div class="timer-controls">
+    <button class="timer-btn" id="timerStart"><i class="fas fa-play"></i> Start</button>
+    <button class="timer-btn" id="timerPause"><i class="fas fa-pause"></i> Pause</button>
+    <button class="timer-btn" id="timerReset"><i class="fas fa-redo"></i> Reset</button>
+  </div>
+  <div class="timer-session">Sessions: <span id="sessionCount">0</span></div>
+</div>
+
+<nav class="navbar">
+  <div class="container nav-container">
+    <a href="/index.html" class="logo">BrainHub<span class="dot">.</span></a>
+    <button class="mobile-menu-btn" aria-label="Toggle navigation"><i class="fas fa-bars"></i></button>
+    <ul class="nav-links">
+      <li><a href="/index.html">Home</a></li>
+      <li><a href="/pages/universities.html" class="active">Universities</a></li>
+      <li><a href="/pages/quizzes.html">Quizzes</a></li>
+      <li><a href="/pages/flashcards.html">Flashcards</a></li>
+      <li><a href="/pages/about.html">About</a></li>
+      <li><a href="/pages/contact.html">Contact</a></li>
+      <li><button id="theme-toggle" class="btn-primary theme-toggle"><i class="fas fa-moon" id="theme-icon"></i></button></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="container">
+  <!-- Breadcrumbs -->
+  <div class="uni-page-header">
+    <div class="breadcrumbs">
+      <a href="/index.html">Home</a><i class="fas fa-chevron-right"></i>
+      <a href="/pages/universities.html">Universities</a><i class="fas fa-chevron-right"></i>
+      <a href="/pages/universities/cbu.html">CBU</a><i class="fas fa-chevron-right"></i>
+      <a href="/pages/universities/cbu/programs/natural-sciences.html">Natural Sciences</a><i class="fas fa-chevron-right"></i>
+      <a href="/pages/universities/cbu/programs/natural-sciences/bio110/index.html">BIO110</a><i class="fas fa-chevron-right"></i>
+      <span>Lecture Notes</span>
+    </div>
+
+    <div class="title-group">
+      <h1>BIO110 Lecture Notes</h1>
+      <p class="subtitle">Select a document to read or download.</p>
+      <span class="last-updated"><i class="far fa-clock"></i> Last updated: January 2026</span>
+    </div>
+  </div>
+
+  <!-- Progress tracker -->
+  <div class="course-progress-wrap reveal">
+    <h4>
+      <i class="fas fa-tasks" style="color:var(--primary)"></i>
+      Your Progress
+    </h4>
+    <div class="progress-track">
+      <div class="progress-fill" id="courseProgressBar"></div>
+    </div>
+    <span id="courseProgressLabel">0 / 0 completed</span>
+  </div>
+
+  <!-- Completion certificate trigger (auto-shows when all done) -->
+  <div class="cert-trigger-wrap" id="certTrigger" data-course="BIO110 — Cell Biology, CBU">
+    <div style="font-size:2rem;margin-bottom:0.5rem">🎓</div>
+    <h4>You've completed all resources!</h4>
+    <p>Download your personalised study completion certificate.</p>
+    <button class="cert-generate-btn" id="certGenerateBtn">
+      <i class="fas fa-award"></i> Generate Certificate
+    </button>
+  </div>
+
+  <!-- Document Viewer -->
+  <div class="doc-viewer">
+    <div class="doc-list-panel">
+      <div class="doc-list-header">
+        <span>Available Notes</span>
+        <span id="docCount"></span>
+      </div>
+      <div class="doc-list" id="docList"></div>
+      <button class="load-more-btn" id="loadMoreBtn" style="display:none">
+        <i class="fas fa-plus-circle"></i> Load More
+      </button>
+      <!-- Suggest a resource -->
+      <button class="suggest-btn suggest-resource-btn" data-course="BIO 110" data-university="CBU">
+        <i class="fas fa-plus-circle"></i> Suggest a resource for this course
+      </button>
+    </div>
+    <div class="doc-preview-panel">
+      <div id="previewPlaceholder" class="preview-placeholder">
+        <div class="preview-icon"><i class="fas fa-file-pdf"></i></div>
+        <h3>Select a document</h3>
+        <p>Choose a file from the list to preview and download.</p>
+      </div>
+      <div id="previewActive" class="preview-active" style="display:none;"></div>
+    </div>
+  </div>
+
+  <!-- Students also viewed -->
+  <div id="alsoViewedContainer" data-courses='[
+    {"code":"PH110","name":"Physics PH 110","desc":"Mechanics, waves & thermodynamics","url":"/pages/universities/cbu/programs/natural-sciences/ph110/index.html","color":"#eff6ff","textColor":"#1d4ed8"},
+    {"code":"CH110","name":"Chemistry CH 110","desc":"Atomic structure & bonding","url":"/pages/universities/cbu/programs/natural-sciences/ch110/index.html","color":"#f0fdf4","textColor":"#15803d"},
+    {"code":"MA110","name":"Maths MA 110","desc":"Calculus & linear algebra","url":"/pages/universities/cbu/programs/natural-sciences/ma110/index.html","color":"#fff7ed","textColor":"#c2410c"},
+    {"code":"LA111","name":"Languages LA 111","desc":"Communication & academic writing","url":"/pages/universities/cbu/programs/natural-sciences/la111/index.html","color":"#fdf4ff","textColor":"#7e22ce"}
+  ]'></div>
+</main>
+
+<footer>
+  <div class="container footer-content">
+    <div class="footer-col">
+      <h3>BrainHub<span class="dot">.</span></h3>
+      <p>Free education for everyone.</p>
+      <button class="timer-toggle" id="timerToggle"><i class="fas fa-clock"></i> Study Timer</button>
+    </div>
+    <div class="footer-col">
+      <h4>Platform</h4>
+      <a href="/index.html">Home</a>
+      <a href="/pages/universities.html">Universities</a>
+      <a href="/pages/flashcards.html">Flashcards</a>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <a href="/pages/contact.html">Contact Us</a>
+      <a href="/pages/privacy-policy.html">Privacy Policy</a>
+      <a href="/pages/terms.html">Terms</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 BrainHub. All rights reserved.</p>
+    <p id="realtime-clock" class="clock-text"></p>
+  </div>
+</footer>
+
+<!-- AI Chatbot -->
+<button class="chat-toggle-btn" id="chatToggleBtn" aria-label="Open AI Tutor">
+  <i class="fas fa-robot"></i>
+  <span class="chat-badge">AI</span>
+</button>
+<div class="ai-chat-window" id="aiChatWindow">
+  <div class="chat-header">
+    <div class="chat-avatar"><i class="fas fa-robot"></i></div>
+    <div class="chat-header-info">
+      <h4>BrainHub AI Tutor</h4>
+      <span><span class="chat-status-dot"></span> Ask me about BIO110</span>
+    </div>
+    <button class="chat-close-btn" id="chatCloseBtn"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="chat-messages" id="chatMessages"></div>
+  <div class="chat-input-area">
+    <input type="text" id="chatInput" placeholder="e.g. Explain cell structure…" autocomplete="off" />
+    <button id="chatSendBtn"><i class="fas fa-paper-plane"></i></button>
+  </div>
+  <div class="chat-footer-note">Powered by Claude AI</div>
+</div>
+
+<!-- Mobile Bottom Nav -->
+<nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+  <ul>
+    <li><a href="/index.html" data-page="home"><i class="fas fa-home"></i>Home</a></li>
+    <li><a href="/pages/universities.html" data-page="universities"><i class="fas fa-university"></i>Study</a></li>
+    <li><a href="/pages/flashcards.html" data-page="flashcards"><i class="fas fa-layer-group"></i>Cards</a></li>
+    <li><a href="/pages/quizzes.html" data-page="quizzes"><i class="fas fa-stopwatch"></i>Quizzes</a></li>
+    <li><button class="nav-ai-btn" onclick="document.getElementById('chatToggleBtn').click()"><i class="fas fa-robot"></i>AI Tutor</button></li>
+  </ul>
+</nav>
+
+<audio id="timerBeep" preload="auto">
+  <source src="https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3" type="audio/mpeg">
+</audio>
+
+<script src="/src/main.js"></script>
+<script>
+(function() {
+  const documents = [
+    {
+      id: 1,
+      title: 'Cell Biology – Structure and Function',
+      type: 'PDF',
+      size: '14.8 MB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['verified', 'popular'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/BI%20110/BI110_%20CELL%20STRUCTURE%20AND%20FUNCTION%20NOTES%20BY%20NEWSTONE..pdf'
+    },
+    {
+      id: 2,
+      title: 'Biology – Raven, Johnson, Mason – 11th Edition',
+      type: 'PDF',
+      size: '237 MB',
+      icon: 'fa-book',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: '/assets/documents/cbu/BI 110/Peter_H._Raven,_George_B._Johnson)_Kenneth_A_M.pdf'
+    },
+  ];
+  if (typeof initDocumentViewer === 'function') initDocumentViewer(documents, 'notes');
+})();
+</script>
+
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];s1.async=true;s1.src='https://embed.tawk.to/69a705c374e2141c34038ab5/1jiq6t1l1';s1.charset='UTF-8';s1.setAttribute('crossorigin','*');s0.parentNode.insertBefore(s1,s0);})();
+</script>
+<!--End of Tawk.to Script-->
+
+<!-- AI Chatbot -->
+<button class="chat-toggle-btn" id="chatToggleBtn" aria-label="Open AI Tutor">
+  <i class="fas fa-robot"></i>
+  <span class="chat-badge">AI</span>
+</button>
+<div class="ai-chat-window" id="aiChatWindow">
+  <div class="chat-header">
+    <div class="chat-avatar"><i class="fas fa-robot"></i></div>
+    <div class="chat-header-info">
+      <h4>BrainHub AI Tutor</h4>
+      <span><span class="chat-status-dot"></span> Online · Ready to help</span>
+    </div>
+    <button class="chat-close-btn" id="chatCloseBtn"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="chat-messages" id="chatMessages"></div>
+  <div class="chat-input-area">
+    <input type="text" id="chatInput" placeholder="Ask anything about your course…" autocomplete="off" />
+    <button id="chatSendBtn"><i class="fas fa-paper-plane"></i></button>
+  </div>
+  <div class="chat-footer-note">Powered by Claude AI</div>
+</div>
+<nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+  <ul>
+    <li><a href="/index.html" data-page="home"><i class="fas fa-home"></i>Home</a></li>
+    <li><a href="/pages/universities.html" data-page="universities"><i class="fas fa-university"></i>Study</a></li>
+    <li><a href="/pages/flashcards.html" data-page="flashcards"><i class="fas fa-layer-group"></i>Cards</a></li>
+    <li><a href="/pages/quizzes.html" data-page="quizzes"><i class="fas fa-stopwatch"></i>Quizzes</a></li>
+    <li><button class="nav-ai-btn" onclick="document.getElementById('chatToggleBtn').click()"><i class="fas fa-robot"></i>AI Tutor</button></li>
+  </ul>
+</nav>
+
+</body>
+</html>

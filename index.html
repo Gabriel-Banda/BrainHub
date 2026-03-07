@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- SEO -->
+  <title>BrainHub | Free University Study Materials, Past Papers & AI Tools</title>
+  <meta name="description" content="BrainHub is a free learning platform for Zambian students offering university notes, past papers, quizzes, flashcards and an AI tutor. No login required." />
+  <meta name="keywords" content="BrainHub, Zambia study materials, CBU notes, university past papers, free study resources, CBU biology, CBU physics, CBU chemistry, CBU maths" />
+  <meta name="author" content="BrainHub" />
+  <link rel="canonical" href="https://brainhub.pages.dev/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://brainhub.pages.dev/" />
+  <meta property="og:title" content="BrainHub | Free University Study Materials" />
+  <meta property="og:description" content="Free university notes, past papers, flashcards and AI tools for Zambian students. No login needed." />
+  <meta property="og:image" content="https://brainhub.pages.dev/public/assets/images/welcome-hero.png" />
+  <meta property="og:site_name" content="BrainHub" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="BrainHub | Free University Study Materials" />
+  <meta name="twitter:description" content="Free notes, past papers, flashcards and AI tools for Zambian students." />
+  <meta name="twitter:image" content="https://brainhub.pages.dev/public/assets/images/welcome-hero.png" />
+
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#2563eb" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="BrainHub" />
+  <link rel="apple-touch-icon" href="/public/assets/images/icon.png" />
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "BrainHub",
+    "url": "https://brainhub.pages.dev",
+    "description": "Free university study materials, past papers, flashcards and AI tools for Zambian students.",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://brainhub.pages.dev/pages/universities.html?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+
+  <link rel="stylesheet" href="/src/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link rel="icon" type="image/x-icon" href="/public/assets/images/favicon.png" />
+</head>
+<body>
+
+<!-- Page scroll progress bar -->
+<div id="progress-bar"></div>
+
+<!-- PWA Install Banner -->
+<div class="pwa-banner" id="pwaBanner">
+  <div class="pwa-icon">📚</div>
+  <div class="pwa-text">
+    <strong>Install BrainHub</strong>
+    <span>Study offline — add to your home screen</span>
+  </div>
+  <button class="pwa-install-btn" id="pwaInstallBtn">Install</button>
+  <button class="pwa-dismiss-btn" id="pwaDismissBtn" aria-label="Dismiss"><i class="fas fa-times"></i></button>
+</div>
+
+<!-- Announcement Banner -->
+<div class="announce-banner" id="announceBanner">
+  🎉 New courses added for CBU Natural Sciences — <a href="/pages/universities.html">Explore now →</a>
+  <button class="announce-close" id="announceClose" aria-label="Close"><i class="fas fa-times"></i></button>
+</div>
+
+<!-- Pomodoro Timer Widget -->
+<div class="pomodoro-widget" id="pomodoroWidget">
+  <div class="timer-header">
+    <h4><i class="fas fa-clock"></i> Study Timer</h4>
+    <button class="timer-close" id="timerClose"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="timer-display" id="timerDisplay">25:00</div>
+  <div class="timer-controls">
+    <button class="timer-btn" id="timerStart"><i class="fas fa-play"></i> Start</button>
+    <button class="timer-btn" id="timerPause"><i class="fas fa-pause"></i> Pause</button>
+    <button class="timer-btn" id="timerReset"><i class="fas fa-redo"></i> Reset</button>
+  </div>
+  <div class="timer-session">Sessions: <span id="sessionCount">0</span></div>
+</div>
+
+<!-- Back to top -->
+<button class="back-to-top" aria-label="Back to top"><i class="fas fa-arrow-up"></i></button>
+
+<!-- AI Chatbot Toggle -->
+<button class="chat-toggle-btn" id="chatToggleBtn" aria-label="Open AI Tutor">
+  <i class="fas fa-robot"></i>
+  <span class="chat-badge">AI</span>
+</button>
+
+<!-- AI Chat Window -->
+<div class="ai-chat-window" id="aiChatWindow">
+  <div class="chat-header">
+    <div class="chat-avatar"><i class="fas fa-robot"></i></div>
+    <div class="chat-header-info">
+      <h4>BrainHub AI Tutor</h4>
+      <span><span class="chat-status-dot"></span> Online · Ready to help</span>
+    </div>
+    <button class="chat-close-btn" id="chatCloseBtn"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="chat-messages" id="chatMessages"></div>
+  <div class="chat-input-area">
+    <input type="text" id="chatInput" placeholder="Ask anything about your course…" autocomplete="off" />
+    <button id="chatSendBtn" aria-label="Send"><i class="fas fa-paper-plane"></i></button>
+  </div>
+  <div class="chat-footer-note">Powered by Claude AI · Answers may not always be perfect</div>
+</div>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="container nav-container">
+    <a href="/index.html" class="logo">BrainHub<span class="dot">.</span></a>
+    <button class="mobile-menu-btn" aria-label="Toggle navigation"><i class="fas fa-bars"></i></button>
+    <ul class="nav-links">
+      <li><a href="/pages/universities.html">Universities</a></li>
+      <li><a href="/pages/quizzes.html">Quizzes</a></li>
+      <li><a href="/pages/flashcards.html">Flashcards</a></li>
+      <li><a href="/pages/about.html">About</a></li>
+      <li><a href="/pages/contact.html">Contact</a></li>
+      <li><button id="theme-toggle" class="btn-primary theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon" id="theme-icon"></i></button></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Hero -->
+<header class="hero">
+  <div class="container hero-content">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      Free · No login required · Always updated
+    </div>
+    <h1>Study smarter with<br><span class="highlight">everything in one place.</span></h1>
+    <p class="hero-sub">Access university notes, past papers, quizzes, flashcards and an AI tutor — completely free, no account needed.</p>
+    <div class="search-box">
+      <i class="fas fa-search search-icon"></i>
+      <input type="text" id="searchInput" placeholder="Search for courses, universities, or topics…" onkeydown="if(event.key==='Enter') searchMaterials()" />
+      <button onclick="searchMaterials()">Search</button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item"><i class="fas fa-user-graduate"></i><span>50+ Learners</span></div>
+      <div class="stat-item"><i class="fas fa-book-open"></i><span>100+ Resources</span></div>
+      <div class="stat-item"><i class="fas fa-check-circle"></i><span>No Login Needed</span></div>
+      <div class="stat-item"><i class="fas fa-wifi"></i><span>Works Offline</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- Stats bar -->
+<div class="stats-bar">
+  <div class="container stats-bar-inner">
+    <div class="stats-bar-item"><i class="fas fa-file-alt" style="color:var(--primary)"></i><span><strong>100+</strong> Resources</span></div>
+    <div class="stats-bar-divider"></div>
+    <div class="stats-bar-item"><i class="fas fa-university" style="color:var(--accent)"></i><span><strong>1</strong> University</span></div>
+    <div class="stats-bar-divider"></div>
+    <div class="stats-bar-item"><i class="fas fa-user-graduate" style="color:#10b981"></i><span><strong>50+</strong> Students helped</span></div>
+    <div class="stats-bar-divider"></div>
+    <div class="stats-bar-item"><i class="fas fa-layer-group" style="color:#f59e0b"></i><span><strong>5</strong> Course topics</span></div>
+    <div class="stats-bar-divider"></div>
+    <div class="stats-bar-item"><i class="fas fa-heart" style="color:#ef4444"></i><span><strong>Always</strong> Free</span></div>
+  </div>
+</div>
+
+<!-- Features grid -->
+<section class="features container">
+  <div class="section-header reveal">
+    <div class="section-tag">Study Materials</div>
+    <h2>Everything you need to pass.</h2>
+    <p>Pick a category — notes, papers, quizzes, flashcards and more await.</p>
+  </div>
+  <div class="grid-container">
+    <div class="card reveal">
+      <div class="icon-box blue-bg"><i class="fas fa-university"></i></div>
+      <h3>University Notes</h3>
+      <p>Curated lecture notes, textbooks and resources organized by university, school and course.</p>
+      <a href="/pages/universities.html" class="link-btn">Browse Universities <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="card reveal">
+      <div class="icon-box purple-bg"><i class="fas fa-stopwatch"></i></div>
+      <h3>Topic Quizzes</h3>
+      <p>Rapid-fire questions with instant feedback to sharpen your knowledge before exams.</p>
+      <a href="/pages/quizzes.html" class="link-btn">Start Quizzing <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="card reveal">
+      <div class="icon-box green-bg"><i class="fas fa-layer-group"></i></div>
+      <h3>Flashcards</h3>
+      <p>Flip-card sessions built for fast memorization. Perfect for the final days before exams.</p>
+      <a href="/pages/flashcards.html" class="link-btn">Study Flashcards <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="card reveal">
+      <div class="icon-box teal-bg"><i class="fas fa-robot"></i></div>
+      <h3>AI Tutor</h3>
+      <p>Ask questions about any topic and get instant, clear explanations powered by Claude AI.</p>
+      <button onclick="document.getElementById('chatToggleBtn').click()" class="link-btn" style="background:none;border:none;padding:0;cursor:pointer;font-family:var(--font-body);font-size:inherit;">Open AI Tutor <i class="fas fa-arrow-right"></i></button>
+    </div>
+  </div>
+</section>
+
+<!-- Weekly Study Challenge -->
+<section class="container" style="margin-bottom:3rem">
+  <div class="section-header reveal" style="margin-bottom:2rem">
+    <div class="section-tag">This Week</div>
+    <h2>Weekly Study Challenge</h2>
+    <p>A new question every week. Test yourself and track your streak.</p>
+  </div>
+  <div id="studyChallengeWidget"></div>
+</section>
+
+<!-- Share bar -->
+<div class="container reveal" style="margin-bottom:2rem">
+  <div class="donate-section">
+    <div style="flex:1">
+      <div class="share-bar">
+        <span class="share-bar-label"><i class="fas fa-share-alt"></i> Share BrainHub</span>
+        <button class="share-pill whatsapp" onclick="sharePage('whatsapp')"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+        <button class="share-pill twitter" onclick="sharePage('twitter')"><i class="fab fa-twitter"></i> Twitter</button>
+        <button class="share-pill facebook" onclick="sharePage('facebook')"><i class="fab fa-facebook"></i> Facebook</button>
+        <button class="share-pill copy" onclick="sharePage('copy')"><i class="fas fa-link"></i> Copy link</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Newsletter -->
+<div class="container reveal">
+  <div class="newsletter-section">
+    <h2>Stay in the loop 📬</h2>
+    <p>Get notified when new notes, past papers, and features drop. No spam — ever.</p>
+    <form class="newsletter-form" id="newsletterForm">
+      <input type="email" placeholder="your@email.com" required />
+      <button type="submit" class="newsletter-btn">Subscribe</button>
+    </form>
+    <p id="newsletterMsg"></p>
+    <p class="newsletter-note">No spam. Unsubscribe anytime.</p>
+  </div>
+</div>
+
+<!-- Donate -->
+<div class="container reveal" style="margin-bottom:4rem">
+  <div class="donate-section">
+    <div class="donate-icon"><i class="fas fa-heart"></i></div>
+    <div class="donate-text">
+      <h4>Keep BrainHub free</h4>
+      <p>BrainHub is completely free. If it's helped you study, consider buying us a coffee ☕</p>
+    </div>
+    <a href="https://www.buymeacoffee.com/brainhub" target="_blank" rel="noopener" class="donate-btn">
+      <i class="fas fa-heart"></i> Donate
+    </a>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="container footer-content">
+    <div class="footer-col">
+      <h3>BrainHub<span class="dot">.</span></h3>
+      <p>Making quality education accessible and free for everyone, everywhere.</p>
+      <button class="timer-toggle" id="timerToggle"><i class="fas fa-clock"></i> Study Timer</button>
+      <a href="https://whatsapp.com/channel/0029VbCA25b9sBHzhZRLXA13" target="_blank" rel="noopener" class="whatsapp-community-btn">
+        <i class="fab fa-whatsapp"></i> Follow Our WhatsApp Channel
+      </a>
+        <a href="https://chat.whatsapp.com/GDEAb5mBMXA7L7h6R4Ck3b?mode=hq2tcli" target="_blank" rel="noopener" class="whatsapp-community-btn">
+        <i class="fab fa-whatsapp"></i> Join Our WhatsApp Group
+      </a>
+    </div>
+    <div class="footer-col">
+      <h4>Platform</h4>
+      <a href="/pages/universities.html">Universities</a>
+      <a href="/pages/quizzes.html">Quizzes</a>
+      <a href="/pages/flashcards.html">Flashcards</a>
+      <h4 style="margin-top:1rem">AI Tools</h4>
+      <a href="https://chat.openai.com/" target="_blank" rel="noopener">ChatGPT</a>
+      <a href="https://chat.deepseek.com/" target="_blank" rel="noopener">DeepSeek AI</a>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <a href="/pages/about.html">About Us</a>
+      <a href="/pages/contact.html">Contact Us</a>
+      <a href="/pages/privacy-policy.html">Privacy Policy</a>
+      <a href="/pages/terms.html">Terms &amp; Conditions</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 BrainHub. All rights reserved.</p>
+    <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;justify-content:center">
+      <p id="realtime-clock" class="clock-text"></p>
+      <button onclick="showKeyboardHint()" title="Keyboard shortcuts"
+        style="background:none;border:1px solid var(--border);color:var(--text-500);padding:0.25rem 0.6rem;border-radius:4px;font-size:0.72rem;cursor:pointer;font-family:var(--font-body)">
+        <kbd style="background:none;border:none;box-shadow:none;padding:0;font-size:0.72rem">?</kbd> Shortcuts
+      </button>
+    </div>
+  </div>
+</footer>
+
+<!-- Mobile Bottom Nav -->
+<nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+  <ul>
+    <li><a href="/index.html" data-page="home"><i class="fas fa-home"></i>Home</a></li>
+    <li><a href="/pages/universities.html" data-page="universities"><i class="fas fa-university"></i>Study</a></li>
+    <li><a href="/pages/flashcards.html" data-page="flashcards"><i class="fas fa-layer-group"></i>Cards</a></li>
+    <li><a href="/pages/quizzes.html" data-page="quizzes"><i class="fas fa-stopwatch"></i>Quizzes</a></li>
+    <li><button class="nav-ai-btn" onclick="document.getElementById('chatToggleBtn').click()"><i class="fas fa-robot"></i>AI Tutor</button></li>
+  </ul>
+</nav>
+
+<!-- What's New Modal -->
+<div id="whatsNewModal" class="modal-overlay" style="display:none;">
+  <div class="modal-container">
+    <button class="modal-close" id="closeModalBtn"><i class="fas fa-times"></i></button>
+    <div class="modal-header">
+      <div class="modal-icon"><i class="fas fa-star"></i></div>
+      <h2>What's New</h2>
+      <p class="modal-subtitle">Latest updates to BrainHub</p>
+    </div>
+    <div class="modal-body">
+      <ul class="updates-list">
+        <li><span class="update-badge new">NEW</span><span class="update-text"><strong>AI Tutor</strong> — Ask any study question and get instant answers powered by Claude AI</span></li>
+        <li><span class="update-badge new">NEW</span><span class="update-text"><strong>PDF Reader</strong> — Read documents directly in the browser, no download needed</span></li>
+        <li><span class="update-badge new">NEW</span><span class="update-text"><strong>Progress Tracker</strong> — Mark resources as done and track your study completion</span></li>
+        <li><span class="update-badge new">NEW</span><span class="update-text"><strong>Weekly Challenge</strong> — A new study question every week with streak tracking</span></li>
+        <li><span class="update-badge new">NEW</span><span class="update-text"><strong>Offline Support</strong> — Install as an app and study without internet</span></li>
+        <li><span class="update-badge new">NEW</span><span class="update-text"><strong>Keyboard Shortcuts</strong> — Press <kbd>?</kbd> to see all shortcuts</span></li>
+        <li><span class="update-badge update">UPDATE</span><span class="update-text"><strong>Completion Certificates</strong> — Download a certificate when you finish a course</span></li>
+      </ul>
+      <p class="update-footer">More courses and features coming soon!</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-primary" id="gotItBtn">Got it</button>
+      <button class="btn-secondary" id="dontShowAgainBtn">Don't show again</button>
+    </div>
+  </div>
+</div>
+
+<audio id="timerBeep" preload="auto">
+  <source src="https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3" type="audio/mpeg">
+</audio>
+
+<script src="/src/main.js"></script>
+
+<script>
+// PWA Registration
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(err => console.warn('[SW]', err));
+  });
+}
+
+// PWA Install prompt
+let deferredPrompt = null;
+const pwaBanner = document.getElementById('pwaBanner');
+if (localStorage.getItem('bh-pwa-dismissed') !== '1') {
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault(); deferredPrompt = e;
+    setTimeout(() => pwaBanner?.classList.add('show'), 3000);
+  });
+}
+document.getElementById('pwaInstallBtn')?.addEventListener('click', async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  deferredPrompt = null; pwaBanner?.classList.remove('show');
+  if (outcome === 'accepted') showToast('🎉 BrainHub installed!');
+});
+document.getElementById('pwaDismissBtn')?.addEventListener('click', () => {
+  pwaBanner?.classList.remove('show');
+  localStorage.setItem('bh-pwa-dismissed', '1');
+});
+window.addEventListener('appinstalled', () => {
+  pwaBanner?.classList.remove('show');
+  showToast('✓ BrainHub installed successfully!');
+});
+</script>
+
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];s1.async=true;s1.src='https://embed.tawk.to/69a705c374e2141c34038ab5/1jiq6t1l1';s1.charset='UTF-8';s1.setAttribute('crossorigin','*');s0.parentNode.insertBefore(s1,s0);})();
+</script>
+<!--End of Tawk.to Script-->
+
+</body>
+</html>

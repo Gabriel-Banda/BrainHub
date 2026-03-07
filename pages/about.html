@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us | BrainHub</title>
+  <meta name="description" content="Learn about BrainHub's mission to make education accessible and effective for all learners." />
+  <link rel="stylesheet" href="/src/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link rel="icon" type="image/x-icon" href="/public/assets/images/favicon.png" />
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<button class="back-to-top" aria-label="Back to top"><i class="fas fa-arrow-up"></i></button>
+
+<div class="pomodoro-widget" id="pomodoroWidget">
+  <div class="timer-header">
+    <h4><i class="fas fa-clock"></i> Study Timer</h4>
+    <button class="timer-close" id="timerClose"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="timer-display" id="timerDisplay">25:00</div>
+  <div class="timer-controls">
+    <button class="timer-btn" id="timerStart"><i class="fas fa-play"></i> Start</button>
+    <button class="timer-btn" id="timerPause"><i class="fas fa-pause"></i> Pause</button>
+    <button class="timer-btn" id="timerReset"><i class="fas fa-redo"></i> Reset</button>
+  </div>
+  <div class="timer-session">Sessions: <span id="sessionCount">0</span></div>
+</div>
+
+<nav class="navbar">
+  <div class="container nav-container">
+    <a href="/index.html" class="logo">BrainHub<span class="dot">.</span></a>
+    <button class="mobile-menu-btn" aria-label="Toggle navigation"><i class="fas fa-bars"></i></button>
+    <ul class="nav-links">
+      <li><a href="/index.html">Home</a></li>
+      <li><a href="universities.html">Universities</a></li>
+      <li><a href="quizzes.html">Quizzes</a></li>
+      <li><a href="flashcards.html">Flashcards</a></li>
+      <li><a href="about.html" class="active">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><button id="theme-toggle" class="btn-primary theme-toggle"><i class="fas fa-moon" id="theme-icon"></i></button></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="container">
+  <a href="/index.html" class="back-home"><i class="fas fa-arrow-left"></i> Back to Home</a>
+
+  <div class="about-content">
+    <div class="content-header reveal">
+      <h1>About BrainHub</h1>
+      <p class="subtitle">Empowering learners with accessible, free education.</p>
+    </div>
+
+    <div class="content-section reveal">
+      <h2>Our Mission</h2>
+      <p>BrainHub was founded with a simple but powerful belief: quality education should be free and accessible to every student, regardless of background or location. In a world where study resources are often locked behind paywalls or limited to well-resourced institutions, we're building an open platform that breaks down those barriers.</p>
+      <p>We started by focusing on Zambian universities — the courses are real, the materials are curated from students and educators who've been through them — and we're growing from there.</p>
+    </div>
+
+    <div class="content-section reveal">
+      <h2>What We Offer</h2>
+      <ul>
+        <li><strong>University Notes:</strong> Curated lecture notes, textbooks and resources organized by program and university</li>
+        <li><strong>Past Exam Papers:</strong> Previous exam papers to help you practice and prepare</li>
+        <li><strong>Interactive Quizzes:</strong> Topic-based quizzes with instant feedback</li>
+        <li><strong>Flashcards:</strong> Flip-card study sessions for fast memorization</li>
+        <li><strong>AI Tools:</strong> Curated links to the best free AI study assistants</li>
+        <li><strong>Pomodoro Timer:</strong> Built-in study timer to help you stay focused</li>
+        <li><strong>No Login Required:</strong> Immediate access to everything, always free</li>
+      </ul>
+    </div>
+
+    <div class="content-section reveal">
+      <h2>Our Values</h2>
+      <p><strong>Accessibility:</strong> We believe education should be available to everyone. No paywalls, no sign-ups, no barriers.</p>
+      <p><strong>Quality:</strong> All materials are carefully selected and verified. We'd rather have fewer resources that are accurate than many that are unreliable.</p>
+      <p><strong>Community:</strong> BrainHub grows with contributions from students, educators, and institutions. If you have materials to share, we want to hear from you.</p>
+      <p><strong>Transparency:</strong> We're honest about what we are — a small, passionate team building something useful. No ads, no tracking-for-profit, no selling your data.</p>
+    </div>
+
+    <div class="content-section reveal">
+      <h2>Our Team</h2>
+      <p>BrainHub is built by a small team of students and developers who understand firsthand how hard it can be to find reliable study materials. We built the platform we wished existed when we were studying.</p>
+    </div>
+
+    <div class="content-section reveal">
+      <h3>Get Involved</h3>
+      <p>We're always looking for educators, students, and institutions to collaborate with. If you have notes, past papers, or other study materials to contribute, please <a href="contact.html" style="color:var(--primary);font-weight:600;">contact us</a> — you'll be helping thousands of students.</p>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container footer-content">
+    <div class="footer-col">
+      <h3>BrainHub<span class="dot">.</span></h3>
+      <p>Making quality education accessible and free for everyone.</p>
+      <button class="timer-toggle" id="timerToggle"><i class="fas fa-clock"></i> Study Timer</button>
+    </div>
+    <div class="footer-col">
+      <h4>Platform</h4>
+      <a href="/index.html">Home</a>
+      <a href="universities.html">Universities</a>
+      <a href="quizzes.html">Quizzes</a>
+      <a href="flashcards.html">Flashcards</a>
+      <h4>AI Tools</h4>
+      <a href="https://chat.openai.com/" target="_blank" rel="noopener">ChatGPT</a>
+      <a href="https://chat.deepseek.com/" target="_blank" rel="noopener">DeepSeek AI</a>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <a href="contact.html">Contact Us</a>
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="terms.html">Terms &amp; Conditions</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 BrainHub. All rights reserved.</p>
+    <p id="realtime-clock" class="clock-text"></p>
+  </div>
+</footer>
+
+<audio id="timerBeep" preload="auto">
+  <source src="https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3" type="audio/mpeg">
+</audio>
+<script src="/src/main.js"></script>
+
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];s1.async=true;s1.src='https://embed.tawk.to/69a705c374e2141c34038ab5/1jiq6t1l1';s1.charset='UTF-8';s1.setAttribute('crossorigin','*');s0.parentNode.insertBefore(s1,s0);})();
+</script>
+<!--End of Tawk.to Script-->
+
+<!-- AI Chatbot -->
+<button class="chat-toggle-btn" id="chatToggleBtn" aria-label="Open AI Tutor">
+  <i class="fas fa-robot"></i>
+  <span class="chat-badge">AI</span>
+</button>
+<div class="ai-chat-window" id="aiChatWindow">
+  <div class="chat-header">
+    <div class="chat-avatar"><i class="fas fa-robot"></i></div>
+    <div class="chat-header-info">
+      <h4>BrainHub AI Tutor</h4>
+      <span><span class="chat-status-dot"></span> Online · Ready to help</span>
+    </div>
+    <button class="chat-close-btn" id="chatCloseBtn"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="chat-messages" id="chatMessages"></div>
+  <div class="chat-input-area">
+    <input type="text" id="chatInput" placeholder="Ask anything about your course…" autocomplete="off" />
+    <button id="chatSendBtn"><i class="fas fa-paper-plane"></i></button>
+  </div>
+  <div class="chat-footer-note">Powered by Claude AI</div>
+</div>
+<nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+  <ul>
+    <li><a href="/index.html" data-page="home"><i class="fas fa-home"></i>Home</a></li>
+    <li><a href="/pages/universities.html" data-page="universities"><i class="fas fa-university"></i>Study</a></li>
+    <li><a href="/pages/flashcards.html" data-page="flashcards"><i class="fas fa-layer-group"></i>Cards</a></li>
+    <li><a href="/pages/quizzes.html" data-page="quizzes"><i class="fas fa-stopwatch"></i>Quizzes</a></li>
+    <li><button class="nav-ai-btn" onclick="document.getElementById('chatToggleBtn').click()"><i class="fas fa-robot"></i>AI Tutor</button></li>
+  </ul>
+</nav>
+
+</body>
+</html>

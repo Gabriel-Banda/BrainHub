@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page Not Found | BrainHub</title>
+  <meta name="description" content="The page you're looking for doesn't exist." />
+  <meta name="robots" content="noindex" />
+  <link rel="stylesheet" href="/src/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link rel="icon" type="image/x-icon" href="/public/assets/images/favicon.png" />
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<nav class="navbar">
+  <div class="container nav-container">
+    <a href="/index.html" class="logo">BrainHub<span class="dot">.</span></a>
+    <button class="mobile-menu-btn" aria-label="Toggle navigation"><i class="fas fa-bars"></i></button>
+    <ul class="nav-links">
+      <li><a href="/index.html">Home</a></li>
+      <li><a href="/pages/universities.html">Universities</a></li>
+      <li><a href="/pages/quizzes.html">Quizzes</a></li>
+      <li><a href="/pages/flashcards.html">Flashcards</a></li>
+      <li><a href="/pages/contact.html">Contact</a></li>
+      <li><button id="theme-toggle" class="btn-primary theme-toggle"><i class="fas fa-moon" id="theme-icon"></i></button></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+  <div class="not-found-page">
+    <div class="not-found-content">
+      <div class="not-found-code">404</div>
+      <h2>Page not found.</h2>
+      <p>Looks like this page took a wrong turn. The link might be broken, or the page may have moved. Let's get you back on track.</p>
+
+      <div class="not-found-actions">
+        <a href="/index.html" class="btn-primary">
+          <i class="fas fa-home"></i> Go Home
+        </a>
+        <a href="/pages/universities.html" class="btn-secondary">
+          <i class="fas fa-university"></i> Browse Universities
+        </a>
+      </div>
+
+      <div style="margin-top: 3rem;">
+        <p style="font-size:0.875rem;color:var(--text-500);margin-bottom:1rem;">Or try searching for what you need:</p>
+        <div class="search-box" style="max-width:420px;margin:0 auto;box-shadow:var(--shadow);">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" id="searchInput" placeholder="Search courses, topics…" />
+          <button onclick="searchMaterials()">Search</button>
+        </div>
+      </div>
+
+      <div style="margin-top:3rem;display:flex;flex-wrap:wrap;gap:0.75rem;justify-content:center;">
+        <a href="/pages/universities/cbu.html" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.5rem 1rem;background:var(--bg-muted);border:1px solid var(--border);border-radius:60px;font-size:0.85rem;font-weight:600;color:var(--text-700);transition:var(--transition);" onmouseover="this.style.borderColor='var(--primary)';this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-700)'">
+          <i class="fas fa-university"></i> CBU
+        </a>
+        <a href="/pages/flashcards.html" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.5rem 1rem;background:var(--bg-muted);border:1px solid var(--border);border-radius:60px;font-size:0.85rem;font-weight:600;color:var(--text-700);transition:var(--transition);" onmouseover="this.style.borderColor='var(--primary)';this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-700)'">
+          <i class="fas fa-layer-group"></i> Flashcards
+        </a>
+        <a href="/pages/about.html" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.5rem 1rem;background:var(--bg-muted);border:1px solid var(--border);border-radius:60px;font-size:0.85rem;font-weight:600;color:var(--text-700);transition:var(--transition);" onmouseover="this.style.borderColor='var(--primary)';this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-700)'">
+          <i class="fas fa-info-circle"></i> About
+        </a>
+        <a href="/pages/contact.html" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.5rem 1rem;background:var(--bg-muted);border:1px solid var(--border);border-radius:60px;font-size:0.85rem;font-weight:600;color:var(--text-700);transition:var(--transition);" onmouseover="this.style.borderColor='var(--primary)';this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-700)'">
+          <i class="fas fa-envelope"></i> Contact
+        </a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container footer-content">
+    <div class="footer-col">
+      <h3>BrainHub<span class="dot">.</span></h3>
+      <p>Free education for everyone.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Platform</h4>
+      <a href="/index.html">Home</a>
+      <a href="/pages/universities.html">Universities</a>
+      <a href="/pages/flashcards.html">Flashcards</a>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <a href="/pages/contact.html">Contact Us</a>
+      <a href="/pages/privacy-policy.html">Privacy Policy</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 BrainHub. All rights reserved.</p>
+    <p id="realtime-clock" class="clock-text"></p>
+  </div>
+</footer>
+
+<script src="/src/main.js"></script>
+<nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+  <ul>
+    <li><a href="/index.html" data-page="home"><i class="fas fa-home"></i>Home</a></li>
+    <li><a href="/pages/universities.html" data-page="universities"><i class="fas fa-university"></i>Study</a></li>
+    <li><a href="/pages/flashcards.html" data-page="flashcards"><i class="fas fa-layer-group"></i>Cards</a></li>
+    <li><a href="/pages/quizzes.html" data-page="quizzes"><i class="fas fa-stopwatch"></i>Quizzes</a></li>
+    <li><button class="nav-ai-btn" onclick="document.getElementById('chatToggleBtn').click()"><i class="fas fa-robot"></i>AI Tutor</button></li>
+  </ul>
+</nav>
+</body>
+</html>
