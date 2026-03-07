@@ -443,7 +443,7 @@ function initAIChatbot() {
     const typingId = appendMessage('bot', '<span class="typing-dots"><span></span><span></span><span></span></span>', true);
 
     try {
-      const response = await fetch('https://brainhub-ai.gabrieljoshuabanda81.workers.dev', {
+      const response = await fetch('https://brainhub-ai.gabrieljoshuabanda81.workers.dev/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
