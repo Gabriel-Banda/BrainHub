@@ -469,6 +469,7 @@ footer { background: var(--bg-subtle); border-top: 1px solid var(--border); padd
 .bg-bio     { background: #ecfdf5; color: #059669; }
 .bg-chem    { background: #fff7ed; color: #ea580c; }
 .bg-lang    { background: #fefce8; color: #ca8a04; }
+.bg-soft    { background: #f5f3ff; color: #7c3aed; } 
 .resource-card h3 { font-family: var(--font-display); font-size: 1rem; font-weight: 700; color: var(--text-900); margin-bottom: 0.4rem; }
 .resource-card p { font-size: 0.875rem; color: var(--text-500); }
 
