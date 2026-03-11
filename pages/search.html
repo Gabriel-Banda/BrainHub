@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Search | BrainHub</title>
+  <meta name="description" content="Search all BrainHub study materials, courses, notes and resources." />
+  <link rel="stylesheet" href="/src/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link rel="icon" type="image/x-icon" href="/public/assets/images/favicon.png" />
+  <style>
+    .search-page { padding: 3rem 0 6rem; }
+    .search-hero {
+      text-align: center;
+      padding: 3rem 0 2.5rem;
+    }
+    .search-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      color: var(--text-900);
+      letter-spacing: -0.03em;
+      margin-bottom: 0.5rem;
+    }
+    .search-hero p { color: var(--text-500); font-size: 1.05rem; margin-bottom: 2rem; }
+
+    .search-main-box {
+      max-width: 640px;
+      margin: 0 auto 2.5rem;
+      position: relative;
+    }
+    .search-main-box input {
+      width: 100%;
+      padding: 1.1rem 1.5rem 1.1rem 3.5rem;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-xl);
+      font-size: 1.05rem;
+      font-family: var(--font-body);
+      background: var(--card);
+      color: var(--text-900);
+      outline: none;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+    .search-main-box input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(37,99,235,0.1); }
+    .search-main-box .search-icon {
+      position: absolute;
+      left: 1.2rem; top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-500);
+      font-size: 1.1rem;
+      pointer-events: none;
+    }
+    .search-main-box .search-clear {
+      position: absolute;
+      right: 1.2rem; top: 50%;
+      transform: translateY(-50%);
+      background: none; border: none;
+      color: var(--text-400);
+      cursor: pointer; font-size: 1rem;
+      display: none;
+      transition: color 0.2s;
+    }
+    .search-main-box .search-clear:hover { color: var(--text-900); }
+
+    /* Filters */
+    .search-filters {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    .filter-pill {
+      padding: 0.4rem 1rem;
+      border-radius: 60px;
+      border: 1.5px solid var(--border);
+      background: var(--card);
+      color: var(--text-700);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: var(--font-body);
+    }
+    .filter-pill:hover { border-color: var(--primary); color: var(--primary); }
+    .filter-pill.active { background: var(--primary); border-color: var(--primary); color: white; }
+
+    /* Results */
+    .search-meta {
+      font-size: 0.875rem;
+      color: var(--text-500);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .search-meta strong { color: var(--text-900); }
+
+    .search-results { display: flex; flex-direction: column; gap: 0.75rem; }
+
+    .result-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.1rem 1.25rem;
+      transition: var(--transition);
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+    }
+    .result-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+    .result-icon {
+      width: 44px; height: 44px;
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .result-icon.course   { background: #eff6ff; color: #2563eb; }
+    .result-icon.notes    { background: #f0fdf4; color: #15803d; }
+    .result-icon.exam     { background: #fff7ed; color: #c2410c; }
+    .result-icon.flashcard{ background: #fdf4ff; color: #7e22ce; }
+    .result-icon.page     { background: #f8fafc; color: #64748b; }
+
+    .result-body { flex: 1; min-width: 0; }
+    .result-title {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-900);
+      margin-bottom: 0.2rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .result-title mark {
+      background: #fef9c3;
+      color: var(--text-900);
+      border-radius: 3px;
+      padding: 0 2px;
+    }
+    .result-desc { font-size: 0.82rem; color: var(--text-500); }
+    .result-breadcrumb {
+      font-size: 0.75rem;
+      color: var(--text-400);
+      margin-top: 0.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .result-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.1rem 0.5rem;
+      border-radius: 60px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      flex-shrink: 0;
+    }
+    .tag-course   { background: #eff6ff; color: #2563eb; }
+    .tag-notes    { background: #f0fdf4; color: #15803d; }
+    .tag-exam     { background: #fff7ed; color: #c2410c; }
+    .tag-flashcard{ background: #fdf4ff; color: #7e22ce; }
+    .tag-page     { background: #f8fafc; color: #64748b; }
+
+    /* Empty / no results */
+    .search-empty {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text-500);
+    }
+    .search-empty .empty-icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.4; }
+    .search-empty h3 { font-family: var(--font-display); font-size: 1.2rem; color: var(--text-700); margin-bottom: 0.5rem; }
+
+    /* Popular searches */
+    .popular-searches { text-align: center; }
+    .popular-searches h3 {
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-500);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 1rem;
+    }
+    .popular-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+    .popular-tag {
+      padding: 0.45rem 1rem;
+      border-radius: 60px;
+      border: 1.5px solid var(--border);
+      background: var(--card);
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-700);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .popular-tag:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+
+    /* Recent searches */
+    .recent-searches { margin-bottom: 2rem; }
+    .recent-searches h3 {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-500);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.75rem;
+    }
+    .recent-list { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .recent-item {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 60px;
+      background: var(--bg-muted);
+      border: 1px solid var(--border);
+      font-size: 0.82rem;
+      color: var(--text-700);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .recent-item:hover { border-color: var(--primary); color: var(--primary); }
+    .recent-item i { font-size: 0.7rem; color: var(--text-400); }
+  </style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<button class="back-to-top" aria-label="Back to top"><i class="fas fa-arrow-up"></i></button>
+
+<nav class="navbar">
+  <div class="container nav-container">
+    <a href="/index.html" class="logo">
+      <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;color:var(--primary)"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M9 13a4.5 4.5 0 0 0 3-4"/><path d="M12 13h4"/><path d="M12 18h6a2 2 0 0 1 2 2v1"/><path d="M12 8h8"/><path d="M16 8V5a2 2 0 0 1 2-2"/><circle cx="16" cy="13" r=".5"/><circle cx="18" cy="3" r=".5"/><circle cx="20" cy="21" r=".5"/><circle cx="20" cy="8" r=".5"/></svg>
+      BrainHub<span class="dot">.</span>
+    </a>
+    <button class="mobile-menu-btn" aria-label="Toggle navigation"><i class="fas fa-bars"></i></button>
+    <ul class="nav-links">
+      <li><a href="/index.html">Home</a></li>
+      <li><a href="/pages/universities.html">Universities</a></li>
+      <li><a href="/pages/quizzes.html">Quizzes</a></li>
+      <li><a href="/pages/flashcards.html">Flashcards</a></li>
+      <li><a href="/pages/about.html">About</a></li>
+      <li><a href="/pages/contact.html">Contact</a></li>
+      <li><button id="theme-toggle" class="btn-primary theme-toggle"><i class="fas fa-moon" id="theme-icon"></i></button></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="container search-page">
+  <div class="search-hero">
+    <h1>Search BrainHub</h1>
+    <p>Find courses, notes, past papers and resources instantly.</p>
+
+    <div class="search-main-box">
+      <i class="fas fa-search search-icon"></i>
+      <input type="text" id="globalSearch" placeholder="Try 'BIO110', 'cell biology', 'CBU physics'…" autocomplete="off" autofocus />
+      <button class="search-clear" id="searchClear"><i class="fas fa-times"></i></button>
+    </div>
+
+    <div class="search-filters">
+      <button class="filter-pill active" data-filter="all">All</button>
+      <button class="filter-pill" data-filter="course">Courses</button>
+      <button class="filter-pill" data-filter="notes">Notes</button>
+      <button class="filter-pill" data-filter="exam">Past Papers</button>
+      <button class="filter-pill" data-filter="flashcard">Flashcards</button>
+      <button class="filter-pill" data-filter="page">Pages</button>
+    </div>
+  </div>
+
+  <!-- Results area -->
+  <div id="searchResultsWrap">
+    <!-- Recent searches shown when no query -->
+    <div id="recentSearchesSection" class="recent-searches" style="display:none">
+      <h3><i class="fas fa-history"></i> Recent searches</h3>
+      <div class="recent-list" id="recentList"></div>
+    </div>
+
+    <!-- Popular shown by default -->
+    <div id="popularSection" class="popular-searches">
+      <h3>Popular searches</h3>
+      <div class="popular-tags">
+        <span class="popular-tag" onclick="runSearch('BIO110')">BIO110</span>
+        <span class="popular-tag" onclick="runSearch('cell biology')">Cell biology</span>
+        <span class="popular-tag" onclick="runSearch('PH110')">PH110</span>
+        <span class="popular-tag" onclick="runSearch('physics')">Physics</span>
+        <span class="popular-tag" onclick="runSearch('MA110')">MA110</span>
+        <span class="popular-tag" onclick="runSearch('calculus')">Calculus</span>
+        <span class="popular-tag" onclick="runSearch('CH110')">CH110</span>
+        <span class="popular-tag" onclick="runSearch('chemistry')">Chemistry</span>
+        <span class="popular-tag" onclick="runSearch('flashcards')">Flashcards</span>
+        <span class="popular-tag" onclick="runSearch('CBU')">CBU</span>
+        <span class="popular-tag" onclick="runSearch('past papers')">Past papers</span>
+        <span class="popular-tag" onclick="runSearch('notes')">Notes</span>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div id="searchMeta" class="search-meta" style="display:none"></div>
+    <div id="searchResults" class="search-results"></div>
+  </div>
+</main>
+
+<!-- Mobile Bottom Nav -->
+<nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+  <ul>
+    <li><a href="/index.html" data-page="home"><i class="fas fa-home"></i>Home</a></li>
+    <li><a href="/pages/universities.html" data-page="universities"><i class="fas fa-university"></i>Study</a></li>
+    <li><a href="/pages/flashcards.html" data-page="flashcards"><i class="fas fa-layer-group"></i>Cards</a></li>
+    <li><a href="/pages/quizzes.html" data-page="quizzes"><i class="fas fa-stopwatch"></i>Quizzes</a></li>
+    <li><a href="/pages/search.html" data-page="search" class="active"><i class="fas fa-search"></i>Search</a></li>
+  </ul>
+</nav>
+
+<footer>
+  <div class="container footer-content">
+    <div class="footer-col"><h3>BrainHub<span class="dot">.</span></h3><p>Free education for everyone.</p></div>
+    <div class="footer-col"><h4>Platform</h4><a href="/index.html">Home</a><a href="/pages/universities.html">Universities</a><a href="/pages/flashcards.html">Flashcards</a></div>
+    <div class="footer-col"><h4>Support</h4><a href="/pages/contact.html">Contact Us</a><a href="/pages/privacy-policy.html">Privacy Policy</a></div>
+  </div>
+  <div class="footer-bottom"><p>&copy; 2026 BrainHub. All rights reserved.</p><p id="realtime-clock" class="clock-text"></p></div>
+</footer>
+
+<script src="/src/main.js"></script>
+<script src="/src/gamification.js"></script>
+<script>
+// ── Search Index ─────────────────────────────────────────
+// Add every page, course, document here
+const SEARCH_INDEX = [
+  // Universities
+  { type:'course', title:'Copperbelt University (CBU)', desc:'Browse all CBU programs and courses', url:'/pages/universities/cbu.html', tags:['cbu','copperbelt','university','kitwe'] },
+
+  // Natural Sciences
+  { type:'course', title:'Natural Sciences — CBU', desc:'Physics, Maths, Biology, Chemistry, Languages', url:'/pages/universities/cbu/programs/natural-sciences.html', tags:['natural sciences','cbu','science'] },
+
+  // BIO110
+  { type:'course', title:'Biology BIO110', desc:'Cellular Biology & Genetics — CBU Natural Sciences', url:'/pages/universities/cbu/programs/natural-sciences/bio110/index.html', tags:['bio110','biology','cell','genetics','cbu'] },
+  { type:'notes',  title:'BIO110 Lecture Notes', desc:'Cell structure, function, genetics PDFs', url:'/pages/universities/cbu/programs/natural-sciences/bio110/notes.html', tags:['bio110','biology','notes','cell structure','lecture'] },
+  { type:'exam',   title:'BIO110 Past Exams', desc:'Past examination papers for BIO110', url:'/pages/universities/cbu/programs/natural-sciences/bio110/exams.html', tags:['bio110','biology','exam','past paper'] },
+  { type:'exam',   title:'BIO110 Test Papers', desc:'Continuous assessment tests for BIO110', url:'/pages/universities/cbu/programs/natural-sciences/bio110/tests.html', tags:['bio110','biology','test','cat'] },
+
+  // PH110
+  { type:'course', title:'Physics PH110', desc:'Mechanics, Optics & Thermodynamics — CBU', url:'/pages/universities/cbu/programs/natural-sciences/ph110/index.html', tags:['ph110','physics','mechanics','optics','thermodynamics','cbu'] },
+  { type:'notes',  title:'PH110 Lecture Notes', desc:'Physics notes and resources', url:'/pages/universities/cbu/programs/natural-sciences/ph110/notes.html', tags:['ph110','physics','notes','lecture'] },
+  { type:'exam',   title:'PH110 Past Exams', desc:'Past examination papers for PH110', url:'/pages/universities/cbu/programs/natural-sciences/ph110/exams.html', tags:['ph110','physics','exam','past paper'] },
+  { type:'exam',   title:'PH110 Test Papers', desc:'Continuous assessment tests for PH110', url:'/pages/universities/cbu/programs/natural-sciences/ph110/tests.html', tags:['ph110','physics','test','cat'] },
+
+  // MA110
+  { type:'course', title:'Mathematics MA110', desc:'Calculus, Algebra & Trigonometry — CBU', url:'/pages/universities/cbu/programs/natural-sciences/ma110/index.html', tags:['ma110','maths','mathematics','calculus','algebra','trigonometry','cbu'] },
+  { type:'notes',  title:'MA110 Lecture Notes', desc:'Maths notes, formulas and resources', url:'/pages/universities/cbu/programs/natural-sciences/ma110/notes.html', tags:['ma110','maths','notes','calculus','lecture'] },
+  { type:'exam',   title:'MA110 Past Exams', desc:'Past examination papers for MA110', url:'/pages/universities/cbu/programs/natural-sciences/ma110/exams.html', tags:['ma110','maths','exam','past paper'] },
+  { type:'exam',   title:'MA110 Test Papers', desc:'Continuous assessment tests for MA110', url:'/pages/universities/cbu/programs/natural-sciences/ma110/tests.html', tags:['ma110','maths','test','cat'] },
+
+  // CH110
+  { type:'course', title:'Chemistry CH110', desc:'General & Inorganic Chemistry — CBU', url:'/pages/universities/cbu/programs/natural-sciences/ch110/index.html', tags:['ch110','chemistry','inorganic','atoms','bonds','cbu'] },
+  { type:'notes',  title:'CH110 Lecture Notes', desc:'Chemistry notes and resources', url:'/pages/universities/cbu/programs/natural-sciences/ch110/notes.html', tags:['ch110','chemistry','notes','lecture'] },
+  { type:'exam',   title:'CH110 Past Exams', desc:'Past examination papers for CH110', url:'/pages/universities/cbu/programs/natural-sciences/ch110/exams.html', tags:['ch110','chemistry','exam','past paper'] },
+  { type:'exam',   title:'CH110 Test Papers', desc:'Continuous assessment tests for CH110', url:'/pages/universities/cbu/programs/natural-sciences/ch110/tests.html', tags:['ch110','chemistry','test','cat'] },
+
+  // LA111
+  { type:'course', title:'Languages & Communication LA111', desc:'Communication Skills — CBU', url:'/pages/universities/cbu/programs/natural-sciences/la111/index.html', tags:['la111','languages','communication','english','writing','cbu'] },
+  { type:'notes',  title:'LA111 Lecture Notes', desc:'Language and communication notes', url:'/pages/universities/cbu/programs/natural-sciences/la111/notes.html', tags:['la111','languages','notes','lecture'] },
+  { type:'exam',   title:'LA111 Past Exams', desc:'Past examination papers for LA111', url:'/pages/universities/cbu/programs/natural-sciences/la111/exams.html', tags:['la111','languages','exam','past paper'] },
+
+  // Engineering
+  { type:'course', title:'Engineering Drawing ED — CBU', desc:'Technical drawing and design — School of Engineering', url:'/pages/universities/cbu/programs/engineering-drawing.html', tags:['engineering','drawing','ed','design','cbu'] },
+
+  // Platform pages
+  { type:'flashcard', title:'Flashcards', desc:'Interactive flip-card study sessions — Geography, Science, Maths, History', url:'/pages/flashcards.html', tags:['flashcards','study','memorize','flip','geography','science','maths','history'] },
+  { type:'page', title:'Quizzes', desc:'Topic-based quizzes with instant feedback', url:'/pages/quizzes.html', tags:['quiz','quizzes','test yourself','practice'] },
+  { type:'page', title:'About BrainHub', desc:'Our mission, values and team', url:'/pages/about.html', tags:['about','mission','team','brainhub'] },
+  { type:'page', title:'Contact Us', desc:'Get in touch or contribute materials', url:'/pages/contact.html', tags:['contact','contribute','help','support'] },
+  { type:'page', title:'All Universities', desc:'Browse all universities on BrainHub', url:'/pages/universities.html', tags:['universities','browse','all'] },
+];
+
+// ── State ─────────────────────────────────────────────────
+let activeFilter = 'all';
+let currentQuery = '';
+
+// ── Init ──────────────────────────────────────────────────
+const input    = document.getElementById('globalSearch');
+const clearBtn = document.getElementById('searchClear');
+const metaEl   = document.getElementById('searchMeta');
+const resultsEl= document.getElementById('searchResults');
+const popularEl= document.getElementById('popularSection');
+const recentSec= document.getElementById('recentSearchesSection');
+const recentList= document.getElementById('recentList');
+
+// Load recent searches
+loadRecentSearches();
+
+// Check URL params
+const urlQ = new URLSearchParams(window.location.search).get('q');
+if (urlQ) { input.value = urlQ; runSearch(urlQ); }
+
+// Live search as you type
+input.addEventListener('input', () => {
+  const q = input.value.trim();
+  clearBtn.style.display = q ? 'block' : 'none';
+  if (q.length >= 1) runSearch(q);
+  else showDefault();
+});
+
+input.addEventListener('keydown', e => {
+  if (e.key === 'Enter') { saveRecentSearch(input.value.trim()); }
+  if (e.key === 'Escape') { input.value = ''; clearBtn.style.display='none'; showDefault(); }
+});
+
+clearBtn.addEventListener('click', () => {
+  input.value = ''; clearBtn.style.display = 'none';
+  showDefault(); input.focus();
+});
+
+// Filter pills
+document.querySelectorAll('.filter-pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+    activeFilter = pill.dataset.filter;
+    if (currentQuery) runSearch(currentQuery);
+  });
+});
+
+function runSearch(query) {
+  if (!query) return;
+  currentQuery = query;
+  input.value = query;
+  clearBtn.style.display = 'block';
+  popularEl.style.display = 'none';
+  recentSec.style.display = 'none';
+
+  const q = query.toLowerCase();
+  let results = SEARCH_INDEX.filter(item => {
+    const matchesFilter = activeFilter === 'all' || item.type === activeFilter;
+    const matchesQuery =
+      item.title.toLowerCase().includes(q) ||
+      item.desc.toLowerCase().includes(q) ||
+      item.tags.some(t => t.includes(q));
+    return matchesFilter && matchesQuery;
+  });
+
+  // Sort — exact title match first
+  results.sort((a, b) => {
+    const aExact = a.title.toLowerCase().includes(q) ? 0 : 1;
+    const bExact = b.title.toLowerCase().includes(q) ? 0 : 1;
+    return aExact - bExact;
+  });
+
+  metaEl.style.display = 'flex';
+  metaEl.innerHTML = `<span>Found <strong>${results.length}</strong> result${results.length !== 1 ? 's' : ''} for "<strong>${escHtml(query)}</strong>"</span>
+    <span style="font-size:0.8rem;color:var(--text-400)">${SEARCH_INDEX.length} items indexed</span>`;
+
+  if (!results.length) {
+    resultsEl.innerHTML = `
+      <div class="search-empty">
+        <div class="empty-icon"><i class="fas fa-search"></i></div>
+        <h3>No results for "${escHtml(query)}"</h3>
+        <p>Try a different keyword — e.g. "BIO110", "physics notes", "CBU"</p>
+      </div>`;
+    return;
+  }
+
+  resultsEl.innerHTML = results.map(item => `
+    <a href="${item.url}" class="result-card" onclick="saveRecentSearch('${escHtml(query)}')">
+      <div class="result-icon ${item.type}">
+        ${iconFor(item.type)}
+      </div>
+      <div class="result-body">
+        <div class="result-title">${highlight(item.title, q)}</div>
+        <div class="result-desc">${highlight(item.desc, q)}</div>
+        <div class="result-breadcrumb">
+          <i class="fas fa-link" style="font-size:0.65rem"></i>
+          ${breadcrumb(item.url)}
+        </div>
+      </div>
+      <span class="result-tag tag-${item.type}">${labelFor(item.type)}</span>
+    </a>
+  `).join('');
+}
+
+function showDefault() {
+  currentQuery = '';
+  metaEl.style.display = 'none';
+  resultsEl.innerHTML = '';
+  popularEl.style.display = 'block';
+  loadRecentSearches();
+}
+
+function highlight(text, query) {
+  if (!query) return escHtml(text);
+  const re = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
+  return escHtml(text).replace(re, '<mark>$1</mark>');
+}
+
+function breadcrumb(url) {
+  return url.replace('/pages/','').replace('/index.html','').replace('.html','').replace(/\//g,' › ').replace(/-/g,' ') || 'brainhub.pages.dev';
+}
+
+function iconFor(type) {
+  const icons = { course:'<i class="fas fa-book-open"></i>', notes:'<i class="fas fa-file-alt"></i>', exam:'<i class="fas fa-scroll"></i>', flashcard:'<i class="fas fa-layer-group"></i>', page:'<i class="fas fa-globe"></i>' };
+  return icons[type] || '<i class="fas fa-circle"></i>';
+}
+
+function labelFor(type) {
+  const labels = { course:'Course', notes:'Notes', exam:'Past Paper', flashcard:'Flashcard', page:'Page' };
+  return labels[type] || type;
+}
+
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function saveRecentSearch(q) {
+  if (!q) return;
+  let recent = JSON.parse(localStorage.getItem('bh-recent-searches') || '[]');
+  recent = [q, ...recent.filter(r => r !== q)].slice(0, 6);
+  localStorage.setItem('bh-recent-searches', JSON.stringify(recent));
+}
+
+function loadRecentSearches() {
+  const recent = JSON.parse(localStorage.getItem('bh-recent-searches') || '[]');
+  if (!recent.length) { recentSec.style.display = 'none'; return; }
+  recentSec.style.display = 'block';
+  recentList.innerHTML = recent.map(r => `
+    <span class="recent-item" onclick="runSearch('${escHtml(r)}')">
+      <i class="fas fa-history"></i> ${escHtml(r)}
+    </span>
+  `).join('');
+}
+</script>
+
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];s1.async=true;s1.src='https://embed.tawk.to/69a705c374e2141c34038ab5/1jiq6t1l1';s1.charset='UTF-8';s1.setAttribute('crossorigin','*');s0.parentNode.insertBefore(s1,s0);})();
+</script>
+</body>
+</html>

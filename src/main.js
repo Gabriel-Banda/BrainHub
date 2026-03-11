@@ -568,7 +568,7 @@ function initDocumentViewer(documents, type) {
             onclick="toggleDocBookmark('doc-${doc.id}', '${doc.title.replace(/'/g,"\\'")}', this)">
             ${bm ? '<i class="fas fa-bookmark"></i> Saved' : '<i class="far fa-bookmark"></i> Save'}
           </button>
-          <button class="share-doc-btn" onclick="sharePage('whatsapp')" title="Share on WhatsApp">
+          <button class="share-doc-btn" onclick="sharePage('whatsapp') BrainHubXP?.trackShare()" title="Share on WhatsApp">
             <i class="fab fa-whatsapp"></i>
           </button>
           <button class="share-doc-btn" onclick="sharePage('copy')" title="Copy link">
@@ -629,7 +629,7 @@ function openPdfViewer(url, title) {
           <span class="pdf-modal-title" id="pdfModalTitle"></span>
           <div class="pdf-modal-actions">
             <a id="pdfDownloadBtn" class="pdf-action-btn" download><i class="fas fa-download"></i> Download</a>
-            <button class="pdf-action-btn" onclick="sharePage('whatsapp')"><i class="fab fa-whatsapp"></i> Share</button>
+            <button class="pdf-action-btn" onclick="sharePage('whatsapp') BrainHubXP?.trackShare()"><i class="fab fa-whatsapp"></i> Share</button>
             <button class="pdf-action-btn" onclick="sharePage('copy')"><i class="fas fa-link"></i> Copy link</button>
             <button class="pdf-close-btn" id="pdfCloseBtn"><i class="fas fa-times"></i></button>
           </div>

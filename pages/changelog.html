@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Changelog | BrainHub</title>
+  <meta name="description" content="BrainHub product changelog — every feature, fix and improvement, documented." />
+  <link rel="stylesheet" href="/src/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link rel="icon" type="image/x-icon" href="/public/assets/images/favicon.png" />
+  <style>
+
+    /* ── Layout ── */
+    .changelog-page { padding: 3rem 0 6rem; }
+
+    .changelog-hero {
+      text-align: center;
+      padding: 3rem 0 3.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 3rem;
+    }
+    .changelog-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      color: var(--text-900);
+      letter-spacing: -0.04em;
+      margin-bottom: 0.5rem;
+    }
+    .changelog-hero p { color: var(--text-500); font-size: 1rem; max-width: 480px; margin: 0 auto 1.5rem; }
+    .changelog-hero-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      font-size: 0.85rem;
+      color: var(--text-500);
+    }
+    .changelog-hero-meta span { display: flex; align-items: center; gap: 0.4rem; }
+    .changelog-hero-meta strong { color: var(--text-900); font-weight: 700; }
+
+    /* ── Two-column layout ── */
+    .changelog-layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+    @media (max-width: 768px) {
+      .changelog-layout { grid-template-columns: 1fr; }
+      .changelog-sidebar { display: none; }
+    }
+
+    /* ── Sidebar ── */
+    .changelog-sidebar {
+      position: sticky;
+      top: 90px;
+    }
+    .sidebar-title {
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-400);
+      margin-bottom: 0.75rem;
+    }
+    .sidebar-links { display: flex; flex-direction: column; gap: 0.1rem; }
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      color: var(--text-500);
+      cursor: pointer;
+      text-decoration: none;
+      transition: var(--transition);
+      border-left: 2px solid transparent;
+    }
+    .sidebar-link:hover { background: var(--bg-muted); color: var(--text-900); border-left-color: var(--border); }
+    .sidebar-link.active { background: var(--primary-light); color: var(--primary); border-left-color: var(--primary); font-weight: 700; }
+    .sidebar-link .sl-version {
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+    .sidebar-link .sl-date { font-size: 0.72rem; color: var(--text-400); margin-left: auto; }
+
+    .sidebar-divider { height: 1px; background: var(--border); margin: 1rem 0; }
+    .sidebar-subscribe {
+      background: var(--primary-light);
+      border: 1px solid rgba(37,99,235,0.2);
+      border-radius: var(--radius-lg);
+      padding: 1rem;
+      text-align: center;
+    }
+    .sidebar-subscribe p { font-size: 0.78rem; color: var(--text-700); margin-bottom: 0.75rem; line-height: 1.5; }
+    .sidebar-subscribe a {
+      display: block;
+      background: var(--primary);
+      color: white;
+      padding: 0.5rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    .sidebar-subscribe a:hover { background: var(--primary-dark); }
+
+    /* ── Entries ── */
+    .changelog-entries { display: flex; flex-direction: column; gap: 0; }
+
+    .changelog-entry {
+      padding-bottom: 3.5rem;
+      position: relative;
+    }
+    .changelog-entry:not(:last-child) {
+      border-bottom: 1px dashed var(--border);
+      margin-bottom: 3.5rem;
+    }
+
+    /* Version header */
+    .entry-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .entry-version-wrap { flex: 1; }
+    .entry-version {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--text-900);
+      letter-spacing: -0.04em;
+      margin-bottom: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .version-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 0.2rem 0.6rem;
+      border-radius: 60px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-family: var(--font-body);
+    }
+    .tag-major   { background: #dbeafe; color: #1d4ed8; }
+    .tag-minor   { background: #dcfce7; color: #15803d; }
+    .tag-patch   { background: #f3f4f6; color: #374151; }
+    .tag-latest  { background: var(--primary); color: white; }
+    [data-theme="dark"] .tag-major  { background: #1e3a5f; color: #93c5fd; }
+    [data-theme="dark"] .tag-minor  { background: #052e16; color: #86efac; }
+    [data-theme="dark"] .tag-patch  { background: #1e293b; color: #94a3b8; }
+
+    .entry-date {
+      font-size: 0.82rem;
+      color: var(--text-500);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .entry-summary {
+      font-size: 1rem;
+      color: var(--text-700);
+      line-height: 1.65;
+      margin-bottom: 1.75rem;
+      max-width: 680px;
+    }
+
+    /* Change type sections */
+    .change-section { margin-bottom: 1.5rem; }
+    .change-section-title {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .change-section-title .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .type-feat   .dot { background: #2563eb; }
+    .type-feat   .change-section-title { color: #2563eb; }
+    .type-fix    .dot { background: #ef4444; }
+    .type-fix    .change-section-title { color: #ef4444; }
+    .type-improve .dot { background: #10b981; }
+    .type-improve .change-section-title { color: #10b981; }
+    .type-perf   .dot { background: #f59e0b; }
+    .type-perf   .change-section-title { color: #f59e0b; }
+    .type-style  .dot { background: #8b5cf6; }
+    .type-style  .change-section-title { color: #8b5cf6; }
+    .type-remove .dot { background: #64748b; }
+    .type-remove .change-section-title { color: #64748b; }
+
+    /* Change items */
+    .change-list { display: flex; flex-direction: column; gap: 0.6rem; }
+    .change-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.85rem;
+      font-size: 0.9rem;
+      color: var(--text-700);
+      line-height: 1.55;
+    }
+    .change-item-icon {
+      width: 22px; height: 22px;
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.65rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .type-feat   .change-item-icon { background: #dbeafe; color: #2563eb; }
+    .type-fix    .change-item-icon { background: #fee2e2; color: #ef4444; }
+    .type-improve .change-item-icon { background: #dcfce7; color: #15803d; }
+    .type-perf   .change-item-icon { background: #fef3c7; color: #d97706; }
+    .type-style  .change-item-icon { background: #ede9fe; color: #7c3aed; }
+    .type-remove .change-item-icon { background: #f1f5f9; color: #64748b; }
+    [data-theme="dark"] .type-feat   .change-item-icon { background: #1e3a5f; color: #93c5fd; }
+    [data-theme="dark"] .type-fix    .change-item-icon { background: #450a0a; color: #fca5a5; }
+    [data-theme="dark"] .type-improve .change-item-icon { background: #052e16; color: #86efac; }
+    [data-theme="dark"] .type-perf   .change-item-icon { background: #431407; color: #fcd34d; }
+    [data-theme="dark"] .type-style  .change-item-icon { background: #2e1065; color: #c4b5fd; }
+    [data-theme="dark"] .type-remove .change-item-icon { background: #1e293b; color: #94a3b8; }
+
+    .change-item strong { color: var(--text-900); font-weight: 700; }
+    .change-item code {
+      font-family: 'Courier New', monospace;
+      font-size: 0.8rem;
+      background: var(--bg-muted);
+      border: 1px solid var(--border);
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+      color: var(--primary);
+    }
+
+    /* Entry footer */
+    .entry-footer {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .entry-contributors {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--text-500);
+    }
+    .contributor-avatar {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display);
+    }
+    .entry-github-link {
+      font-size: 0.8rem;
+      color: var(--primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+    .entry-github-link:hover { text-decoration: underline; }
+
+    /* Coming soon */
+    .coming-soon-card {
+      background: linear-gradient(135deg, var(--primary-light), var(--card));
+      border: 1.5px dashed rgba(37,99,235,0.4);
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      text-align: center;
+      margin-top: 1rem;
+    }
+    [data-theme="dark"] .coming-soon-card { background: linear-gradient(135deg, #1e3a5f, #131929); }
+    .coming-soon-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--text-900);
+      margin-bottom: 0.5rem;
+    }
+    .coming-soon-card p { font-size: 0.875rem; color: var(--text-500); margin-bottom: 1.25rem; }
+    .coming-soon-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+    .coming-soon-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.875rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 60px;
+      font-size: 0.8rem;
+      color: var(--text-700);
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<button class="back-to-top" aria-label="Back to top"><i class="fas fa-arrow-up"></i></button>
+
+<nav class="navbar">
+  <div class="container nav-container">
+    <a href="/index.html" class="logo">
+      <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;color:var(--primary)"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M9 13a4.5 4.5 0 0 0 3-4"/><path d="M12 13h4"/><path d="M12 18h6a2 2 0 0 1 2 2v1"/><path d="M12 8h8"/><path d="M16 8V5a2 2 0 0 1 2-2"/><circle cx="16" cy="13" r=".5"/><circle cx="18" cy="3" r=".5"/><circle cx="20" cy="21" r=".5"/><circle cx="20" cy="8" r=".5"/></svg>
+      BrainHub<span class="dot">.</span>
+    </a>
+    <button class="mobile-menu-btn" aria-label="Toggle navigation"><i class="fas fa-bars"></i></button>
+    <ul class="nav-links">
+      <li><a href="/index.html">Home</a></li>
+      <li><a href="/pages/universities.html">Universities</a></li>
+      <li><a href="/pages/search.html">Search</a></li>
+      <li><a href="/pages/about.html">About</a></li>
+      <li><a href="/pages/contact.html">Contact</a></li>
+      <li><button id="theme-toggle" class="btn-primary theme-toggle"><i class="fas fa-moon" id="theme-icon"></i></button></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="container changelog-page">
+
+  <!-- Hero -->
+  <div class="changelog-hero">
+    <div class="section-tag">Product Updates</div>
+    <h1>Changelog</h1>
+    <p>Every feature, fix and improvement to BrainHub — documented in detail.</p>
+    <div class="changelog-hero-meta">
+      <span><i class="fas fa-code-branch" style="color:var(--primary)"></i> <strong>4</strong> releases</span>
+      <span><i class="fas fa-star" style="color:#f59e0b"></i> <strong>40+</strong> features shipped</span>
+      <span><i class="fas fa-users" style="color:#10b981"></i> Built for <strong>Zambian students</strong></span>
+      <span><i class="fab fa-github" style="color:var(--text-500)"></i> <a href="https://github.com/Gabriel-Banda/Brainhub" target="_blank" rel="noopener" style="color:var(--primary);font-weight:700;">GitHub</a></span>
+    </div>
+  </div>
+
+  <div class="changelog-layout">
+
+    <!-- Sidebar -->
+    <aside class="changelog-sidebar">
+      <div class="sidebar-title">Releases</div>
+      <div class="sidebar-links">
+        <a class="sidebar-link active" href="#v4">
+          <span class="sl-version">v4.0</span>
+          <span class="sl-date">Mar 2026</span>
+        </a>
+        <a class="sidebar-link" href="#v3">
+          <span class="sl-version">v3.0</span>
+          <span class="sl-date">Feb 2026</span>
+        </a>
+        <a class="sidebar-link" href="#v2">
+          <span class="sl-version">v2.0</span>
+          <span class="sl-date">Feb 2026</span>
+        </a>
+        <a class="sidebar-link" href="#v1">
+          <span class="sl-version">v1.0</span>
+          <span class="sl-date">Jan 2026</span>
+        </a>
+      </div>
+
+      <div class="sidebar-divider"></div>
+
+      <div class="sidebar-subscribe">
+        <p>Get notified when new features drop.</p>
+        <a href="/pages/contact.html">Subscribe to updates</a>
+      </div>
+    </aside>
+
+    <!-- Entries -->
+    <div class="changelog-entries">
+
+      <!-- ── v4.0 ── -->
+      <div class="changelog-entry" id="v4">
+        <div class="entry-header">
+          <div class="entry-version-wrap">
+            <div class="entry-version">
+              v4.0
+              <span class="version-tag tag-latest">Latest</span>
+              <span class="version-tag tag-major">Major</span>
+            </div>
+            <div class="entry-date">
+              <i class="fas fa-calendar-alt"></i>
+              March 11, 2026
+            </div>
+          </div>
+        </div>
+
+        <p class="entry-summary">
+          The biggest BrainHub update yet. Introduces a full global search engine, a gamification system with XP and badges, a personal profile page, major dark mode improvements, accessibility upgrades, and performance optimisations across the board.
+        </p>
+
+        <!-- Features -->
+        <div class="change-section type-feat">
+          <div class="change-section-title">
+            <div class="dot"></div>
+            New Features
+          </div>
+          <div class="change-list">
+            <div class="change-item">
+              <div class="change-item-icon"><i class="fas fa-search"></i></div>
+              <div><strong>Global Search</strong> — Full-text search across all 30+ pages and resources at <code>/pages/search.html</code>. Supports live filtering by type (Courses, Notes, Past Papers, Flashcards, Pages), keyword highlighting, recent search history, popular shortcuts, and URL query params.</div>
+            </div>
+            <div class="change-item">
+              <div class="change-item-icon"><i class="fas fa-gamepad"></i></div>
+              <div><strong>Gamification System</strong> — New <code>gamification.js</code> awards XP for page visits, opening resources, completing docs, sharing, searching and weekly challenges. Includes 6 levels (Freshman → BrainHub Pro) and 12 unlockable badges.</div>
+            </div>
+            <div class="change-item">
+              <div class="change-item-icon"><i class="fas fa-layer-group"></i></div>
+              <div><strong>Live XP HUD</strong> — Floating heads-up display on every page showing current level, XP, streak, and progress to next level. Expandable to show full stats.</div>
+            </div>
+            <div class="change-item">
+              <div class="change-item-icon"><i class="fas fa-user"></i></div>
+              <div><strong>Profile Page</strong> — New <code>/pages/profile.html</code> with full XP breakdown, streak tracking, badge gallery (earned vs locked), level roadmap, XP activity log, and progress reset.</div>
+            </div>
+            <div class="change-item">
+              <div class="change-item-icon"><i class="fas fa-fire"></i></div>
+              <div><strong>Study Streaks</strong> — Daily visit tracking with streak counter, max streak record, and +20 XP bonus for consecutive study days.</div>
+            </div>
+            <div class="change-item">
+              <div class="change-item-icon"><i class="fas fa-star"></i></div>
+              <div><strong>Testimonials Section</strong> — Fully designed student review section on the homepage with animated cards, star ratings, verified badges, gradient avatars, and a share CTA.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Improvements -->
+        <div class="change-section type-improve">
+          <div class="change-section-title">
+            <div class="dot"></div>
+            Improvements
+          </div>
+          <div class="change-list">
+            <div class="change-item">
+              <div class="change-item-icon"><i class="fas fa-moon"></i></div>
+              <div><strong>Dark Mode Polish</strong> — Richer dark backgrounds for every component: navbar, hero, cards, doc viewer, chat window, timer, bottom nav, HUD, and more. Custom dark scrollbar styling.</div>
+            </div>
+            <div class="change-item">
+              <div class="change-item-icon"><i class="fas fa-mobile-alt"></i></div>
+              <div><strong>Mobile UX</strong> — Tap targets upgraded to ≥44px (Apple/Google standard). Cards stack better on small screens. Breadcrumbs scroll horizontally. Toast repositioned to bottom-centre on mobile.</div>
+            </div>
+            <div class="change-item">
+              <div class="change-item-icon"><i class="fas fa-universal-access"></i></div>
+              <div><strong>Accessibility</strong> — Skip-to-content link added. Focus rings visible on keyboard navigation, hidden for mouse users. <code>prefers-reduced-motion</code> support disables all animations for users who need it.</div>
+            </div>
+            <div class="change-item">
+              <div class="change-item-icon"><i class="fas fa-mobile-alt"></i></div>
+              <div><strong>Mobile Bottom Nav</strong> — Updated with Search and Profile tabs replacing the old AI Tutor slot. Active state highlighting improved.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Performance -->
+        <div class="change-section type-perf">
+          <div class="change-section-title">
+            <div class="dot"></div>
+            Performance
+          </div>
+          <div class="change-list">
+            <div class="change-item">
+              <div class="change-item-icon"><i class="fas fa-bolt"></i></div>
+              <div><strong>Layout containment</strong> — Added <code>contain: layout style</code> to cards and result items to reduce repaint scope and improve scroll performance.</div>
+            </div>
+            <div class="change-item">
+              <div class="change-item-icon"><i class="fas fa-bolt"></i></div>
+              <div><strong>GPU acceleration</strong> — <code>will-change: transform, opacity</code> added to animated elements. Automatically removed after animation completes to free GPU memory.</div>
+            </div>
+            <div class="change-item">
+              <div class="change-item-icon"><i class="fas fa-bolt"></i></div>
+              <div><strong>Skeleton loaders</strong> — Shimmer placeholder CSS ready for dynamic content areas so pages feel fast while loading.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Style -->
+        <div class="change-section type-style">
+          <div class="change-section-title">
+            <div class="dot"></div>
+            Design
+          </div>
+          <div class="change-list">
+            <div class="change-item">
+              <div class="change-item-icon"><i class="fas fa-paint-brush"></i></div>
+              <div><strong>Progress bar animation</strong> — Reading progress bar now has a moving gradient shimmer effect.</div>
+            </div>
+            <div class="change-item">
+              <div class="change-item-icon"><i class="fas fa-paint-brush"></i></div>
+              <div><strong>Page fade-in</strong> — Smooth fade and slide-up entrance animation on every page load.</div>
+            </div>
+            <div class="change-item">
+              <div class="change-item-icon"><i class="fas fa-paint-brush"></i></div>
+              <div><strong>Card hover refinement</strong> — Lift effect increased to 6px with stronger shadow on hover. Bottom accent line animates in from left on hover.</div>
+            </div>
+            <div class="change-item">
+              <div class="change-item-icon"><i class="fas fa-paint-brush"></i></div>
+              <div><strong>Navbar blur</strong> — Frosted glass blur (<code>backdrop-filter: blur(12px)</code>) added to navbar background.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry-footer">
+          <div class="entry-contributors">
+            <div class="contributor-avatar">G</div>
+            <span>Gabriel J. Banda</span>
+          </div>
+          <a href="https://github.com/Gabriel-Banda/BrainHub" class="entry-github-link" target="_blank" rel="noopener">
+            <i class="fab fa-github"></i> View on GitHub
+          </a>
+        </div>
+      </div>
+
+      <!-- ── v3.0 ── -->
+      <div class="changelog-entry" id="v3">
+        <div class="entry-header">
+          <div class="entry-version-wrap">
+            <div class="entry-version">
+              v3.0
+              <span class="version-tag tag-minor">Minor</span>
+            </div>
+            <div class="entry-date"><i class="fas fa-calendar-alt"></i> February 2026</div>
+          </div>
+        </div>
+        <p class="entry-summary">Professional and standout features — mobile bottom navigation, keyboard shortcuts, weekly study challenge, resource suggestion, completion certificates, and "students also viewed" recommendations.</p>
+
+        <div class="change-section type-feat">
+          <div class="change-section-title"><div class="dot"></div>New Features</div>
+          <div class="change-list">
+            <div class="change-item"><div class="change-item-icon"><i class="fas fa-compass"></i></div><div><strong>Mobile Bottom Navigation</strong> — Fixed bottom nav bar for mobile users with Home, Study, Cards, Quizzes, and AI Tutor quick access. Active page highlighted automatically.</div></div>
+            <div class="change-item"><div class="change-item-icon"><i class="fas fa-keyboard"></i></div><div><strong>Keyboard Shortcuts</strong> — Full shortcut system: <code>K</code> search, <code>T</code> theme, <code>C</code> chat, <code>P</code> timer, <code>?</code> shortcuts panel, <code>G+H/U/F/Q</code> navigate, <code>Esc</code> close all.</div></div>
+            <div class="change-item"><div class="change-item-icon"><i class="fas fa-trophy"></i></div><div><strong>Weekly Study Challenge</strong> — Rotating weekly quiz with 5 questions covering all Natural Sciences courses, countdown timer to next reset, and streak tracking.</div></div>
+            <div class="change-item"><div class="change-item-icon"><i class="fas fa-award"></i></div><div><strong>Course Completion Certificates</strong> — Auto-triggered when all resources in a course are marked done. Canvas-drawn certificate with student name, course, date, and BrainHub seal, downloadable as PNG.</div></div>
+            <div class="change-item"><div class="change-item-icon"><i class="fas fa-plus-circle"></i></div><div><strong>Suggest a Resource</strong> — Students can submit resource suggestions per course. Submits to Formspree with course and university pre-filled.</div></div>
+            <div class="change-item"><div class="change-item-icon"><i class="fas fa-th-large"></i></div><div><strong>Students Also Viewed</strong> — Related course recommendations shown on notes pages, data-driven from JSON attributes on the container element.</div></div>
+          </div>
+        </div>
+
+        <div class="entry-footer">
+          <div class="entry-contributors"><div class="contributor-avatar">G</div><span>Gabriel J. Banda</span></div>
+        </div>
+      </div>
+
+      <!-- ── v2.0 ── -->
+      <div class="changelog-entry" id="v2">
+        <div class="entry-header">
+          <div class="entry-version-wrap">
+            <div class="entry-version">v2.0 <span class="version-tag tag-minor">Minor</span></div>
+            <div class="entry-date"><i class="fas fa-calendar-alt"></i> February 2026</div>
+          </div>
+        </div>
+        <p class="entry-summary">Major feature expansion adding AI tutoring, PDF viewing, PWA support, SEO, progress tracking, bookmarks, social sharing, newsletter, and a 404 page.</p>
+
+        <div class="change-section type-feat">
+          <div class="change-section-title"><div class="dot"></div>New Features</div>
+          <div class="change-list">
+            <div class="change-item"><div class="change-item-icon"><i class="fas fa-robot"></i></div><div><strong>AI Tutor Chatbot</strong> — Context-aware AI assistant powered by the Claude API (via Cloudflare Worker proxy), with course context from page meta tags, typing animation, and conversation history.</div></div>
+            <div class="change-item"><div class="change-item-icon"><i class="fas fa-file-pdf"></i></div><div><strong>In-Browser PDF Viewer</strong> — Documents open in a modal overlay using Google Docs viewer. Includes download, share, and close actions.</div></div>
+            <div class="change-item"><div class="change-item-icon"><i class="fas fa-tasks"></i></div><div><strong>Progress Tracker</strong> — Mark individual resources as done. Progress bar and completion percentage shown per course. State persisted in <code>localStorage</code>.</div></div>
+            <div class="change-item"><div class="change-item-icon"><i class="fas fa-bookmark"></i></div><div><strong>Bookmarks</strong> — Save any document or page to a bookmark panel, accessible from any page. State persisted in <code>localStorage</code>.</div></div>
+            <div class="change-item"><div class="change-item-icon"><i class="fas fa-download"></i></div><div><strong>PWA Support</strong> — <code>manifest.json</code>, service worker with cache-first strategy, offline fallback, install prompt banner. BrainHub is installable on Android and desktop.</div></div>
+            <div class="change-item"><div class="change-item-icon"><i class="fas fa-share-alt"></i></div><div><strong>Social Sharing</strong> — Share any page to WhatsApp, Twitter, Facebook, or copy link. Available on all doc pages and the homepage.</div></div>
+            <div class="change-item"><div class="change-item-icon"><i class="fas fa-envelope"></i></div><div><strong>Newsletter Signup</strong> — Email subscription form integrated with Formspree, with local deduplication and success message.</div></div>
+            <div class="change-item"><div class="change-item-icon"><i class="fas fa-search-plus"></i></div><div><strong>Full SEO</strong> — Open Graph, Twitter Card, JSON-LD structured data, <code>sitemap.xml</code>, <code>robots.txt</code>, canonical URLs added to all pages.</div></div>
+          </div>
+        </div>
+
+        <div class="entry-footer">
+          <div class="entry-contributors"><div class="contributor-avatar">G</div><span>Gabriel J. Banda</span></div>
+        </div>
+      </div>
+
+      <!-- ── v1.0 ── -->
+      <div class="changelog-entry" id="v1">
+        <div class="entry-header">
+          <div class="entry-version-wrap">
+            <div class="entry-version">v1.0 <span class="version-tag tag-patch">Initial</span></div>
+            <div class="entry-date"><i class="fas fa-calendar-alt"></i> January 26, 2026</div>
+          </div>
+        </div>
+        <p class="entry-summary">
+          Initial public launch of BrainHub. A free, no-login university study platform for Zambian students, starting with CBU Natural Sciences resources.
+        </p>
+
+        <div class="change-section type-feat">
+          <div class="change-section-title"><div class="dot"></div>Initial Release</div>
+          <div class="change-list">
+            <div class="change-item"><div class="change-item-icon"><i class="fas fa-university"></i></div><div><strong>University Resources</strong> — BIO110 Biology notes and resources for CBU Natural Sciences. Document viewer with PDF download support.</div></div>
+            <div class="change-item"><div class="change-item-icon"><i class="fas fa-layer-group"></i></div><div><strong>Flashcards</strong> — Interactive flip-card study tool with 5 topic decks: Geography, Science, Mathematics, History, and General Knowledge.</div></div>
+            <div class="change-item"><div class="change-item-icon"><i class="fas fa-stopwatch"></i></div><div><strong>Pomodoro Timer</strong> — Built-in 25-minute study timer with pause, reset, and session counter. Accessible from every page via the footer toggle.</div></div>
+            <div class="change-item"><div class="change-item-icon"><i class="fas fa-moon"></i></div><div><strong>Dark / Light Mode</strong> — System preference detection with manual toggle. Theme persisted to <code>localStorage</code>.</div></div>
+            <div class="change-item"><div class="change-item-icon"><i class="fas fa-mobile-alt"></i></div><div><strong>Responsive Design</strong> — Mobile-first layout with hamburger nav, flexible grids, and optimised touch targets.</div></div>
+            <div class="change-item"><div class="change-item-icon"><i class="fas fa-scroll"></i></div><div><strong>Scroll Animations</strong> — IntersectionObserver-based reveal animations on all cards and sections. Reading progress bar at top of page.</div></div>
+            <div class="change-item"><div class="change-item-icon"><i class="fas fa-comments"></i></div><div><strong>Live Chat</strong> — Tawk.to live chat widget integrated site-wide for student support.</div></div>
+            <div class="change-item"><div class="change-item-icon"><i class="fas fa-file-alt"></i></div><div><strong>Pages</strong> — About, Contact (Formspree), Privacy Policy, Terms & Conditions, Universities browser with search.</div></div>
+          </div>
+        </div>
+
+        <div class="entry-footer">
+          <div class="entry-contributors"><div class="contributor-avatar">G</div><span>Gabriel J. Banda — Founder</span></div>
+          <a href="https://github.com/Gabriel-Banda/BrainHub" class="entry-github-link" target="_blank" rel="noopener">
+            <i class="fab fa-github"></i> Initial commit
+          </a>
+        </div>
+      </div>
+
+      <!-- Coming soon -->
+      <div class="coming-soon-card reveal">
+        <h3>🚀 What's coming next</h3>
+        <p>Features currently in development or planned for future releases.</p>
+        <div class="coming-soon-items">
+          <span class="coming-soon-item"><i class="fas fa-university" style="color:var(--primary)"></i> More universities (UNZA, MU)</span>
+          <span class="coming-soon-item"><i class="fas fa-book" style="color:#8b5cf6"></i> More course content</span>
+          <span class="coming-soon-item"><i class="fas fa-users" style="color:#10b981"></i> Study groups</span>
+          <span class="coming-soon-item"><i class="fas fa-bell" style="color:#f59e0b"></i> Push notifications</span>
+          <span class="coming-soon-item"><i class="fas fa-chart-bar" style="color:#ef4444"></i> Analytics dashboard</span>
+          <span class="coming-soon-item"><i class="fas fa-globe" style="color:#06b6d4"></i> More languages</span>
+        </div>
+      </div>
+
+    </div><!-- end entries -->
+  </div><!-- end layout -->
+
+</main>
+
+<!-- Mobile Bottom Nav -->
+<nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+  <ul>
+    <li><a href="/index.html" data-page="home"><i class="fas fa-home"></i>Home</a></li>
+    <li><a href="/pages/universities.html" data-page="universities"><i class="fas fa-university"></i>Study</a></li>
+    <li><a href="/pages/search.html" data-page="search"><i class="fas fa-search"></i>Search</a></li>
+    <li><a href="/pages/flashcards.html" data-page="flashcards"><i class="fas fa-layer-group"></i>Cards</a></li>
+    <li><a href="/pages/profile.html" data-page="profile"><i class="fas fa-user"></i>Profile</a></li>
+  </ul>
+</nav>
+
+<footer>
+  <div class="container footer-content">
+    <div class="footer-col">
+      <h3>BrainHub<span class="dot">.</span></h3>
+      <p>Making quality education accessible and free for everyone.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Platform</h4>
+      <a href="/index.html">Home</a>
+      <a href="/pages/universities.html">Universities</a>
+      <a href="/pages/search.html">Search</a>
+      <a href="/pages/flashcards.html">Flashcards</a>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <a href="/pages/about.html">About</a>
+      <a href="/pages/contact.html">Contact Us</a>
+      <a href="/pages/privacy-policy.html">Privacy Policy</a>
+      <a href="/pages/changelog.html" style="color:var(--primary);font-weight:700">Changelog</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 BrainHub. All rights reserved.</p>
+    <p id="realtime-clock" class="clock-text"></p>
+  </div>
+</footer>
+
+<script src="/src/main.js"></script>
+<script src="/src/gamification.js"></script>
+<script>
+  // Sidebar active state on scroll
+  const entries = document.querySelectorAll('.changelog-entry');
+  const sidebarLinks = document.querySelectorAll('.sidebar-link');
+  const observer = new IntersectionObserver((obs) => {
+    obs.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        sidebarLinks.forEach(l => {
+          l.classList.toggle('active', l.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { threshold: 0.3, rootMargin: '-80px 0px -60% 0px' });
+  entries.forEach(e => observer.observe(e));
+</script>
+
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];s1.async=true;s1.src='https://embed.tawk.to/69a705c374e2141c34038ab5/1jiq6t1l1';s1.charset='UTF-8';s1.setAttribute('crossorigin','*');s0.parentNode.insertBefore(s1,s0);})();
+</script>
+
+</body>
+</html>

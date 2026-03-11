@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Profile | BrainHub</title>
+  <meta name="description" content="Your BrainHub study profile — XP, level, badges and stats." />
+  <link rel="stylesheet" href="/src/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link rel="icon" type="image/x-icon" href="/public/assets/images/favicon.png" />
+  <style>
+    .profile-page { padding: 2rem 0 6rem; }
+
+    /* Hero card */
+    .profile-hero {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+      border-radius: var(--radius-xl);
+      padding: 2.5rem 2rem;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      position: relative;
+      overflow: hidden;
+    }
+    .profile-hero::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 200px; height: 200px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 50%;
+    }
+    .profile-avatar {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.5rem;
+      flex-shrink: 0;
+      border: 3px solid rgba(255,255,255,0.4);
+    }
+    .profile-hero-info { flex: 1; }
+    .profile-hero-info h1 {
+      font-family: var(--font-display);
+      font-size: 1.6rem; font-weight: 800;
+      margin-bottom: 0.25rem;
+    }
+    .profile-hero-info .level-badge {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: rgba(255,255,255,0.2);
+      padding: 0.3rem 0.85rem;
+      border-radius: 60px;
+      font-size: 0.85rem; font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+    .profile-xp-bar-wrap { margin-top: 0.5rem; }
+    .profile-xp-label { font-size: 0.78rem; opacity: 0.85; margin-bottom: 0.35rem; }
+    .profile-xp-bar {
+      height: 8px;
+      background: rgba(255,255,255,0.25);
+      border-radius: 60px;
+      overflow: hidden;
+      max-width: 300px;
+    }
+    .profile-xp-fill {
+      height: 100%;
+      background: white;
+      border-radius: 60px;
+      transition: width 1s cubic-bezier(0.4,0,0.2,1);
+    }
+    .profile-hero-xp {
+      text-align: right;
+      flex-shrink: 0;
+    }
+    .profile-hero-xp .xp-big {
+      font-family: var(--font-display);
+      font-size: 2.5rem; font-weight: 900;
+      line-height: 1;
+    }
+    .profile-hero-xp .xp-label { font-size: 0.8rem; opacity: 0.8; }
+
+    /* Stats grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      text-align: center;
+      transition: var(--transition);
+    }
+    .stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+    .stat-card .stat-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+    .stat-card .stat-val {
+      font-family: var(--font-display);
+      font-size: 1.75rem; font-weight: 900;
+      color: var(--text-900);
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+    .stat-card .stat-lbl { font-size: 0.78rem; color: var(--text-500); font-weight: 600; }
+
+    /* Streak */
+    .streak-card {
+      background: linear-gradient(135deg, #fff7ed, #fef3c7);
+      border: 1.5px solid #fcd34d;
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    [data-theme="dark"] .streak-card { background: linear-gradient(135deg, #1c1917, #292524); border-color: #78350f; }
+    .streak-flame { font-size: 2.5rem; }
+    .streak-info h3 { font-family: var(--font-display); font-size: 1rem; font-weight: 700; color: var(--text-900); }
+    .streak-info p { font-size: 0.82rem; color: var(--text-500); }
+    .streak-days {
+      margin-left: auto;
+      font-family: var(--font-display);
+      font-size: 2rem; font-weight: 900;
+      color: #f59e0b;
+    }
+
+    /* Section headers */
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 1.1rem; font-weight: 800;
+      color: var(--text-900);
+      margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+
+    /* Badges grid */
+    .badges-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .badge-card {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1rem;
+      text-align: center;
+      transition: var(--transition);
+      position: relative;
+    }
+    .badge-card.earned {
+      border-color: #fcd34d;
+      background: linear-gradient(135deg, #fffbeb, var(--card));
+    }
+    .badge-card.earned:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(251,191,36,0.2); }
+    .badge-card.locked { opacity: 0.45; filter: grayscale(1); }
+    .badge-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .badge-name { font-family: var(--font-display); font-size: 0.82rem; font-weight: 700; color: var(--text-900); margin-bottom: 0.2rem; }
+    .badge-desc { font-size: 0.72rem; color: var(--text-500); }
+    .badge-earned-tag {
+      position: absolute; top: 0.5rem; right: 0.5rem;
+      background: #fcd34d; color: #78350f;
+      font-size: 0.6rem; font-weight: 800;
+      padding: 0.1rem 0.4rem;
+      border-radius: 60px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* XP Log */
+    .xp-log { margin-bottom: 2rem; }
+    .xp-log-item {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.65rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.85rem;
+    }
+    .xp-log-item:last-child { border-bottom: none; }
+    .xp-log-amount { font-weight: 800; color: var(--primary); font-family: var(--font-display); flex-shrink: 0; min-width: 48px; }
+    .xp-log-label { color: var(--text-700); flex: 1; }
+    .xp-log-time { color: var(--text-400); font-size: 0.75rem; flex-shrink: 0; }
+
+    /* Levels roadmap */
+    .levels-list { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2rem; }
+    .level-row {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 0.85rem 1.1rem;
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      transition: var(--transition);
+    }
+    .level-row.current { border-color: var(--primary); background: var(--primary-light); }
+    .level-row.achieved { border-color: #86efac; background: #f0fdf4; }
+    [data-theme="dark"] .level-row.achieved { background: #052e16; border-color: #166534; }
+    .level-row-icon { font-size: 1.4rem; flex-shrink: 0; }
+    .level-row-info { flex: 1; }
+    .level-row-name { font-family: var(--font-display); font-size: 0.9rem; font-weight: 700; color: var(--text-900); }
+    .level-row-xp { font-size: 0.78rem; color: var(--text-500); }
+    .level-row-status { font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 60px; }
+    .status-current { background: var(--primary); color: white; }
+    .status-achieved { background: #86efac; color: #14532d; }
+    .status-locked { background: var(--bg-muted); color: var(--text-400); }
+
+    /* Reset button */
+    .danger-zone {
+      background: var(--card);
+      border: 1px solid #fca5a5;
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+    }
+    .danger-zone p { font-size: 0.85rem; color: var(--text-500); }
+    .danger-zone strong { color: var(--text-900); display: block; font-size: 0.9rem; margin-bottom: 0.2rem; }
+    .btn-danger {
+      padding: 0.55rem 1.25rem;
+      background: #fef2f2;
+      border: 1.5px solid #fca5a5;
+      color: #dc2626;
+      border-radius: var(--radius);
+      font-size: 0.85rem; font-weight: 700;
+      cursor: pointer;
+      font-family: var(--font-body);
+      transition: var(--transition);
+      flex-shrink: 0;
+    }
+    .btn-danger:hover { background: #dc2626; color: white; }
+  </style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<button class="back-to-top" aria-label="Back to top"><i class="fas fa-arrow-up"></i></button>
+
+<nav class="navbar">
+  <div class="container nav-container">
+    <a href="/index.html" class="logo">
+      <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;color:var(--primary)"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M9 13a4.5 4.5 0 0 0 3-4"/><path d="M12 13h4"/><path d="M12 18h6a2 2 0 0 1 2 2v1"/><path d="M12 8h8"/><path d="M16 8V5a2 2 0 0 1 2-2"/><circle cx="16" cy="13" r=".5"/><circle cx="18" cy="3" r=".5"/><circle cx="20" cy="21" r=".5"/><circle cx="20" cy="8" r=".5"/></svg>
+      BrainHub<span class="dot">.</span>
+    </a>
+    <button class="mobile-menu-btn" aria-label="Toggle navigation"><i class="fas fa-bars"></i></button>
+    <ul class="nav-links">
+      <li><a href="/index.html">Home</a></li>
+      <li><a href="/pages/universities.html">Universities</a></li>
+      <li><a href="/pages/flashcards.html">Flashcards</a></li>
+      <li><a href="/pages/about.html">About</a></li>
+      <li><a href="/pages/contact.html">Contact</a></li>
+      <li><button id="theme-toggle" class="btn-primary theme-toggle"><i class="fas fa-moon" id="theme-icon"></i></button></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="container profile-page">
+
+  <!-- Profile hero -->
+  <div class="profile-hero" id="profileHero">
+    <div class="profile-avatar" id="profileAvatar">🎒</div>
+    <div class="profile-hero-info">
+      <h1 id="profileLevelName">Freshman</h1>
+      <div class="level-badge" id="profileLevelBadge">🎒 Level 1</div>
+      <div class="profile-xp-bar-wrap">
+        <div class="profile-xp-label" id="profileXPLabel">0 XP — 100 XP to next level</div>
+        <div class="profile-xp-bar">
+          <div class="profile-xp-fill" id="profileXPFill" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+    <div class="profile-hero-xp">
+      <div class="xp-big" id="profileXPBig">0</div>
+      <div class="xp-label">Total XP</div>
+    </div>
+  </div>
+
+  <!-- Streak -->
+  <div class="streak-card">
+    <div class="streak-flame">🔥</div>
+    <div class="streak-info">
+      <h3 id="streakTitle">0-day streak</h3>
+      <p id="streakDesc">Study every day to build your streak and earn bonus XP!</p>
+    </div>
+    <div class="streak-days" id="streakDays">0</div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-grid" id="statsGrid">
+    <div class="stat-card"><div class="stat-icon">📚</div><div class="stat-val" id="statDocs">0</div><div class="stat-lbl">Docs opened</div></div>
+    <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-val" id="statCompleted">0</div><div class="stat-lbl">Completed</div></div>
+    <div class="stat-card"><div class="stat-icon">🏅</div><div class="stat-val" id="statBadges">0</div><div class="stat-lbl">Badges earned</div></div>
+    <div class="stat-card"><div class="stat-icon">📅</div><div class="stat-val" id="statVisits">0</div><div class="stat-lbl">Total visits</div></div>
+    <div class="stat-card"><div class="stat-icon">💪</div><div class="stat-val" id="statMaxStreak">0</div><div class="stat-lbl">Best streak</div></div>
+    <div class="stat-card"><div class="stat-icon">🔍</div><div class="stat-val" id="statSearches">0</div><div class="stat-lbl">Searches</div></div>
+  </div>
+
+  <!-- Badges -->
+  <div class="section-title"><i class="fas fa-medal" style="color:#f59e0b"></i> Badges</div>
+  <div class="badges-grid" id="badgesGrid"></div>
+
+  <!-- Levels roadmap -->
+  <div class="section-title"><i class="fas fa-layer-group" style="color:var(--primary)"></i> Levels</div>
+  <div class="levels-list" id="levelsList"></div>
+
+  <!-- XP Log -->
+  <div class="section-title"><i class="fas fa-history" style="color:var(--accent)"></i> Recent XP</div>
+  <div class="xp-log" id="xpLog"></div>
+
+  <!-- Danger zone -->
+  <div class="section-title" style="color:#dc2626"><i class="fas fa-exclamation-triangle"></i> Reset</div>
+  <div class="danger-zone">
+    <div>
+      <strong>Reset all progress</strong>
+      <p>This will permanently delete your XP, badges, and streak. This cannot be undone.</p>
+    </div>
+    <button class="btn-danger" onclick="confirmReset()">Reset progress</button>
+  </div>
+
+</main>
+
+<!-- Mobile Bottom Nav -->
+<nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+  <ul>
+    <li><a href="/index.html" data-page="home"><i class="fas fa-home"></i>Home</a></li>
+    <li><a href="/pages/universities.html" data-page="universities"><i class="fas fa-university"></i>Study</a></li>
+    <li><a href="/pages/flashcards.html" data-page="flashcards"><i class="fas fa-layer-group"></i>Cards</a></li>
+    <li><a href="/pages/search.html" data-page="search"><i class="fas fa-search"></i>Search</a></li>
+    <li><a href="/pages/profile.html" data-page="profile" class="active"><i class="fas fa-user"></i>Profile</a></li>
+  </ul>
+</nav>
+
+<footer>
+  <div class="container footer-content">
+    <div class="footer-col"><h3>BrainHub<span class="dot">.</span></h3><p>Free education for everyone.</p></div>
+    <div class="footer-col"><h4>Platform</h4><a href="/index.html">Home</a><a href="/pages/universities.html">Universities</a></div>
+    <div class="footer-col"><h4>Support</h4><a href="/pages/contact.html">Contact</a><a href="/pages/privacy-policy.html">Privacy Policy</a></div>
+  </div>
+  <div class="footer-bottom"><p>&copy; 2026 BrainHub. All rights reserved.</p><p id="realtime-clock" class="clock-text"></p></div>
+</footer>
+
+<script src="/src/main.js"></script>
+<script src="/src/gamification.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Wait a tick for gamification.js to init
+  setTimeout(renderProfile, 100);
+});
+
+function renderProfile() {
+  const G = window.BrainHubXP;
+  if (!G) return;
+
+  const stats  = G.getStats();
+  const level  = G.getLevel(stats.xp);
+  const levels = G.LEVELS;
+  const badges = G.BADGES;
+
+  // Hero
+  document.getElementById('profileAvatar').textContent = level.icon;
+  document.getElementById('profileLevelName').textContent = level.name;
+  document.getElementById('profileLevelBadge').textContent = `${level.icon} ${level.name}`;
+  document.getElementById('profileXPBig').textContent = stats.xp.toLocaleString();
+
+  const nextLevel = levels.find(l => l.min > stats.xp);
+  const progress  = nextLevel
+    ? Math.round(((stats.xp - level.min) / (nextLevel.min - level.min)) * 100)
+    : 100;
+  document.getElementById('profileXPFill').style.width = progress + '%';
+  document.getElementById('profileXPLabel').textContent = nextLevel
+    ? `${stats.xp} XP — ${nextLevel.min - stats.xp} XP to ${nextLevel.icon} ${nextLevel.name}`
+    : `${stats.xp} XP — Maximum level reached!`;
+
+  // Streak
+  document.getElementById('streakDays').textContent = stats.currentStreak;
+  document.getElementById('streakTitle').textContent = `${stats.currentStreak}-day streak`;
+  document.getElementById('streakDesc').textContent = stats.currentStreak >= 3
+    ? `🔥 You're on fire! Best streak: ${stats.maxStreak} days`
+    : `Study every day to build your streak and earn +${20} bonus XP daily!`;
+
+  // Stats
+  document.getElementById('statDocs').textContent     = stats.docsOpened;
+  document.getElementById('statCompleted').textContent= stats.docsCompleted;
+  document.getElementById('statBadges').textContent   = stats.earnedBadges.length;
+  document.getElementById('statVisits').textContent   = stats.totalVisits;
+  document.getElementById('statMaxStreak').textContent= stats.maxStreak;
+  document.getElementById('statSearches').textContent = stats.searches;
+
+  // Badges
+  const badgesGrid = document.getElementById('badgesGrid');
+  const earned = badges.filter(b => stats.earnedBadges.includes(b.id));
+  const locked  = badges.filter(b => !stats.earnedBadges.includes(b.id));
+  badgesGrid.innerHTML = [...earned, ...locked].map(badge => {
+    const isEarned = stats.earnedBadges.includes(badge.id);
+    return `
+      <div class="badge-card ${isEarned ? 'earned' : 'locked'}" title="${badge.desc}">
+        ${isEarned ? '<span class="badge-earned-tag">Earned</span>' : ''}
+        <div class="badge-icon">${badge.icon}</div>
+        <div class="badge-name">${badge.name}</div>
+        <div class="badge-desc">${badge.desc}</div>
+      </div>`;
+  }).join('');
+
+  // Levels
+  const levelsList = document.getElementById('levelsList');
+  levelsList.innerHTML = levels.map((l, i) => {
+    const isCurrentLevel = level.min === l.min;
+    const isAchieved = stats.xp >= l.min && !isCurrentLevel;
+    const statusClass = isCurrentLevel ? 'status-current' : isAchieved ? 'status-achieved' : 'status-locked';
+    const statusText  = isCurrentLevel ? 'Current' : isAchieved ? '✓ Achieved' : `${l.min} XP`;
+    const rowClass    = isCurrentLevel ? 'current' : isAchieved ? 'achieved' : '';
+    return `
+      <div class="level-row ${rowClass}">
+        <div class="level-row-icon">${l.icon}</div>
+        <div class="level-row-info">
+          <div class="level-row-name">${l.name}</div>
+          <div class="level-row-xp">Requires ${l.min.toLocaleString()} XP</div>
+        </div>
+        <span class="level-row-status ${statusClass}">${statusText}</span>
+      </div>`;
+  }).join('');
+
+  // XP Log
+  const xpLog = document.getElementById('xpLog');
+  const log = (stats.xpLog || []).slice(0, 15);
+  if (!log.length) {
+    xpLog.innerHTML = '<p style="color:var(--text-400);font-size:0.85rem">No activity yet — start studying to earn XP!</p>';
+  } else {
+    xpLog.innerHTML = log.map(entry => `
+      <div class="xp-log-item">
+        <span class="xp-log-amount">+${entry.amount}</span>
+        <span class="xp-log-label">${entry.label || entry.action}</span>
+        <span class="xp-log-time">${timeAgo(entry.ts)}</span>
+      </div>`).join('');
+  }
+}
+
+function timeAgo(ts) {
+  const diff = Date.now() - ts;
+  if (diff < 60000) return 'just now';
+  if (diff < 3600000) return Math.floor(diff/60000) + 'm ago';
+  if (diff < 86400000) return Math.floor(diff/3600000) + 'h ago';
+  return Math.floor(diff/86400000) + 'd ago';
+}
+
+function confirmReset() {
+  if (confirm('Are you sure? This will permanently delete all your XP, badges and streaks.')) {
+    localStorage.removeItem('bh-gamification');
+    showToast('Progress reset.');
+    setTimeout(() => location.reload(), 800);
+  }
+}
+</script>
+
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];s1.async=true;s1.src='https://embed.tawk.to/69a705c374e2141c34038ab5/1jiq6t1l1';s1.charset='UTF-8';s1.setAttribute('crossorigin','*');s0.parentNode.insertBefore(s1,s0);})();
+</script>
+
+</body>
+</html>
