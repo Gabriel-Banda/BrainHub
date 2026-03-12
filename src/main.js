@@ -196,6 +196,7 @@ function initFlashcards() {
 // ==================== LIVE SEARCH ====================
 function initLiveSearch() { /* homepage search handled inline */ }
 function searchMaterials() {
+  window.BrainHubXP?.trackSearch();
   const query = document.getElementById('searchInput')?.value?.trim();
   if (!query) return;
   window.location.href = `pages/universities.html?q=${encodeURIComponent(query)}`;
@@ -283,6 +284,7 @@ function initProgressTracker() {
       setProgress(id, newState);
       updateDoneBtn(btn, newState);
       showToast(newState ? '✓ Marked as complete!' : 'Unmarked');
+      if (newState) window.BrainHubXP?.trackDocComplete();
       renderProgressBar();
     });
   });
@@ -399,6 +401,7 @@ function initSocialShare() {
 
 // Share current page helper (callable from inline onclick)
 function sharePage(platform) {
+  window.BrainHubXP?.trackShare();
   const url = encodeURIComponent(window.location.href);
   const text = encodeURIComponent(document.title + ' — Free study materials on BrainHub');
   const links = {
@@ -447,7 +450,7 @@ function initAIChatbot() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model: 'openrouter/free',
+          model: 'claude-haiku-4-5-20251001',
           max_tokens: 1000,
           system: `You are a helpful, friendly AI tutor on BrainHub, a free study platform for Zambian university students. Context: ${context}. Keep answers clear, concise and encouraging. Use simple language suitable for university students. When explaining concepts, use examples relevant to Zambia where possible.`,
           messages: history
@@ -533,7 +536,7 @@ function initDocumentViewer(documents, type) {
     document.querySelectorAll('.doc-card').forEach(card => {
       card.addEventListener('click', () => {
         const doc = documents.find(d => d.id == card.dataset.id);
-        if (doc) selectDocument(doc);
+        if (doc) { selectDocument(doc); window.BrainHubXP?.trackDocOpen(); }
         document.querySelectorAll('.doc-card').forEach(c => c.classList.remove('active'));
         card.classList.add('active');
       });
@@ -568,7 +571,7 @@ function initDocumentViewer(documents, type) {
             onclick="toggleDocBookmark('doc-${doc.id}', '${doc.title.replace(/'/g,"\\'")}', this)">
             ${bm ? '<i class="fas fa-bookmark"></i> Saved' : '<i class="far fa-bookmark"></i> Save'}
           </button>
-          <button class="share-doc-btn" onclick="sharePage('whatsapp') BrainHubXP?.trackShare()" title="Share on WhatsApp">
+          <button class="share-doc-btn" onclick="sharePage('whatsapp')" title="Share on WhatsApp">
             <i class="fab fa-whatsapp"></i>
           </button>
           <button class="share-doc-btn" onclick="sharePage('copy')" title="Copy link">
@@ -617,7 +620,13 @@ function toggleDocBookmark(id, title, btn) {
 }
 
 // ==================== PDF VIEWER ====================
-function openPdfViewer(url, title) {
+async function openPdfViewer(url, title) {
+  // url coming in is already the secure /doc Worker URL
+  // Build the download URL by swapping /doc → /download
+  const dlUrl = window.BrainHubDocs && url.includes('/doc?')
+    ? url.replace('/doc?', '/download?')
+    : url;
+
   let overlay = document.getElementById('pdfViewerOverlay');
   if (!overlay) {
     overlay = document.createElement('div');
@@ -629,13 +638,13 @@ function openPdfViewer(url, title) {
           <span class="pdf-modal-title" id="pdfModalTitle"></span>
           <div class="pdf-modal-actions">
             <a id="pdfDownloadBtn" class="pdf-action-btn" download><i class="fas fa-download"></i> Download</a>
-            <button class="pdf-action-btn" onclick="sharePage('whatsapp') BrainHubXP?.trackShare()"><i class="fab fa-whatsapp"></i> Share</button>
+            <button class="pdf-action-btn" onclick="sharePage('whatsapp')"><i class="fab fa-whatsapp"></i> Share</button>
             <button class="pdf-action-btn" onclick="sharePage('copy')"><i class="fas fa-link"></i> Copy link</button>
             <button class="pdf-close-btn" id="pdfCloseBtn"><i class="fas fa-times"></i></button>
           </div>
         </div>
-        <div class="pdf-modal-body">
-          <iframe id="pdfFrame" src="" frameborder="0"></iframe>
+        <div class="pdf-modal-body" id="pdfModalBody">
+          <!-- Filled dynamically below -->
         </div>
       </div>
     `;
@@ -643,18 +652,92 @@ function openPdfViewer(url, title) {
     document.getElementById('pdfCloseBtn').addEventListener('click', closePdfViewer);
     overlay.addEventListener('click', (e) => { if (e.target === overlay) closePdfViewer(); });
   }
+
   document.getElementById('pdfModalTitle').textContent = title || 'Document Preview';
-  document.getElementById('pdfDownloadBtn').href = url;
-  // Use Google Docs viewer as fallback for broad compatibility
-  const viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true`;
-  document.getElementById('pdfFrame').src = viewerUrl;
+  document.getElementById('pdfDownloadBtn').href = dlUrl;
+
+  const body = document.getElementById('pdfModalBody');
+
+  // Detect iOS/Safari — they block iframe PDF rendering for cross-origin blobs
+  const isSafariIOS = /iP(ad|hone|od)/.test(navigator.userAgent) ||
+    (navigator.userAgent.includes('Safari') && !navigator.userAgent.includes('Chrome') && !navigator.userAgent.includes('Firefox'));
+
+  const ext = (url.split('?')[0]).split('.').pop().toLowerCase();
+  const isOfficeDoc = ['docx','doc','pptx','xlsx','xls','ppt'].includes(ext);
+
+  if (isOfficeDoc) {
+    // Office docs — use Google Docs viewer (these can't render natively)
+    body.innerHTML = `<iframe id="pdfFrame"
+      src="https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true"
+      frameborder="0" style="width:100%;height:100%;border:none"></iframe>`;
+
+  } else if (isSafariIOS) {
+    // Safari iOS — can't render PDF in iframe cross-origin, show open button
+    body.innerHTML = `
+      <div class="pdf-safari-fallback">
+        <div style="font-size:3rem;margin-bottom:1rem">📄</div>
+        <h3 style="margin-bottom:0.5rem;color:var(--text-900)">${title || 'Document'}</h3>
+        <p style="color:var(--text-500);margin-bottom:1.5rem;font-size:0.9rem">
+          Tap below to open the document in your browser.
+        </p>
+        <a href="${url}" target="_blank" rel="noopener"
+          style="display:inline-flex;align-items:center;gap:0.5rem;background:var(--primary);color:white;
+          padding:0.75rem 1.5rem;border-radius:10px;text-decoration:none;font-weight:700;font-size:0.95rem">
+          <i class="fas fa-eye"></i> Open Document
+        </a>
+        <br><br>
+        <a href="${dlUrl}" download
+          style="display:inline-flex;align-items:center;gap:0.5rem;background:var(--bg-muted);color:var(--text-700);
+          padding:0.65rem 1.25rem;border-radius:10px;text-decoration:none;font-weight:600;font-size:0.875rem;
+          border:1px solid var(--border)">
+          <i class="fas fa-download"></i> Download Instead
+        </a>
+      </div>`;
+
+  } else {
+    // Chrome, Firefox, Edge, Desktop Safari — stream directly into iframe
+    // Worker returns Content-Type: application/pdf + Content-Disposition: inline
+    // Browser PDF renderer handles it natively — fast, no third party involved
+    body.innerHTML = `<iframe id="pdfFrame"
+      src="${url}"
+      frameborder="0"
+      style="width:100%;height:100%;border:none"
+      title="${(title || 'Document').replace(/"/g, '')}"
+    ></iframe>`;
+
+    // Fallback: if iframe fails to load after 8s, show download prompt
+    const frame = document.getElementById('pdfFrame');
+    const fallbackTimer = setTimeout(() => {
+      if (frame && !frame.contentDocument) {
+        frame.outerHTML = `
+          <div class="pdf-safari-fallback">
+            <div style="font-size:2.5rem;margin-bottom:1rem">⚠️</div>
+            <h3 style="color:var(--text-900);margin-bottom:0.5rem">Preview unavailable</h3>
+            <p style="color:var(--text-500);margin-bottom:1.5rem;font-size:0.875rem">
+              Your browser could not display this document inline.
+            </p>
+            <a href="${dlUrl}" download
+              style="display:inline-flex;align-items:center;gap:0.5rem;background:var(--primary);color:white;
+              padding:0.75rem 1.5rem;border-radius:10px;text-decoration:none;font-weight:700">
+              <i class="fas fa-download"></i> Download Document
+            </a>
+          </div>`;
+      }
+    }, 8000);
+    if (frame) frame.addEventListener('load', () => clearTimeout(fallbackTimer));
+  }
+
   overlay.classList.add('open');
   document.body.style.overflow = 'hidden';
 }
 
 function closePdfViewer() {
   const overlay = document.getElementById('pdfViewerOverlay');
-  if (overlay) { overlay.classList.remove('open'); document.getElementById('pdfFrame').src = ''; }
+  if (overlay) {
+    overlay.classList.remove('open');
+    const body = document.getElementById('pdfModalBody');
+    if (body) body.innerHTML = ''; // clear iframe to stop loading/playing
+  }
   document.body.style.overflow = '';
 }
 
@@ -1079,8 +1162,8 @@ function initStudyChallenge() {
       result.innerHTML = `<strong>${isCorrect ? '✓ Correct!' : '✗ Not quite.'}</strong> ${challenge.explanation}`;
       result.classList.add('show');
 
-      if (isCorrect) showToast('🔥 Correct! Streak: ' + newStreak);
-      else showToast('Keep studying — you\'ll get it next time!');
+      if (isCorrect) { showToast('🔥 Correct! Streak: ' + newStreak); window.BrainHubXP?.trackChallengeCorrect(); }
+      else { showToast('Keep studying — you\'ll get it next time!'); window.BrainHubXP?.trackChallengeWrong(); }
     });
   });
 
@@ -1470,3 +1553,18 @@ function drawCornerOrnament(ctx, x, y, flipX = false, flipY = false) {
 function showKeyboardHint() {
   toggleShortcuts();
 }
+
+/* ── PDF Safari Fallback styles (injected by main.js) ── */
+(function(){
+  if (document.getElementById('bh-pdf-styles')) return;
+  const s = document.createElement('style');
+  s.id = 'bh-pdf-styles';
+  s.textContent = `
+    .pdf-safari-fallback {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; height: 100%; padding: 2rem;
+      text-align: center; background: var(--card, #fff);
+    }
+  `;
+  document.head.appendChild(s);
+})();
