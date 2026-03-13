@@ -8,6 +8,366 @@
   <link rel="stylesheet" href="/src/style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <link rel="icon" type="image/x-icon" href="/public/assets/images/favicon.png" />
+  <style>
+    .contact-hero {
+      padding: 4rem 0 2rem;
+      text-align: center;
+    }
+    .contact-hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+      background: linear-gradient(135deg, var(--primary), #7c3aed);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .contact-hero p {
+      color: var(--text-500);
+      font-size: 1.1rem;
+      max-width: 540px;
+      margin: 0 auto 1.5rem;
+      line-height: 1.7;
+    }
+    .response-time-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(34,197,94,0.1);
+      color: #16a34a;
+      padding: 0.3rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+    .response-time-badge::before {
+      content: '';
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #16a34a;
+      display: inline-block;
+      animation: pulse-g 1.5s infinite;
+    }
+    @keyframes pulse-g {
+      0%,100%{opacity:1;transform:scale(1)}
+      50%{opacity:.5;transform:scale(1.4)}
+    }
+
+    /* Type tabs */
+    .contact-type-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 2.5rem;
+    }
+    @media(max-width:600px){ .contact-type-grid{ grid-template-columns: repeat(2,1fr); } }
+    .contact-type-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 1rem 0.5rem;
+      border-radius: 14px;
+      border: 2px solid var(--border);
+      background: var(--card);
+      color: var(--text-700);
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .contact-type-btn i { font-size: 1.3rem; color: var(--primary); }
+    .contact-type-btn:hover,
+    .contact-type-btn.active {
+      border-color: var(--primary);
+      background: rgba(37,99,235,0.06);
+      color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(37,99,235,0.12);
+    }
+
+    /* Layout */
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 2rem;
+      align-items: start;
+      margin-bottom: 4rem;
+    }
+    @media(max-width:900px){ .contact-layout{ grid-template-columns:1fr; } }
+
+    /* Form card */
+    .contact-form-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    }
+    .form-section-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-900);
+      margin: 1.5rem 0 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .form-section-title i { color: var(--primary); }
+    .form-section-title:first-of-type { margin-top: 0; }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    @media(max-width:600px){ .form-row{ grid-template-columns:1fr; } }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-bottom: 1rem;
+    }
+    .form-group label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-700);
+    }
+    .form-group label .req { color:#ef4444; margin-left:2px; }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 0.7rem 1rem;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      background: var(--bg);
+      color: var(--text-900);
+      font-size: 0.9rem;
+      font-family: inherit;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+    }
+    .form-group textarea { resize: vertical; min-height: 110px; }
+
+    /* Radio pills */
+    .radio-group { display:flex; flex-wrap:wrap; gap:0.5rem; }
+    .radio-pill {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+      border: 1.5px solid var(--border);
+      background: var(--bg);
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-700);
+      transition: all 0.2s;
+    }
+    .radio-pill input { display:none; }
+    .radio-pill.selected {
+      border-color: var(--primary);
+      background: rgba(37,99,235,0.08);
+      color: var(--primary);
+    }
+
+    /* Stars */
+    .star-rating { display:flex; gap:0.3rem; flex-direction:row-reverse; justify-content:flex-end; }
+    .star-rating input { display:none; }
+    .star-rating label {
+      font-size: 1.9rem;
+      color: var(--border);
+      cursor: pointer;
+      transition: color 0.15s, transform 0.15s;
+      line-height: 1;
+    }
+    .star-rating label:hover,
+    .star-rating label:hover ~ label,
+    .star-rating input:checked ~ label { color:#f59e0b; }
+    .star-rating label:hover { transform:scale(1.15); }
+
+    /* Checkboxes */
+    .checkbox-group { display:flex; flex-direction:column; gap:0.5rem; }
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      cursor: pointer;
+      font-size: 0.875rem;
+      color: var(--text-700);
+      font-weight: 500;
+    }
+    .checkbox-item input[type="checkbox"] {
+      width:16px; height:16px;
+      accent-color: var(--primary);
+      cursor:pointer; flex-shrink:0;
+    }
+
+    /* File upload */
+    .file-upload-area {
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: var(--bg);
+      position: relative;
+    }
+    .file-upload-area:hover { border-color:var(--primary); background:rgba(37,99,235,0.03); }
+    .file-upload-area input[type="file"] {
+      position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%;
+    }
+    .file-upload-area i { font-size:1.8rem; color:var(--primary); margin-bottom:0.5rem; display:block; }
+    .file-upload-area p { font-size:0.82rem; color:var(--text-500); margin:0.2rem 0; }
+    .file-upload-area strong { color:var(--primary); }
+    #fileLabel { font-size:0.8rem; color:var(--primary); margin-top:0.4rem; display:block; min-height:1rem; }
+
+    /* Info box */
+    .info-box {
+      background: rgba(37,99,235,0.06);
+      border: 1px solid rgba(37,99,235,0.2);
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      font-size: 0.82rem;
+      color: var(--text-700);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+      display: flex;
+      gap: 0.6rem;
+      align-items: flex-start;
+    }
+    .info-box i { color:var(--primary); margin-top:2px; flex-shrink:0; }
+
+    /* Submit */
+    .submit-btn {
+      width: 100%;
+      padding: 0.9rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      margin-top: 0.5rem;
+      font-family: inherit;
+    }
+    .submit-btn:hover { background:var(--primary-dark,#1d4ed8); transform:translateY(-1px); box-shadow:0 6px 20px rgba(37,99,235,0.3); }
+    .submit-btn:disabled { opacity:0.65; pointer-events:none; transform:none; }
+
+    /* Progress */
+    .form-progress {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.78rem;
+      color: var(--text-500);
+      font-weight: 600;
+    }
+    .form-progress-bar { flex:1; height:4px; background:var(--border); border-radius:99px; overflow:hidden; }
+    .form-progress-fill { height:100%; background:var(--primary); border-radius:99px; transition:width 0.4s ease; width:0%; }
+
+    /* Success */
+    .form-success {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 3rem 1rem;
+      gap: 1rem;
+    }
+    .form-success.show { display:flex; }
+    .success-icon {
+      width:72px; height:72px;
+      border-radius:50%;
+      background:rgba(34,197,94,0.12);
+      display:flex; align-items:center; justify-content:center;
+      font-size:2rem; color:#16a34a;
+      animation: pop 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+    }
+    @keyframes pop { from{transform:scale(0);opacity:0} to{transform:scale(1);opacity:1} }
+    .form-success h3 { font-size:1.4rem; font-weight:800; color:var(--text-900); }
+    .form-success p { color:var(--text-500); font-size:0.9rem; max-width:320px; line-height:1.6; }
+    .form-success .send-another-btn {
+      padding:0.65rem 1.5rem;
+      background:var(--primary);
+      color:white; border:none;
+      border-radius:10px; font-weight:700;
+      cursor:pointer; font-size:0.875rem;
+      font-family:inherit;
+      display:inline-flex; align-items:center; gap:0.4rem;
+    }
+
+    /* Sidebar */
+    .contact-sidebar { display:flex; flex-direction:column; gap:1.25rem; }
+    .sidebar-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+    .sidebar-card h4 {
+      font-size:0.95rem; font-weight:700;
+      color:var(--text-900); margin-bottom:1rem;
+      display:flex; align-items:center; gap:0.5rem;
+    }
+    .sidebar-card h4 i { color:var(--primary); }
+    .contact-method {
+      display:flex; align-items:flex-start;
+      gap:0.85rem; padding:0.75rem 0;
+      border-bottom:1px solid var(--border);
+    }
+    .contact-method:last-child { border-bottom:none; padding-bottom:0; }
+    .contact-method-icon {
+      width:38px; height:38px; border-radius:10px;
+      background:rgba(37,99,235,0.08);
+      display:flex; align-items:center; justify-content:center;
+      flex-shrink:0; color:var(--primary); font-size:0.95rem;
+    }
+    .contact-method-info strong { display:block; font-size:0.82rem; font-weight:700; color:var(--text-900); }
+    .contact-method-info span { font-size:0.78rem; color:var(--text-500); }
+    .contact-method-info a { color:var(--primary); text-decoration:none; font-size:0.82rem; }
+
+    /* FAQ */
+    .faq-item { border-bottom:1px solid var(--border); overflow:hidden; }
+    .faq-item:last-child { border-bottom:none; }
+    .faq-question {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0.85rem 0; cursor:pointer;
+      font-size:0.83rem; font-weight:600;
+      color:var(--text-900); gap:0.5rem; user-select:none;
+    }
+    .faq-question i { color:var(--primary); transition:transform 0.3s; flex-shrink:0; font-size:0.75rem; }
+    .faq-item.open .faq-question i { transform:rotate(180deg); }
+    .faq-answer {
+      max-height:0; overflow:hidden;
+      transition:max-height 0.35s ease, padding 0.2s;
+      font-size:0.81rem; color:var(--text-500); line-height:1.7;
+    }
+    .faq-item.open .faq-answer { max-height:300px; padding-bottom:0.85rem; }
+  </style>
 </head>
 <body>
 
@@ -48,50 +408,565 @@
 </nav>
 
 <main class="container">
-  <a href="/index.html" class="back-home"><i class="fas fa-arrow-left"></i> Back to Home</a>
 
-  <div class="contact-content">
-    <div class="content-header reveal">
-      <h1>Contact Us</h1>
-      <p class="subtitle">Have a question or want to contribute? We'd love to hear from you.</p>
-    </div>
+  <div class="contact-hero reveal">
+    <h1>Get in Touch</h1>
+    <p>Support, contributions, partnerships, feedback — pick the right category and we'll get back to you fast.</p>
+    <div class="response-time-badge"><i class="fas fa-bolt"></i>&nbsp; Usually responds within 24 hours</div>
+  </div>
 
-    <div class="contact-form reveal">
-      <h3>Send Us a Message</h3>
-      <form action="https://formspree.io/f/xzdazvwz" method="POST">
+  <!-- Type selector -->
+  <div class="contact-type-grid reveal">
+    <button class="contact-type-btn active" onclick="setType(this,'general')">
+      <i class="fas fa-comments"></i> General Enquiry
+    </button>
+    <button class="contact-type-btn" onclick="setType(this,'support')">
+      <i class="fas fa-life-ring"></i> Technical Support
+    </button>
+    <button class="contact-type-btn" onclick="setType(this,'contribute')">
+      <i class="fas fa-upload"></i> Contribute Materials
+    </button>
+    <button class="contact-type-btn" onclick="setType(this,'feedback')">
+      <i class="fas fa-star"></i> Feedback & Rating
+    </button>
+    <button class="contact-type-btn" onclick="setType(this,'partnership')">
+      <i class="fas fa-handshake"></i> Partnership
+    </button>
+    <button class="contact-type-btn" onclick="setType(this,'report')">
+      <i class="fas fa-flag"></i> Report an Issue
+    </button>
+  </div>
+
+  <div class="contact-layout">
+    <!-- FORM CARD -->
+    <div class="contact-form-card reveal">
+
+      <div class="form-progress">
+        <span id="progressLabel">0% complete</span>
+        <div class="form-progress-bar"><div class="form-progress-fill" id="progressFill"></div></div>
+      </div>
+
+      <!-- Success state -->
+      <div class="form-success" id="formSuccess">
+        <div class="success-icon"><i class="fas fa-check"></i></div>
+        <h3>Message Sent!</h3>
+        <p id="successMsg">We've received your message and will get back to you within 24 hours.</p>
+        <button class="send-another-btn" id="sendAnotherBtn"><i class="fas fa-redo"></i> Send Another</button>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════ -->
+      <!-- GENERAL ENQUIRY FORM                               -->
+      <!-- ═══════════════════════════════════════════════════ -->
+      <form id="form-general" class="contact-subform" action="https://formspree.io/f/xzdazvwz" method="POST">
+        <input type="hidden" name="_subject" value="BrainHub — General Enquiry" />
+
+        <p class="form-section-title"><i class="fas fa-user"></i> About You</p>
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name <span class="req">*</span></label>
+            <input type="text" name="first_name" required placeholder="e.g. Chanda" />
+          </div>
+          <div class="form-group">
+            <label>Last Name <span class="req">*</span></label>
+            <input type="text" name="last_name" required placeholder="e.g. Mwale" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Email Address <span class="req">*</span></label>
+            <input type="email" name="email" required placeholder="your@email.com" />
+          </div>
+          <div class="form-group">
+            <label>University</label>
+            <select name="university">
+              <option value="">Select university</option>
+              <option>CBU</option><option>UNZA</option><option>ZUT</option>
+              <option>Mulungushi University</option><option>Other</option><option>Not a student</option>
+            </select>
+          </div>
+        </div>
+
+        <p class="form-section-title"><i class="fas fa-envelope"></i> Your Message</p>
         <div class="form-group">
-          <label for="name">Full Name</label>
-          <input type="text" id="name" name="name" required placeholder="Your full name" />
+          <label>Subject <span class="req">*</span></label>
+          <input type="text" name="subject" required placeholder="What's this about?" />
         </div>
         <div class="form-group">
-          <label for="email">Email Address</label>
-          <input type="email" id="email" name="email" required placeholder="your@email.com" />
+          <label>Message <span class="req">*</span></label>
+          <textarea name="message" required placeholder="Tell us how we can help…"></textarea>
         </div>
         <div class="form-group">
-          <label for="subject">Subject</label>
-          <input type="text" id="subject" name="subject" placeholder="What's this about?" />
+          <label>How did you hear about BrainHub?</label>
+          <select name="how_heard">
+            <option value="">Select an option</option>
+            <option>Friend / Classmate</option><option>WhatsApp Group</option>
+            <option>Facebook</option><option>Instagram</option><option>TikTok</option>
+            <option>Google Search</option><option>Lecturer / Tutor</option><option>Other</option>
+          </select>
         </div>
         <div class="form-group">
-          <label for="message">Message</label>
-          <textarea id="message" name="message" required placeholder="Tell us how we can help or what you'd like to contribute…"></textarea>
+          <label class="checkbox-item" style="font-size:0.82rem;color:var(--text-500);font-weight:500">
+            <input type="checkbox" name="newsletter" value="yes" />
+            Keep me updated about new materials and features
+          </label>
         </div>
-        <button type="submit" class="submit-btn">Send Message</button>
+        <button type="submit" class="submit-btn"><i class="fas fa-paper-plane"></i> Send Message</button>
       </form>
+
+      <!-- ═══════════════════════════════════════════════════ -->
+      <!-- TECHNICAL SUPPORT FORM                             -->
+      <!-- ═══════════════════════════════════════════════════ -->
+      <form id="form-support" class="contact-subform" action="https://formspree.io/f/xzdazvwz" method="POST" style="display:none">
+        <input type="hidden" name="_subject" value="BrainHub — Technical Support" />
+
+        <p class="form-section-title"><i class="fas fa-user"></i> Your Details</p>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name <span class="req">*</span></label>
+            <input type="text" name="full_name" required placeholder="Your full name" />
+          </div>
+          <div class="form-group">
+            <label>Email Address <span class="req">*</span></label>
+            <input type="email" name="email" required placeholder="your@email.com" />
+          </div>
+        </div>
+
+        <p class="form-section-title"><i class="fas fa-bug"></i> Issue Details</p>
+        <div class="form-group">
+          <label>Issue Type <span class="req">*</span></label>
+          <select name="issue_type" required>
+            <option value="">Select issue type</option>
+            <option>Document won't load / preview</option>
+            <option>Download not working</option>
+            <option>Page not loading</option>
+            <option>AI Tutor not responding</option>
+            <option>Quiz / Flashcard error</option>
+            <option>Login / Profile issue</option>
+            <option>Broken link</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Which page or feature? <span class="req">*</span></label>
+          <input type="text" name="affected_page" required placeholder="e.g. ZUT → COM Notes → COM LN 02" />
+        </div>
+        <div class="form-group">
+          <label>Device & Browser</label>
+          <div class="form-row" style="margin-bottom:0">
+            <select name="device">
+              <option value="">Device</option>
+              <option>Android Phone</option><option>iPhone</option>
+              <option>Windows PC</option><option>Mac</option><option>Tablet</option>
+            </select>
+            <select name="browser">
+              <option value="">Browser</option>
+              <option>Chrome</option><option>Firefox</option><option>Safari</option>
+              <option>Edge</option><option>Samsung Internet</option><option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Priority</label>
+          <div class="radio-group" id="supportPriorityGroup">
+            <label class="radio-pill selected"><input type="radio" name="priority" value="Low" checked> 🟢 Low</label>
+            <label class="radio-pill"><input type="radio" name="priority" value="Medium"> 🟡 Medium</label>
+            <label class="radio-pill"><input type="radio" name="priority" value="High"> 🔴 High — blocking my studies</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Describe the issue <span class="req">*</span></label>
+          <textarea name="description" required placeholder="What happened? What did you expect to happen? Any error messages you saw…"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Steps to reproduce (optional)</label>
+          <textarea name="steps" placeholder="1. I clicked on…&#10;2. Then I saw…&#10;3. Expected…" style="min-height:80px"></textarea>
+        </div>
+        <button type="submit" class="submit-btn"><i class="fas fa-life-ring"></i> Submit Support Request</button>
+      </form>
+
+      <!-- ═══════════════════════════════════════════════════ -->
+      <!-- CONTRIBUTE MATERIALS FORM                          -->
+      <!-- ═══════════════════════════════════════════════════ -->
+      <form id="form-contribute" class="contact-subform" action="https://formspree.io/f/xzdazvwz" method="POST" style="display:none">
+        <input type="hidden" name="_subject" value="BrainHub — Material Contribution" />
+
+        <div class="info-box">
+          <i class="fas fa-info-circle"></i>
+          <span>Share a Google Drive, OneDrive, or any public link to your file in the message below. We'll review and upload within 72 hours. Thank you for contributing!</span>
+        </div>
+
+        <p class="form-section-title"><i class="fas fa-user"></i> Contributor Details</p>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name <span class="req">*</span></label>
+            <input type="text" name="full_name" required placeholder="Your full name" />
+          </div>
+          <div class="form-group">
+            <label>Email Address <span class="req">*</span></label>
+            <input type="email" name="email" required placeholder="your@email.com" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Phone / WhatsApp</label>
+            <input type="tel" name="phone" placeholder="+260 97X XXX XXX" />
+          </div>
+          <div class="form-group">
+            <label>Your University <span class="req">*</span></label>
+            <select name="university" required>
+              <option value="">Select university</option>
+              <option>CBU</option><option>UNZA</option><option>ZUT</option>
+              <option>Mulungushi University</option><option>Other</option>
+            </select>
+          </div>
+        </div>
+
+        <p class="form-section-title"><i class="fas fa-file-alt"></i> Material Information</p>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Course Code <span class="req">*</span></label>
+            <input type="text" name="course_code" required placeholder="e.g. BIO110, COM, MA110" />
+          </div>
+          <div class="form-group">
+            <label>Course Name</label>
+            <input type="text" name="course_name" placeholder="e.g. Cellular Biology" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Material Type <span class="req">*</span></label>
+            <select name="material_type" required>
+              <option value="">Select type</option>
+              <option>Lecture Notes</option>
+              <option>Past Exam Paper</option>
+              <option>Test / CAT Paper</option>
+              <option>Textbook / Reference</option>
+              <option>Lab Report Template</option>
+              <option>Assignment / Solution</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Academic Year</label>
+            <input type="text" name="academic_year" placeholder="e.g. 2024/2025" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>File / Drive Link <span class="req">*</span></label>
+          <input type="url" name="file_link" required placeholder="https://drive.google.com/... or any public link" />
+        </div>
+        <div class="form-group">
+          <label>Brief Description</label>
+          <textarea name="description" placeholder="What does this material cover? Any notes for us before we upload…" style="min-height:80px"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="checkbox-item" style="font-size:0.82rem;color:var(--text-500);font-weight:500">
+            <input type="checkbox" name="consent" value="yes" required />
+            I confirm I have the right to share this material and agree to BrainHub publishing it for free student access <span class="req">*</span>
+          </label>
+        </div>
+        <button type="submit" class="submit-btn"><i class="fas fa-upload"></i> Submit Contribution</button>
+      </form>
+
+      <!-- ═══════════════════════════════════════════════════ -->
+      <!-- FEEDBACK & RATING FORM                             -->
+      <!-- ═══════════════════════════════════════════════════ -->
+      <form id="form-feedback" class="contact-subform" action="https://formspree.io/f/xzdazvwz" method="POST" style="display:none">
+        <input type="hidden" name="_subject" value="BrainHub — Feedback & Rating" />
+
+        <p class="form-section-title"><i class="fas fa-user"></i> About You</p>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Name (optional)</label>
+            <input type="text" name="name" placeholder="You can stay anonymous" />
+          </div>
+          <div class="form-group">
+            <label>Email (optional)</label>
+            <input type="email" name="email" placeholder="Only if you want a reply" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>University</label>
+            <select name="university">
+              <option value="">Select university</option>
+              <option>CBU</option><option>UNZA</option><option>ZUT</option>
+              <option>Other</option><option>Not a student</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Year of Study</label>
+            <select name="year_of_study">
+              <option value="">Select year</option>
+              <option>Year 1</option><option>Year 2</option><option>Year 3</option>
+              <option>Year 4</option><option>Year 5+</option><option>Postgraduate</option>
+            </select>
+          </div>
+        </div>
+
+        <p class="form-section-title"><i class="fas fa-star"></i> Your Rating</p>
+        <div class="form-group">
+          <label>Overall Experience</label>
+          <div class="star-rating">
+            <input type="radio" id="s5" name="overall_rating" value="5 stars ★★★★★">
+            <label for="s5" title="Excellent">★</label>
+            <input type="radio" id="s4" name="overall_rating" value="4 stars ★★★★">
+            <label for="s4" title="Good">★</label>
+            <input type="radio" id="s3" name="overall_rating" value="3 stars ★★★">
+            <label for="s3" title="Average">★</label>
+            <input type="radio" id="s2" name="overall_rating" value="2 stars ★★">
+            <label for="s2" title="Poor">★</label>
+            <input type="radio" id="s1" name="overall_rating" value="1 star ★">
+            <label for="s1" title="Terrible">★</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>What did you enjoy most?</label>
+          <div class="checkbox-group">
+            <label class="checkbox-item"><input type="checkbox" name="enjoyed" value="Document Quality"> Document Quality & Relevance</label>
+            <label class="checkbox-item"><input type="checkbox" name="enjoyed" value="AI Tutor"> AI Tutor Helpfulness</label>
+            <label class="checkbox-item"><input type="checkbox" name="enjoyed" value="Quizzes"> Quizzes & Flashcards</label>
+            <label class="checkbox-item"><input type="checkbox" name="enjoyed" value="Design"> Site Design & Speed</label>
+            <label class="checkbox-item"><input type="checkbox" name="enjoyed" value="Free"> It's completely free</label>
+            <label class="checkbox-item"><input type="checkbox" name="enjoyed" value="Coverage"> University & Course Coverage</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>What could be better?</label>
+          <div class="checkbox-group">
+            <label class="checkbox-item"><input type="checkbox" name="improve" value="More documents"> More documents needed</label>
+            <label class="checkbox-item"><input type="checkbox" name="improve" value="More universities"> More universities</label>
+            <label class="checkbox-item"><input type="checkbox" name="improve" value="Faster loading"> Faster loading</label>
+            <label class="checkbox-item"><input type="checkbox" name="improve" value="Mobile experience"> Better mobile experience</label>
+            <label class="checkbox-item"><input type="checkbox" name="improve" value="AI improvements"> Better AI Tutor answers</label>
+            <label class="checkbox-item"><input type="checkbox" name="improve" value="Offline access"> Offline document access</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Would you recommend BrainHub?</label>
+          <div class="radio-group" id="recommendGroup">
+            <label class="radio-pill selected"><input type="radio" name="recommend" value="Definitely" checked> 👍 Definitely</label>
+            <label class="radio-pill"><input type="radio" name="recommend" value="Maybe"> 🤔 Maybe</label>
+            <label class="radio-pill"><input type="radio" name="recommend" value="No"> 👎 Not yet</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Any other comments?</label>
+          <textarea name="comments" placeholder="Tell us anything — compliments, complaints, ideas…"></textarea>
+        </div>
+        <button type="submit" class="submit-btn"><i class="fas fa-star"></i> Submit Feedback</button>
+      </form>
+
+      <!-- ═══════════════════════════════════════════════════ -->
+      <!-- PARTNERSHIP FORM                                   -->
+      <!-- ═══════════════════════════════════════════════════ -->
+      <form id="form-partnership" class="contact-subform" action="https://formspree.io/f/xzdazvwz" method="POST" style="display:none">
+        <input type="hidden" name="_subject" value="BrainHub — Partnership Enquiry" />
+
+        <p class="form-section-title"><i class="fas fa-user-tie"></i> Contact Person</p>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name <span class="req">*</span></label>
+            <input type="text" name="full_name" required placeholder="Your full name" />
+          </div>
+          <div class="form-group">
+            <label>Job Title / Role</label>
+            <input type="text" name="job_title" placeholder="e.g. Lecturer, HOD, CEO" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Email Address <span class="req">*</span></label>
+            <input type="email" name="email" required placeholder="official@org.com" />
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" name="phone" placeholder="+260 97X XXX XXX" />
+          </div>
+        </div>
+
+        <p class="form-section-title"><i class="fas fa-building"></i> Organisation</p>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Organisation Name <span class="req">*</span></label>
+            <input type="text" name="org_name" required placeholder="University, company, NGO…" />
+          </div>
+          <div class="form-group">
+            <label>Organisation Type</label>
+            <select name="org_type">
+              <option value="">Select type</option>
+              <option>University / College</option>
+              <option>Secondary School</option>
+              <option>Education NGO</option>
+              <option>Tech Company</option>
+              <option>Government Body</option>
+              <option>Media / Press</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Website (optional)</label>
+          <input type="url" name="website" placeholder="https://yourorg.com" />
+        </div>
+
+        <p class="form-section-title"><i class="fas fa-handshake"></i> Partnership Details</p>
+        <div class="form-group">
+          <label>Partnership Type <span class="req">*</span></label>
+          <div class="checkbox-group">
+            <label class="checkbox-item"><input type="checkbox" name="partner_type" value="Content Partnership"> Content / Material Partnership</label>
+            <label class="checkbox-item"><input type="checkbox" name="partner_type" value="Sponsorship"> Sponsorship or Funding</label>
+            <label class="checkbox-item"><input type="checkbox" name="partner_type" value="Integration"> Technical Integration</label>
+            <label class="checkbox-item"><input type="checkbox" name="partner_type" value="Promotion"> Promotion / Marketing Collaboration</label>
+            <label class="checkbox-item"><input type="checkbox" name="partner_type" value="Research"> Research Partnership</label>
+            <label class="checkbox-item"><input type="checkbox" name="partner_type" value="Other"> Other</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Proposal / Message <span class="req">*</span></label>
+          <textarea name="proposal" required placeholder="Describe the partnership opportunity and what you're proposing…"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Expected Timeline</label>
+          <select name="timeline">
+            <option value="">Select timeline</option>
+            <option>Immediately</option>
+            <option>Within 1 month</option>
+            <option>1–3 months</option>
+            <option>3–6 months</option>
+            <option>Flexible</option>
+          </select>
+        </div>
+        <button type="submit" class="submit-btn"><i class="fas fa-handshake"></i> Send Partnership Enquiry</button>
+      </form>
+
+      <!-- ═══════════════════════════════════════════════════ -->
+      <!-- REPORT AN ISSUE FORM                               -->
+      <!-- ═══════════════════════════════════════════════════ -->
+      <form id="form-report" class="contact-subform" action="https://formspree.io/f/xzdazvwz" method="POST" style="display:none">
+        <input type="hidden" name="_subject" value="BrainHub — Issue Report" />
+
+        <p class="form-section-title"><i class="fas fa-user"></i> Your Details</p>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Name (optional)</label>
+            <input type="text" name="name" placeholder="You can stay anonymous" />
+          </div>
+          <div class="form-group">
+            <label>Email (optional)</label>
+            <input type="email" name="email" placeholder="If you want an update" />
+          </div>
+        </div>
+
+        <p class="form-section-title"><i class="fas fa-flag"></i> Issue Report</p>
+        <div class="form-group">
+          <label>Issue Category <span class="req">*</span></label>
+          <select name="issue_category" required>
+            <option value="">Select category</option>
+            <option>Wrong / Incorrect document uploaded</option>
+            <option>Copyright / Plagiarism concern</option>
+            <option>Inappropriate content</option>
+            <option>Broken or missing document</option>
+            <option>Wrong course information</option>
+            <option>Privacy concern</option>
+            <option>Accessibility issue</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Where exactly? <span class="req">*</span></label>
+          <input type="text" name="location" required placeholder="e.g. CBU → BIO110 → Notes → Document title" />
+        </div>
+        <div class="form-group">
+          <label>Page URL (optional)</label>
+          <input type="url" name="page_url" placeholder="Paste the link to the page with the issue" />
+        </div>
+        <div class="form-group">
+          <label>Severity</label>
+          <div class="radio-group" id="severityGroup">
+            <label class="radio-pill selected"><input type="radio" name="severity" value="Minor" checked> 🟢 Minor</label>
+            <label class="radio-pill"><input type="radio" name="severity" value="Moderate"> 🟡 Moderate</label>
+            <label class="radio-pill"><input type="radio" name="severity" value="Serious"> 🔴 Serious</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Describe the issue <span class="req">*</span></label>
+          <textarea name="description" required placeholder="Please describe the issue clearly so we can investigate and fix it quickly…"></textarea>
+        </div>
+        <button type="submit" class="submit-btn"><i class="fas fa-flag"></i> Submit Report</button>
+      </form>
+
     </div>
 
-    <div class="content-section reveal">
-      <h2>Frequently Asked Questions</h2>
-      <p><strong>Q: How can I contribute study materials?</strong><br />
-      A: Fill in the form above with your contact details and a description of the materials you'd like to share. We'll get back to you with the next steps.</p>
+    <!-- SIDEBAR -->
+    <div class="contact-sidebar">
+      <div class="sidebar-card reveal">
+        <h4><i class="fas fa-address-card"></i> Contact Info</h4>
+        <div class="contact-method">
+          <div class="contact-method-icon"><i class="fas fa-envelope"></i></div>
+          <div class="contact-method-info">
+            <strong>Email</strong>
+            <a href="mailto:gabrieljoshuabanda81@gmail.com">gabrieljoshuabanda81@gmail.com</a>
+          </div>
+        </div>
+        <div class="contact-method">
+          <div class="contact-method-icon"><i class="fab fa-whatsapp"></i></div>
+          <div class="contact-method-info">
+            <strong>WhatsApp</strong>
+            <span>Join our student community</span>
+          </div>
+        </div>
+        <div class="contact-method">
+          <div class="contact-method-icon"><i class="fas fa-map-marker-alt"></i></div>
+          <div class="contact-method-info">
+            <strong>Location</strong>
+            <span>Zambezi, Zambia 🇿🇲</span>
+          </div>
+        </div>
+        <div class="contact-method">
+          <div class="contact-method-icon"><i class="fas fa-clock"></i></div>
+          <div class="contact-method-info">
+            <strong>Response Time</strong>
+            <span>Within 24 hours (Mon–Sat)</span>
+          </div>
+        </div>
+      </div>
 
-      <p><strong>Q: Is BrainHub completely free?</strong><br />
-      A: Yes — all features and content are free with no hidden costs. We believe education should be accessible to everyone.</p>
+      <div class="sidebar-card reveal">
+        <h4><i class="fas fa-question-circle"></i> Quick Answers</h4>
+        <div class="faq-list">
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">Is BrainHub free? <i class="fas fa-chevron-down"></i></div>
+            <div class="faq-answer">Yes — all features, documents, quizzes, and the AI Tutor are completely free with no hidden costs.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">How do I contribute materials? <i class="fas fa-chevron-down"></i></div>
+            <div class="faq-answer">Select "Contribute Materials" above, fill in the course details and paste a Google Drive or public link to your file. We review and upload within 72 hours.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">My university isn't listed? <i class="fas fa-chevron-down"></i></div>
+            <div class="faq-answer">Send a General Enquiry with your university name and courses. We'll work on adding it as soon as possible.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">How often is content added? <i class="fas fa-chevron-down"></i></div>
+            <div class="faq-answer">We add materials within days of receiving contributions. Check the homepage for the latest updates.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">Can I use BrainHub offline? <i class="fas fa-chevron-down"></i></div>
+            <div class="faq-answer">BrainHub is a PWA — install it on your phone and previously visited pages work offline. Documents need a connection to load.</div>
+          </div>
+        </div>
+      </div>
 
-      <p><strong>Q: How often is new content added?</strong><br />
-      A: We add new materials as they become available. Watch the "What's New" announcement on the homepage for the latest updates.</p>
-
-      <p><strong>Q: My university isn't listed. What can I do?</strong><br />
-      A: Send us a message via the form above and we'll work to add your institution as soon as possible.</p>
+      <div class="sidebar-card reveal" style="background:linear-gradient(135deg,var(--primary),#7c3aed);border:none;color:white">
+        <h4 style="color:white"><i class="fas fa-chart-line"></i> BrainHub at a Glance</h4>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:0.5rem">
+          <div style="text-align:center"><div style="font-size:1.8rem;font-weight:900">3</div><div style="font-size:0.75rem;opacity:.85">Universities</div></div>
+          <div style="text-align:center"><div style="font-size:1.8rem;font-weight:900">10+</div><div style="font-size:0.75rem;opacity:.85">Documents</div></div>
+          <div style="text-align:center"><div style="font-size:1.8rem;font-weight:900">Free</div><div style="font-size:0.75rem;opacity:.85">Always</div></div>
+          <div style="text-align:center"><div style="font-size:1.8rem;font-weight:900">24h</div><div style="font-size:0.75rem;opacity:.85">Response</div></div>
+        </div>
+      </div>
     </div>
   </div>
 </main>
@@ -109,9 +984,6 @@
       <a href="universities.html">Universities</a>
       <a href="quizzes.html">Quizzes</a>
       <a href="flashcards.html">Flashcards</a>
-      <h4>AI Tools</h4>
-      <a href="https://chat.openai.com/" target="_blank" rel="noopener">ChatGPT</a>
-      <a href="https://chat.deepseek.com/" target="_blank" rel="noopener">DeepSeek AI</a>
     </div>
     <div class="footer-col">
       <h4>Support</h4>
@@ -132,17 +1004,8 @@
 <script src="/src/main.js"></script>
 <script src="/src/gamification.js"></script>
 
-<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];s1.async=true;s1.src='https://embed.tawk.to/69a705c374e2141c34038ab5/1jiq6t1l1';s1.charset='UTF-8';s1.setAttribute('crossorigin','*');s0.parentNode.insertBefore(s1,s0);})();
-</script>
-<!--End of Tawk.to Script-->
-
-<!-- AI Chatbot -->
 <button class="chat-toggle-btn" id="chatToggleBtn" aria-label="Open AI Tutor">
-  <i class="fas fa-robot"></i>
-  <span class="chat-badge">AI</span>
+  <i class="fas fa-robot"></i><span class="chat-badge">AI</span>
 </button>
 <div class="ai-chat-window" id="aiChatWindow">
   <div class="chat-header">
@@ -160,6 +1023,7 @@ var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
   </div>
   <div class="chat-footer-note">BrainHub AI Tutor</div>
 </div>
+
 <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
   <ul>
     <li><a href="/index.html" data-page="home"><i class="fas fa-home"></i>Home</a></li>
@@ -169,6 +1033,154 @@ var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
     <li><button class="nav-ai-btn" onclick="document.getElementById('chatToggleBtn').click()"><i class="fas fa-robot"></i>AI Tutor</button></li>
   </ul>
 </nav>
+
+<script>
+(function() {
+  // ── State ────────────────────────────────────────────────
+  let currentType = 'general';
+
+  const successMessages = {
+    general:     "We've received your enquiry and will get back to you within 24 hours.",
+    support:     "Support request received! We'll investigate and get back to you as soon as possible.",
+    contribute:  "Thank you for contributing! We'll review your materials and upload them within 72 hours.",
+    feedback:    "Thank you for your feedback — it genuinely helps us improve BrainHub for everyone.",
+    partnership: "Partnership enquiry received! We'll review your proposal and be in touch shortly.",
+    report:      "Issue reported. We'll investigate and fix it as quickly as possible. Thank you.",
+  };
+
+  // ── Type switcher ────────────────────────────────────────
+  window.setType = function(btn, type) {
+    currentType = type;
+    document.querySelectorAll('.contact-type-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    // Hide all forms + success
+    document.querySelectorAll('.contact-subform').forEach(f => f.style.display = 'none');
+    document.getElementById('formSuccess').classList.remove('show');
+
+    // Show selected form
+    const form = document.getElementById('form-' + type);
+    if (form) form.style.display = 'block';
+
+    updateProgress();
+  };
+
+  // ── Radio pill highlight ─────────────────────────────────
+  document.addEventListener('change', function(e) {
+    if (e.target.type !== 'radio') return;
+    const group = e.target.closest('.radio-group');
+    if (!group) return;
+    group.querySelectorAll('.radio-pill').forEach(p => {
+      p.classList.toggle('selected', p.querySelector('input')?.checked || false);
+    });
+  });
+
+  // ── FAQ accordion ────────────────────────────────────────
+  window.toggleFaq = function(el) {
+    const item = el.parentElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  };
+
+  // ── Progress tracker ─────────────────────────────────────
+  function updateProgress() {
+    const activeForm = document.getElementById('form-' + currentType);
+    if (!activeForm) return;
+    const required = activeForm.querySelectorAll('[required]');
+    if (!required.length) { setProgress(100); return; }
+    const filled = Array.from(required).filter(f => f.value.trim() !== '').length;
+    setProgress(Math.round((filled / required.length) * 100));
+  }
+
+  function setProgress(pct) {
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = pct + '% complete';
+  }
+
+  document.addEventListener('input', updateProgress);
+  document.addEventListener('change', updateProgress);
+
+  // ── Form submission — single delegated handler ───────────
+  // Using event delegation so it works after reset too
+  // and never double-fires
+  document.addEventListener('submit', async function(e) {
+    if (!e.target.classList.contains('contact-subform')) return;
+    e.preventDefault();
+
+    const form = e.target;
+    const btn  = form.querySelector('.submit-btn');
+
+    btn.disabled = true;
+    const originalHTML = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending…';
+
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' },
+      });
+
+      if (res.ok) {
+        // Show success
+        form.style.display = 'none';
+        const success = document.getElementById('formSuccess');
+        document.getElementById('successMsg').textContent = successMessages[currentType] || successMessages.general;
+        success.classList.add('show');
+        setProgress(100);
+      } else {
+        btn.disabled = false;
+        btn.innerHTML = originalHTML;
+        const data = await res.json().catch(() => ({}));
+        const msg = data?.errors?.[0]?.message || 'Something went wrong. Please try again or email us directly.';
+        showFormError(form, msg);
+      }
+    } catch {
+      btn.disabled = false;
+      btn.innerHTML = originalHTML;
+      showFormError(form, 'Network error. Please check your connection and try again.');
+    }
+  });
+
+  function showFormError(form, msg) {
+    let err = form.querySelector('.form-error-msg');
+    if (!err) {
+      err = document.createElement('div');
+      err.className = 'form-error-msg';
+      err.style.cssText = 'background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#dc2626;padding:.75rem 1rem;border-radius:10px;font-size:.85rem;margin-bottom:1rem;';
+      form.insertBefore(err, form.firstChild);
+    }
+    err.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + msg;
+    err.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  // ── Send another — clean reset ───────────────────────────
+  document.getElementById('sendAnotherBtn').addEventListener('click', function() {
+    // Reset the form that was just submitted
+    const form = document.getElementById('form-' + currentType);
+    if (form) {
+      form.reset();
+      // Re-enable submit button
+      const btn = form.querySelector('.submit-btn');
+      if (btn) { btn.disabled = false; }
+      // Remove error messages
+      form.querySelectorAll('.form-error-msg').forEach(e => e.remove());
+      // Reset radio pills to first option
+      form.querySelectorAll('.radio-group').forEach(group => {
+        const pills = group.querySelectorAll('.radio-pill');
+        pills.forEach((p, i) => p.classList.toggle('selected', i === 0));
+        const firstRadio = group.querySelector('input[type="radio"]');
+        if (firstRadio) firstRadio.checked = true;
+      });
+      form.style.display = 'block';
+    }
+    document.getElementById('formSuccess').classList.remove('show');
+    setProgress(0);
+  });
+
+})();
+</script>
 
 </body>
 </html>

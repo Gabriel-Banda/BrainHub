@@ -72,7 +72,6 @@ self.addEventListener('fetch', (event) => {
   if (
     url.hostname === 'api.anthropic.com' ||
     url.hostname === 'formspree.io' ||
-    url.hostname === 'embed.tawk.to' ||
     url.hostname === 'brainhub-docs.gabrieljoshuabanda81.workers.dev' ||
     url.pathname.includes('/v1/messages')
   ) {
