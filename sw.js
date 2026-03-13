@@ -1,9 +1,11 @@
-// BrainHub Service Worker v1.0
+// BrainHub Service Worker v2.0
 // Handles offline caching for PWA support
+// IMPORTANT: Bump CACHE_VERSION on every deploy to force cache refresh
 
-const CACHE_NAME = 'brainhub-v1';
-const STATIC_CACHE = 'brainhub-static-v1';
-const DYNAMIC_CACHE = 'brainhub-dynamic-v1';
+const CACHE_VERSION  = 'v2';
+const CACHE_NAME     = `brainhub-${CACHE_VERSION}`;
+const STATIC_CACHE   = `brainhub-static-${CACHE_VERSION}`;
+const DYNAMIC_CACHE  = `brainhub-dynamic-${CACHE_VERSION}`;
 
 // Files to cache immediately on install (app shell)
 const STATIC_ASSETS = [
@@ -38,14 +40,17 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// ── Activate ─────────────────────────────────────────────
+// ── Activate — wipe ALL old caches on version bump ───────
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys()
       .then(keys => Promise.all(
         keys
-          .filter(key => key !== STATIC_CACHE && key !== DYNAMIC_CACHE)
-          .map(key => caches.delete(key))
+          .filter(key => !key.includes(CACHE_VERSION))
+          .map(key => {
+            console.log('[SW] Deleting old cache:', key);
+            return caches.delete(key);
+          })
       ))
       .then(() => self.clients.claim())
   );
@@ -63,17 +68,25 @@ self.addEventListener('fetch', (event) => {
   // Skip non-GET requests
   if (request.method !== 'GET') return;
 
-  // Skip API calls — always use network
+  // Skip API calls and Worker calls — always use network
   if (
     url.hostname === 'api.anthropic.com' ||
     url.hostname === 'formspree.io' ||
     url.hostname === 'embed.tawk.to' ||
+    url.hostname === 'brainhub-docs.gabrieljoshuabanda81.workers.dev' ||
     url.pathname.includes('/v1/messages')
   ) {
     return; // let browser handle normally
   }
 
-  // Static assets — cache first
+  // JS and CSS — network first so users always get latest code
+  // Falls back to cache only when offline
+  if (url.pathname.endsWith('.js') || url.pathname.endsWith('.css')) {
+    event.respondWith(networkFirstWithFallback(request));
+    return;
+  }
+
+  // Other static assets (images, fonts, icons) — cache first is fine
   if (isStaticAsset(url)) {
     event.respondWith(cacheFirst(request));
     return;
