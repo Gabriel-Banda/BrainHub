@@ -555,12 +555,21 @@ function _bootViewer(documents, type) {
     if (loadMoreBtn) loadMoreBtn.style.display = visibleCount >= documents.length ? 'none' : 'flex';
   }
 
-  function selectDocument(doc) {
+  async function selectDocument(doc) {
     if (previewPlaceholder) previewPlaceholder.style.display = 'none';
     if (previewActive) {
       previewActive.style.display = 'block';
-      const bm = isBookmarked('doc-' + doc.id);
+      const bm   = isBookmarked('doc-' + doc.id);
       const done = getProgress('doc-' + doc.id);
+
+      // Build secure proxied URLs — raw R2 URL never reaches the browser
+      const readUrl = window.BrainHubDocs
+        ? await window.BrainHubDocs.secureReadUrl(doc.url)
+        : doc.url;
+      const dlUrl = window.BrainHubDocs
+        ? await window.BrainHubDocs.secureDownloadUrl(doc.url)
+        : doc.url;
+
       previewActive.innerHTML = `
         <div class="preview-doc-icon"><i class="fas ${doc.icon || 'fa-file-pdf'}"></i></div>
         <div class="preview-doc-title">${doc.title}</div>
@@ -569,8 +578,8 @@ function _bootViewer(documents, type) {
           <span><i class="far fa-save"></i> ${doc.size || ''}</span>
         </div>
         <div class="preview-actions">
-          <a href="${doc.url}" download class="download-btn"><i class="fas fa-download"></i> Download</a>
-          <button class="view-btn" onclick="openPdfViewer('${doc.url}', '${doc.title.replace(/'/g,"\\'")}')"><i class="fas fa-eye"></i> Read</button>
+          <a href="${dlUrl}" download class="download-btn"><i class="fas fa-download"></i> Download</a>
+          <button class="view-btn" onclick="openPdfViewer('${readUrl}', '${doc.title.replace(/'/g,"\\'")}')"><i class="fas fa-eye"></i> Read</button>
         </div>
         <div class="preview-doc-extras">
           <button class="mark-done-btn ${done ? 'done' : ''}" data-id="doc-${doc.id}"
