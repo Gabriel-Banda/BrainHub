@@ -492,6 +492,16 @@ function initAIChatbot() {
 
 // ==================== DOCUMENT VIEWER (with PDF viewer + bookmarks + share) ====================
 function initDocumentViewer(documents, type) {
+  // Await token then boot — this means NO page ever needs to handle
+  // the token itself. Just call initDocumentViewer() normally and it works.
+  if (window.BrainHubDocs) {
+    window.BrainHubDocs.getToken().then(() => _bootViewer(documents, type));
+    return;
+  }
+  _bootViewer(documents, type);
+}
+
+function _bootViewer(documents, type) {
   const docViewer = document.querySelector('.doc-viewer');
   const brickWall = document.getElementById('brickWall');
   const docList   = document.getElementById('docList');
