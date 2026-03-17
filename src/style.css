@@ -833,6 +833,126 @@ footer { background: var(--bg-subtle); border-top: 1px solid var(--border); padd
 }
 .share-doc-btn:hover { background: var(--primary-light); color: var(--primary); border-color: var(--primary); }
 
+/* ── AI Chat HTML rendering ─────────────────────────────── */
+.chat-html { font-size: 0.875rem; line-height: 1.7; color: var(--text-700); }
+.chat-html p { margin: 0 0 0.6rem; }
+.chat-html p:last-child { margin-bottom: 0; }
+.chat-html h3, .chat-html h4 {
+  font-size: 0.9rem; font-weight: 700;
+  color: var(--text-900); margin: 0.85rem 0 0.4rem;
+}
+.chat-html h3:first-child,
+.chat-html h4:first-child { margin-top: 0; }
+.chat-html ul, .chat-html ol {
+  margin: 0.4rem 0 0.6rem 1.2rem; padding: 0;
+}
+.chat-html li { margin-bottom: 0.25rem; }
+.chat-html strong { font-weight: 700; color: var(--text-900); }
+.chat-html em { font-style: italic; }
+.chat-html hr {
+  border: none; border-top: 1px solid var(--border); margin: 0.75rem 0;
+}
+.chat-html table {
+  width: 100%; border-collapse: collapse;
+  font-size: 0.82rem; margin: 0.6rem 0;
+  display: block; overflow-x: auto;
+}
+.chat-html th, .chat-html td {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--border);
+  text-align: left; vertical-align: top;
+}
+.chat-html th {
+  background: var(--bg-muted);
+  font-weight: 700; color: var(--text-900);
+}
+.chat-html tr:nth-child(even) td { background: var(--bg-subtle); }
+.chat-html blockquote {
+  border-left: 3px solid var(--primary);
+  margin: 0.5rem 0; padding: 0.4rem 0.75rem;
+  background: var(--primary-light); border-radius: 0 8px 8px 0;
+  color: var(--text-700);
+}
+.chat-html code {
+  background: var(--bg-muted); padding: 1px 5px;
+  border-radius: 4px; font-family: monospace; font-size: 0.85em;
+}
+.chat-html pre {
+  background: var(--bg-muted); padding: 0.75rem;
+  border-radius: 8px; overflow-x: auto; font-size: 0.82rem;
+  margin: 0.5rem 0;
+}
+
+/* ── Save for Offline Button ────────────────────────────── */
+.save-offline-btn {
+  position: relative;
+  transition: var(--transition);
+}
+.save-offline-btn:hover {
+  background: rgba(34,197,94,0.1);
+  color: #16a34a;
+  border-color: #16a34a;
+}
+.save-offline-btn.saved-offline {
+  background: rgba(34,197,94,0.12);
+  color: #16a34a;
+  border-color: #16a34a;
+}
+.save-offline-btn.saved-offline i::before {
+  content: "\f1eb"; /* fa-wifi — repurposed as "saved" indicator */
+}
+/* Pulse animation when saving */
+.save-offline-btn.saving {
+  animation: offlinePulse 0.8s ease infinite;
+}
+@keyframes offlinePulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%       { transform: scale(1.15); opacity: 0.7; }
+}
+
+/* ── Offline Library Banner ─────────────────────────────── */
+/* Shows at top of doc pages when user is offline */
+.offline-banner {
+  display: none;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(245,158,11,0.1);
+  border: 1px solid rgba(245,158,11,0.3);
+  border-radius: 12px;
+  padding: 0.85rem 1.1rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
+  color: var(--text-700);
+  font-weight: 500;
+}
+.offline-banner.show { display: flex; }
+.offline-banner i { color: #d97706; font-size: 1.1rem; flex-shrink: 0; }
+.offline-banner strong { color: #d97706; }
+
+/* ── Notification Prompt Slide-up animation ─────────────── */
+@keyframes slideUp {
+  from { transform: translateX(-50%) translateY(20px); opacity: 0; }
+  to   { transform: translateX(-50%) translateY(0);    opacity: 1; }
+}
+
+/* ── Search Page ─────────────────────────────────────────── */
+/* Color classes for search result icons (matches uni-card bg classes) */
+.bg-bio     { background: linear-gradient(135deg, #059669, #34d399); }
+.bg-chem    { background: linear-gradient(135deg, #7c3aed, #a78bfa); }
+.bg-physics { background: linear-gradient(135deg, #2563eb, #60a5fa); }
+.bg-math    { background: linear-gradient(135deg, #dc2626, #f87171); }
+.bg-lang    { background: linear-gradient(135deg, #d97706, #fbbf24); }
+.logo-blue  { background: linear-gradient(135deg, #0284c7, #38bdf8); }
+.logo-orange{ background: linear-gradient(135deg, #ea580c, #fb923c); }
+
+/* Search result highlight */
+mark {
+  background: rgba(245,158,11,0.25);
+  color: inherit;
+  border-radius: 3px;
+  padding: 0 2px;
+}
+
 /* ── PDF Viewer Modal ───────────────────────────────────── */
 .pdf-overlay {
   position: fixed;
@@ -2269,15 +2389,18 @@ kbd {
   .stats-bar-divider { display: none; }
 }
 
-*, *::before, *::after {
+/* Global transition for theme switching only - explicitly exclude transform elements */
+*:not(.flashcard-inner):not(.flashcard-front):not(.flashcard-back):not(.reveal):not(.back-to-top):not(.ai-chat-window):not(.pomodoro-widget)::before,
+*:not(.flashcard-inner):not(.flashcard-front):not(.flashcard-back):not(.reveal):not(.back-to-top):not(.ai-chat-window):not(.pomodoro-widget)::after {
   transition: background-color 0.3s ease, border-color 0.3s ease, color 0.2s ease;
 }
-/* But NOT on transforms/opacity (breaks animations) */
-.reveal, .card, .uni-card, .flashcard, .flashcard-inner,
-.flashcard-front, .flashcard-back, .back-to-top,
-.pwa-banner, .ai-chat-window, .pomodoro-widget {
-  transition: var(--transition);
-}
+/* Restore proper transitions for animation elements */
+.flashcard-inner { transition: transform 0.55s cubic-bezier(0.4,0,0.2,1) !important; }
+.flashcard-front, .flashcard-back { transition: none !important; }
+.reveal { transition: opacity 0.55s ease, transform 0.55s ease; }
+.back-to-top { transition: var(--transition); }
+.ai-chat-window { transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.4,0,0.2,1); }
+.pomodoro-widget { transition: var(--transition); }
 
 /* Richer dark mode backgrounds */
 [data-theme="dark"] body { background: #0a0f1e; }

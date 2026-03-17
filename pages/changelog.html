@@ -28,6 +28,21 @@
       <li><a href="/pages/search.html">Search</a></li>
       <li><a href="/pages/about.html">About</a></li>
       <li><a href="/pages/contact.html">Contact</a></li>
+      <!-- Show only when NOT logged in -->
+<li data-auth-show="guest">
+  <a href="/pages/auth.html" class="btn-primary" style="padding:0.4rem 0.9rem;border-radius:8px">
+    Sign In
+  </a>
+</li>
+
+<!-- Show only when logged in -->
+<li data-auth-show="authed" style="display:none">
+  <a href="/pages/profile.html" style="display:flex;align-items:center;gap:0.4rem">
+    <img data-auth-avatar src="" width="28" height="28"
+      style="border-radius:50%;object-fit:cover;display:none;border:2px solid var(--primary)">
+    <span data-auth-name style="font-weight:700;font-size:0.85rem"></span>
+  </a>
+</li>
       <li><button id="theme-toggle" class="btn-primary theme-toggle"><i class="fas fa-moon" id="theme-icon"></i></button></li>
     </ul>
   </div>
@@ -41,8 +56,8 @@
     <h1>Changelog</h1>
     <p>Every feature, fix and improvement to BrainHub — documented in detail.</p>
     <div class="changelog-hero-meta">
-      <span><i class="fas fa-code-branch" style="color:var(--primary)"></i> <strong>4</strong> releases</span>
-      <span><i class="fas fa-star" style="color:#f59e0b"></i> <strong>40+</strong> features shipped</span>
+      <span><i class="fas fa-code-branch" style="color:var(--primary)"></i> <strong>5</strong> releases</span>
+      <span><i class="fas fa-star" style="color:#f59e0b"></i> <strong>55+</strong> features shipped</span>
       <span><i class="fas fa-users" style="color:#10b981"></i> Built for <strong>Zambian students</strong></span>
       <span><i class="fab fa-github" style="color:var(--text-500)"></i> <a href="https://github.com/Gabriel-Banda/Brainhub" target="_blank" rel="noopener" style="color:var(--primary);font-weight:700;">GitHub</a></span>
     </div>
@@ -54,7 +69,11 @@
     <aside class="changelog-sidebar">
       <div class="sidebar-title">Releases</div>
       <div class="sidebar-links">
-        <a class="sidebar-link active" href="#v4">
+        <a class="sidebar-link active" href="#v41">
+          <span class="sl-version">v4.1</span>
+          <span class="sl-date">Mar 2026</span>
+        </a>
+        <a class="sidebar-link" href="#v4">
           <span class="sl-version">v4.0</span>
           <span class="sl-date">Mar 2026</span>
         </a>
@@ -82,6 +101,153 @@
 
     <!-- Entries -->
     <div class="changelog-entries">
+      <!-- ── v4.1 ── -->
+      <div class="changelog-entry" id="v41">
+        <div class="entry-header">
+          <div class="entry-version-wrap">
+            <div class="entry-version">
+              v4.1
+              <span class="version-tag tag-latest">Latest</span>
+              <span class="version-tag tag-minor">Minor</span>
+            </div>
+            <div class="entry-date">
+              <i class="fas fa-calendar-alt"></i>
+              March 17, 2026
+            </div>
+          </div>
+        </div>
+
+        <p class="entry-summary">
+          A focused quality-of-life update shipping a fully playable 100-question quiz system, a motivational quotes carousel, Supabase user accounts, service worker reliability improvements, critical JavaScript bug fixes, and multilingual support across every page.
+        </p>
+
+        <!-- New Features -->
+        <div class="change-section type-feat">
+          <div class="change-section-title">
+            <div class="dot"></div>
+            New Features
+          </div>
+          <div class="change-list">
+
+            <div class="change-item">
+              <div class="change-item-icon"><i class="fas fa-brain"></i></div>
+              <div>
+                <strong>Quiz System — 100 Questions</strong> — Fully rebuilt <code>/pages/quizzes.html</code> with 100 real academic questions across 5 categories: Biology, Chemistry, Mathematics, Physics, and General Knowledge (20 questions each). Features a category picker, animated progress bar, instant answer feedback with explanations, a streak counter that activates after 3 correct answers in a row, a final results screen with grade and emoji, and XP awards on correct answers and quiz completion.
+              </div>
+            </div>
+
+            <div class="change-item">
+              <div class="change-item-icon"><i class="fas fa-quote-left"></i></div>
+              <div>
+                <strong>Motivational Quotes Carousel</strong> — New homepage section featuring 100 curated motivational quotes about education, perseverance, and success. Auto-advances every 8 seconds with smooth fade and slide animation. Includes Previous/Next controls, animated dot indicators, and two custom BrainHub/Zambia-specific quotes. Designed to give users enough reading time before changing.
+              </div>
+            </div>
+
+            <div class="change-item">
+              <div class="change-item-icon"><i class="fas fa-user-circle"></i></div>
+              <div>
+                <strong>User Accounts — Supabase Auth</strong> — Full authentication system via <code>src/supabase.js</code>. Supports email/password sign-up and Google OAuth. User profiles, progress, bookmarks, and XP are synced to a PostgreSQL database (Supabase) on login and every 5 minutes. Includes a dedicated <code>/pages/auth.html</code> with sign-in, sign-up, password reset, and update password flows. Navbar dynamically shows Sign In or avatar based on session state.
+              </div>
+            </div>
+
+            <div class="change-item">
+              <div class="change-item-icon"><i class="fas fa-chart-line"></i></div>
+              <div>
+                <strong>Analytics Dashboard</strong> — New <code>/pages/analytics.html</code> showing study statistics, XP history, session data, and usage patterns for logged-in users.
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Fixes -->
+        <div class="change-section type-fix">
+          <div class="change-section-title">
+            <div class="dot"></div>
+            Bug Fixes
+          </div>
+          <div class="change-list">
+
+            <div class="change-item">
+              <div class="change-item-icon"><i class="fas fa-bug"></i></div>
+              <div>
+                <strong>Critical JS Crash Fixed</strong> — A broken regular expression in <code>main.js</code> at line 564 contained literal newline characters embedded inside a regex literal, causing a <code>SyntaxError: Invalid regular expression</code> that crashed JavaScript entirely on every page load. This prevented all cards, the weekly challenge, the chatbot, and all dynamic content from rendering. Fixed by replacing the regex with proper escape sequences (<code>/\n\n/g</code>).
+              </div>
+            </div>
+
+            <div class="change-item">
+              <div class="change-item-icon"><i class="fas fa-bug"></i></div>
+              <div>
+                <strong>Flashcard Flip Broken</strong> — The global <code>transition: background-color, border-color, color</code> rule added for theme switching was overriding <code>.flashcard-inner</code>'s <code>transform</code> transition, causing the card to invert the question face rather than flip to the answer. Fixed by explicitly restoring <code>transition: transform 0.55s cubic-bezier(...)</code> on <code>.flashcard-inner</code> with <code>!important</code> and disabling conflicting transitions on <code>.flashcard-front</code> and <code>.flashcard-back</code>.
+              </div>
+            </div>
+
+            <div class="change-item">
+              <div class="change-item-icon"><i class="fas fa-bug"></i></div>
+              <div>
+                <strong>Weekly Challenge Not Showing</strong> — The challenge widget HTML is injected dynamically by <code>initStudyChallenge()</code>, but the IntersectionObserver in <code>initScrollReveal()</code> runs earlier and never observes the newly inserted element. The widget was stuck at <code>opacity: 0</code> indefinitely. Fixed by removing the <code>reveal</code> class from the dynamically injected widget and forcing <code>opacity: 1</code> immediately after injection.
+              </div>
+            </div>
+
+            <div class="change-item">
+              <div class="change-item-icon"><i class="fas fa-bug"></i></div>
+              <div>
+                <strong>AI Chatbot Not Opening</strong> — Side effect of the JS crash above. Once the regex fix was applied the chatbot resumed working normally.
+              </div>
+            </div>
+
+            <div class="change-item">
+              <div class="change-item-icon"><i class="fas fa-bug"></i></div>
+              <div>
+                <strong>AI Responses Cut Off Mid-Sentence</strong> — <code>max_tokens</code> in the Cloudflare Worker AI call was set to 1000, truncating longer explanations. Raised to 4000.
+              </div>
+            </div>
+
+            <div class="change-item">
+              <div class="change-item-icon"><i class="fas fa-bug"></i></div>
+              <div>
+                <strong>AI Chatbot Rendering Raw Markdown</strong> — The AI was returning responses with <code>**bold**</code>, <code>##</code> headings, and <code>---</code> table separators displayed as raw text. Fixed by updating the system prompt to instruct the model to respond in clean HTML only, and adding a <code>renderChatContent()</code> function that renders HTML directly with a markdown fallback converter.
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Improvements -->
+        <div class="change-section type-improve">
+          <div class="change-section-title">
+            <div class="dot"></div>
+            Improvements
+          </div>
+          <div class="change-list">
+
+            <div class="change-item">
+              <div class="change-item-icon"><i class="fas fa-wifi"></i></div>
+              <div>
+                <strong>Service Worker Reliability</strong> — Bumped to <code>brainhub-v4</code>. JavaScript and CSS files now use a <strong>network-first</strong> strategy instead of cache-first, ensuring code changes always take effect immediately without requiring a hard refresh (<kbd>Ctrl+Shift+R</kbd>). HTML pages remain network-first with cache fallback. Images and fonts remain cache-first for performance.
+              </div>
+            </div>
+
+            <!-- <div class="change-item">
+              <div class="change-item-icon"><i class="fas fa-globe"></i></div>
+              <div>
+                <strong>Multilingual Support — All 21 Pages Tagged</strong> — Added <code>data-i18n</code> attributes to 373 translatable elements across all 21 HTML pages. All navigation links, footer text, section headers, buttons, chat placeholders, stats bar, mobile nav labels, and page-specific headings now translate instantly when a language is selected. Existing JSON translation files (English, Français, Ichibemba, Chinyanja, Chitonga) were already in place.
+              </div>
+            </div> -->
+
+          </div>
+        </div>
+
+        <div class="entry-footer">
+          <div class="entry-contributors">
+            <div class="contributor-avatar">G</div>
+            <span>Gabriel J. Banda</span>
+          </div>
+          <a href="https://github.com/Gabriel-Banda/BrainHub" class="entry-github-link" target="_blank" rel="noopener">
+            <i class="fab fa-github"></i> View on GitHub
+          </a>
+        </div>
+      </div>
 
       <!-- ── v4.0 ── -->
       <div class="changelog-entry" id="v4">
@@ -89,7 +255,6 @@
           <div class="entry-version-wrap">
             <div class="entry-version">
               v4.0
-              <span class="version-tag tag-latest">Latest</span>
               <span class="version-tag tag-major">Major</span>
             </div>
             <div class="entry-date">
@@ -327,8 +492,8 @@
           <span class="coming-soon-item"><i class="fas fa-book" style="color:#8b5cf6"></i> More course content</span>
           <span class="coming-soon-item"><i class="fas fa-users" style="color:#10b981"></i> Study groups</span>
           <span class="coming-soon-item"><i class="fas fa-bell" style="color:#f59e0b"></i> Push notifications</span>
-          <span class="coming-soon-item"><i class="fas fa-chart-bar" style="color:#ef4444"></i> Analytics dashboard</span>
-          <span class="coming-soon-item"><i class="fas fa-globe" style="color:#06b6d4"></i> More languages</span>
+          <span class="coming-soon-item"><i class="fas fa-comments" style="color:#ef4444"></i> Discussion threads per document</span>
+          <span class="coming-soon-item"><i class="fas fa-user" style="color:#8b5cf6"></i> Full profile dashboard with real Supabase data</span>
         </div>
       </div>
 
@@ -375,8 +540,10 @@
   </div>
 </footer>
 
+<script src="/src/i18n.js"></script>
 <script src="/src/main.js"></script>
 <script src="/src/gamification.js"></script>
+<script src="/src/supabase.js"></script>
 <script>
   // Sidebar active state on scroll
   const entries = document.querySelectorAll('.changelog-entry');

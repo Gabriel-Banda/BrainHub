@@ -103,21 +103,49 @@ function initAnnounceBanner() {
   });
 }
 
-// ==================== DARK MODE ====================
+// ==================== i18n HELPER ====================
+// Thin wrapper — returns translated string or falls back to English key
+function i18n(key, fallback) {
+  return window.BrainHubI18n?.t(key, fallback) || fallback || key;
+}
+
+// ==================== DARK MODE (auto + manual) ====================
+// If user has never manually chosen a theme, we follow the system.
+// If they click the toggle, we remember their choice and stop following system.
 function initDarkMode() {
   const toggle = document.getElementById('theme-toggle');
   if (!toggle) return;
-  const saved = localStorage.getItem('brainhub-theme') ||
-    (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-  document.documentElement.setAttribute('data-theme', saved);
-  updateThemeIcon(saved);
+
+  const mq = window.matchMedia('(prefers-color-scheme: dark)');
+
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    updateThemeIcon(theme);
+  }
+
+  function getTheme() {
+    const saved = localStorage.getItem('brainhub-theme');
+    if (saved) return saved;                          // user chose manually
+    return mq.matches ? 'dark' : 'light';             // follow system
+  }
+
+  applyTheme(getTheme());
+
+  // Listen for system theme changes — only applies if user hasn't chosen manually
+  mq.addEventListener('change', (e) => {
+    if (!localStorage.getItem('brainhub-theme')) {
+      applyTheme(e.matches ? 'dark' : 'light');
+    }
+  });
+
+  // Manual toggle — saves preference
   toggle.addEventListener('click', () => {
     const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-theme', next);
+    applyTheme(next);
     localStorage.setItem('brainhub-theme', next);
-    updateThemeIcon(next);
   });
 }
+
 function updateThemeIcon(theme) {
   const icon = document.getElementById('theme-icon');
   if (icon) icon.className = theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
@@ -300,6 +328,7 @@ function setProgress(id, done) {
   const progress = JSON.parse(localStorage.getItem('bh-progress') || '{}');
   if (done) progress[id] = true; else delete progress[id];
   localStorage.setItem('bh-progress', JSON.stringify(progress));
+  window.dispatchEvent(new Event('brainhub:progresschange'));
 }
 
 function updateDoneBtn(btn, done) {
@@ -346,6 +375,7 @@ function toggleBookmark(id, title, url, add) {
   if (add) { if (!bms.some(b => b.id === id)) bms.push({ id, title, url }); }
   else { bms = bms.filter(b => b.id !== id); }
   localStorage.setItem('bh-bookmarks', JSON.stringify(bms));
+  window.dispatchEvent(new Event('brainhub:bookmarkchange'));
 }
 
 function updateBookmarkBtn(btn, saved) {
@@ -451,8 +481,8 @@ function initAIChatbot() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           model: 'claude-haiku-4-5-20251001',
-          max_tokens: 1000,
-          system: `You are a helpful, friendly AI tutor on BrainHub, a free study platform for Zambian university students. Context: ${context}. Keep answers clear, concise and encouraging. Use simple language suitable for university students. When explaining concepts, use examples relevant to Zambia where possible.`,
+          max_tokens: 4000,
+          system: `You are a helpful, friendly AI tutor on BrainHub, a free study platform for Zambian university students. Context: ${context}. Format your responses in clean HTML only — never use markdown symbols like **, ##, --, or ---. Use <strong> for bold, <em> for italic, <h4> for headings, <ul>/<li> for bullet lists, <ol>/<li> for numbered lists, <table><thead><tbody><tr><th><td> for tables, <br> for line breaks, and <p> for paragraphs. Keep answers clear and encouraging. Use simple language suitable for university students. Use examples relevant to Zambia where possible.`,
           messages: history
         })
       });
@@ -473,7 +503,7 @@ function initAIChatbot() {
     const div = document.createElement('div');
     div.className = `chat-msg chat-${role}`;
     div.id = id;
-    div.innerHTML = raw ? content : `<span>${escapeHtml(content).replace(/\n/g, '<br>')}</span>`;
+    div.innerHTML = raw ? content : `<div class="chat-html">${renderChatContent(content)}</div>`;
     messagesEl.appendChild(div);
     messagesEl.scrollTop = messagesEl.scrollHeight;
     return id;
@@ -481,12 +511,60 @@ function initAIChatbot() {
 
   function updateMessage(id, content) {
     const el = document.getElementById(id);
-    if (el) el.innerHTML = `<span>${escapeHtml(content).replace(/\n/g, '<br>')}</span>`;
+    if (el) el.innerHTML = `<div class="chat-html">${renderChatContent(content)}</div>`;
     messagesEl.scrollTop = messagesEl.scrollHeight;
   }
 
-  function escapeHtml(str) {
-    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  // Renders bot response — accepts HTML from AI, also converts any
+  // stray markdown as a fallback in case the AI slips back into it
+  function renderChatContent(content) {
+    // If content looks like HTML already (AI followed instructions), use it directly
+    if (/<[a-z][\s\S]*>/i.test(content)) {
+      // Sanitise — only allow safe tags
+      const allowed = /^(p|br|strong|em|b|i|h[1-6]|ul|ol|li|table|thead|tbody|tr|th|td|hr|blockquote|code|pre|span|div)$/i;
+      const tmp = document.createElement('div');
+      tmp.innerHTML = content;
+      // Remove any script/style tags
+      tmp.querySelectorAll('script,style,iframe,img,a[href^="javascript"]').forEach(el => el.remove());
+      return tmp.innerHTML;
+    }
+
+    // Fallback: convert markdown to HTML
+    let html = content
+      // Escape HTML entities first
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      // Headers
+      .replace(/^### (.+)$/gm, '<h4>$1</h4>')
+      .replace(/^## (.+)$/gm,  '<h3>$1</h3>')
+      .replace(/^# (.+)$/gm,   '<h3>$1</h3>')
+      // Bold + italic
+      .replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>')
+      .replace(/\*\*(.+?)\*\*/g,      '<strong>$1</strong>')
+      .replace(/__(.+?)__/g,           '<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g,           '<em>$1</em>')
+      .replace(/_(.+?)_/g,             '<em>$1</em>')
+      // Inline code
+      .replace(/`(.+?)`/g, '<code style="background:var(--bg-muted);padding:1px 5px;border-radius:4px;font-family:monospace;font-size:0.85em">$1</code>')
+      // Horizontal rule
+      .replace(/^(-{3,}|\*{3,})$/gm, '<hr style="border:none;border-top:1px solid var(--border);margin:0.75rem 0">')
+      // Unordered lists
+      .replace(/^\s*[-*+] (.+)$/gm, '<li>$1</li>')
+      .replace(/(<li>[\s\S]+?<\/li>)(?!\s*<li>)/g, '<ul>$1</ul>')
+      // Ordered lists
+      .replace(/^\s*\d+\. (.+)$/gm, '<li>$1</li>')
+      // Simple table (pipe-separated)
+      .replace(/^\|(.+)\|$/gm, (match, row) => {
+        const cells = row.split('|').map(c => c.trim());
+        if (cells.every(c => /^[-:]+$/.test(c))) return ''; // skip separator row
+        const tag = match.includes('---') ? 'th' : 'td';
+        return '<tr>' + cells.map(c => `<${tag}>${c}</${tag}>`).join('') + '</tr>';
+      })
+      .replace(/(<tr>[\s\S]+?<\/tr>)/g, '<table style="width:100%;border-collapse:collapse;font-size:0.85em;margin:0.5rem 0">$1</table>')
+      // Line breaks
+      .replace(/\n\n/g, '</p><p>')
+      .replace(/\n/g, '<br>');
+
+    return `<p>${html}</p>`;
   }
 }
 
@@ -595,6 +673,12 @@ function _bootViewer(documents, type) {
           </button>
           <button class="share-doc-btn" onclick="sharePage('copy')" title="Copy link">
             <i class="fas fa-link"></i>
+          </button>
+          <button class="share-doc-btn save-offline-btn" 
+            data-offline-url="${readUrl}"
+            title="Save for offline reading"
+            onclick="window.BrainHubOffline?.saveForOffline('${readUrl}', '${doc.title.replace(/'/g, "\\'")}')">
+            <i class="fas fa-download"></i>
           </button>
         </div>
       `;
@@ -1115,7 +1199,7 @@ function initStudyChallenge() {
   nextMonday.setHours(0,0,0,0);
 
   container.innerHTML = `
-    <div class="challenge-widget reveal">
+    <div class="challenge-widget">
       <div class="challenge-header">
         <span class="challenge-label"><i class="fas fa-fire"></i> Weekly Challenge</span>
         <span class="challenge-countdown" id="challengeCountdown">
@@ -1152,6 +1236,10 @@ function initStudyChallenge() {
       </div>
     </div>
   `;
+
+  // Ensure widget is visible (was injected after ScrollReveal ran)
+  const widget = container.querySelector('.challenge-widget');
+  if (widget) { widget.style.opacity = '1'; widget.style.transform = 'none'; }
 
   // Restore previous answer highlighting
   if (saved !== null) {
@@ -1586,4 +1674,302 @@ function showKeyboardHint() {
     }
   `;
   document.head.appendChild(s);
+})();
+// ==================== GLOBAL DOCUMENT SEARCH ====================
+// Searches across ALL documents from all universities/courses
+// Document index is built from a static JSON file: /search-index.json
+
+(function initGlobalSearch() {
+  const searchPage = document.getElementById('globalSearchPage');
+  if (!searchPage) return; // only runs on search.html
+
+  const input     = document.getElementById('globalSearchInput');
+  const results   = document.getElementById('globalSearchResults');
+  const countEl   = document.getElementById('globalSearchCount');
+  const filterBtns = document.querySelectorAll('.search-filter-btn');
+
+  let allDocs  = [];
+  let activeFilter = 'all';
+
+  // Load the search index
+  fetch('/search-index.json')
+    .then(r => r.json())
+    .then(data => {
+      allDocs = data;
+      // If URL has a query param, run it immediately
+      const q = new URLSearchParams(window.location.search).get('q') || '';
+      if (q) { input.value = q; runSearch(q); }
+    })
+    .catch(() => {
+      results.innerHTML = `<div class="search-empty">
+        <i class="fas fa-exclamation-circle"></i>
+        <p>Could not load search index. Please try again.</p>
+      </div>`;
+    });
+
+  input?.addEventListener('input', () => runSearch(input.value));
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeFilter = btn.dataset.filter || 'all';
+      runSearch(input?.value || '');
+    });
+  });
+
+  function runSearch(query) {
+    query = query.trim().toLowerCase();
+
+    if (!query) {
+      results.innerHTML = `<div class="search-empty">
+        <i class="fas fa-search"></i>
+        <p>Type above to search across all BrainHub documents.</p>
+      </div>`;
+      if (countEl) countEl.textContent = '';
+      return;
+    }
+
+    let filtered = allDocs.filter(doc => {
+      const matchesQuery =
+        doc.title.toLowerCase().includes(query) ||
+        doc.course.toLowerCase().includes(query) ||
+        doc.university.toLowerCase().includes(query) ||
+        (doc.tags || []).some(t => t.toLowerCase().includes(query));
+
+      const matchesFilter =
+        activeFilter === 'all' ||
+        doc.type?.toLowerCase() === activeFilter ||
+        doc.university?.toLowerCase().includes(activeFilter);
+
+      return matchesQuery && matchesFilter;
+    });
+
+    if (countEl) countEl.textContent = `${filtered.length} result${filtered.length !== 1 ? 's' : ''}`;
+
+    if (!filtered.length) {
+      results.innerHTML = `<div class="search-empty">
+        <i class="fas fa-search-minus"></i>
+        <h3>No results for "${query}"</h3>
+        <p>Try a different keyword, course code, or university.</p>
+      </div>`;
+      return;
+    }
+
+    results.innerHTML = filtered.map(doc => `
+      <a href="${doc.pageUrl}" class="search-result-card reveal">
+        <div class="sr-icon ${doc.iconClass || 'bg-bio'}">
+          <i class="fas ${doc.icon || 'fa-file-pdf'}"></i>
+        </div>
+        <div class="sr-body">
+          <div class="sr-meta">
+            <span class="sr-uni">${doc.university}</span>
+            <span class="sr-dot">·</span>
+            <span class="sr-course">${doc.course}</span>
+            <span class="sr-dot">·</span>
+            <span class="sr-type ${doc.type?.toLowerCase()}">${doc.type || 'Notes'}</span>
+          </div>
+          <h3 class="sr-title">${highlight(doc.title, query)}</h3>
+          ${doc.description ? `<p class="sr-desc">${highlight(doc.description, query)}</p>` : ''}
+        </div>
+        <div class="sr-arrow"><i class="fas fa-arrow-right"></i></div>
+      </a>
+    `).join('');
+
+    // Trigger reveal animations
+    setTimeout(() => {
+      document.querySelectorAll('.search-result-card.reveal').forEach(el => el.classList.add('visible'));
+    }, 50);
+
+    window.BrainHubXP?.trackSearch?.();
+  }
+
+  function highlight(text, query) {
+    if (!query) return text;
+    const re = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    return text.replace(re, '<mark>$1</mark>');
+  }
+
+})();
+
+// ==================== OFFLINE DOCUMENT CACHING (CLIENT) ====================
+window.BrainHubOffline = (function() {
+  const SW = navigator.serviceWorker;
+
+  // Save a document for offline reading
+  async function saveForOffline(docUrl, docTitle) {
+    if (!SW?.controller) {
+      showToast('Offline saving not available. Try refreshing.', 3000);
+      return false;
+    }
+    showToast(`Saving "${docTitle}" for offline reading…`, 2500);
+    SW.controller.postMessage({ type: 'CACHE_DOCUMENT', url: docUrl, title: docTitle });
+    return true;
+  }
+
+  // Remove a cached document
+  async function removeOffline(docUrl) {
+    SW?.controller?.postMessage({ type: 'REMOVE_CACHED_DOCUMENT', url: docUrl });
+  }
+
+  // Get list of cached doc URLs
+  function getCachedDocs() {
+    return new Promise(resolve => {
+      if (!SW?.controller) return resolve([]);
+      SW.controller.postMessage({ type: 'GET_CACHED_DOCS' });
+      const handler = (e) => {
+        if (e.data?.type === 'CACHED_DOCS_LIST') {
+          SW.removeEventListener('message', handler);
+          resolve(e.data.docs || []);
+        }
+      };
+      SW.addEventListener('message', handler);
+      setTimeout(() => resolve([]), 2000); // timeout fallback
+    });
+  }
+
+  // Listen for cache confirmations
+  SW?.addEventListener('message', (e) => {
+    if (e.data?.type === 'DOC_CACHED') {
+      if (e.data.success) {
+        showToast(`✅ "${e.data.title}" saved for offline reading`, 3000);
+        // Update save button UI if present
+        document.querySelectorAll(`[data-offline-url="${e.data.url}"]`).forEach(btn => {
+          btn.classList.add('saved-offline');
+          btn.title = 'Saved for offline';
+          btn.innerHTML = '<i class="fas fa-wifi-slash"></i>';
+        });
+      } else {
+        showToast('Could not save document. Please try again.', 3000);
+      }
+    }
+  });
+
+  return { saveForOffline, removeOffline, getCachedDocs };
+})();
+
+
+// ==================== PUSH NOTIFICATIONS (CLIENT) ====================
+window.BrainHubNotifications = (function() {
+  const VAPID_PUBLIC_KEY = 'BNfPyqxX4bPh_ZW49oFHv4KmF2z8Ad6xalQ_P7Wsm8G_lXiStqCTqJSV8DHdoBpNlJnmqku8me-ZPCrFKEFgDgM'; // Add your VAPID public key here when ready
+
+  async function requestPermission() {
+    if (!('Notification' in window)) return 'unsupported';
+    if (Notification.permission === 'granted') return 'granted';
+    if (Notification.permission === 'denied') return 'denied';
+
+    const result = await Notification.requestPermission();
+    return result;
+  }
+
+  async function subscribe() {
+    const perm = await requestPermission();
+    if (perm !== 'granted') {
+      showToast('Notifications blocked. Enable them in your browser settings.', 4000);
+      return null;
+    }
+
+    if (!navigator.serviceWorker) return null;
+    const reg = await navigator.serviceWorker.ready;
+
+    // Check if already subscribed
+    const existing = await reg.pushManager.getSubscription();
+    if (existing) return existing;
+
+    if (!VAPID_PUBLIC_KEY) {
+      // No VAPID key yet — store preference locally and notify when set up
+      localStorage.setItem('brainhub-notif-requested', 'true');
+      showToast('🔔 You\'ll get notified when new documents are uploaded!', 3500);
+      return 'pending';
+    }
+
+    try {
+      const sub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
+      });
+      localStorage.setItem('brainhub-notif-sub', JSON.stringify(sub));
+      showToast('🔔 Notifications enabled! We\'ll let you know when new docs drop.', 3500);
+      return sub;
+    } catch (e) {
+      console.warn('[BrainHub] Push subscription failed:', e);
+      return null;
+    }
+  }
+
+  async function unsubscribe() {
+    if (!navigator.serviceWorker) return;
+    const reg = await navigator.serviceWorker.ready;
+    const sub = await reg.pushManager.getSubscription();
+    if (sub) await sub.unsubscribe();
+    localStorage.removeItem('brainhub-notif-sub');
+    localStorage.removeItem('brainhub-notif-requested');
+    showToast('Notifications turned off.', 2500);
+  }
+
+  function isSubscribed() {
+    return !!(localStorage.getItem('brainhub-notif-sub') || localStorage.getItem('brainhub-notif-requested'));
+  }
+
+  function urlBase64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64  = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+    const raw     = window.atob(base64);
+    return Uint8Array.from([...raw].map(c => c.charCodeAt(0)));
+  }
+
+  // Show notification prompt after 3 visits if not already subscribed/denied
+  function maybePrompt() {
+    if (Notification.permission === 'denied') return;
+    if (isSubscribed()) return;
+    const visits = parseInt(localStorage.getItem('brainhub-visits') || '0');
+    localStorage.setItem('brainhub-visits', visits + 1);
+    if (visits === 3) {
+      setTimeout(() => showNotifPrompt(), 4000);
+    }
+  }
+
+  function showNotifPrompt() {
+    // Only show if not already showing
+    if (document.getElementById('notifPrompt')) return;
+    const prompt = document.createElement('div');
+    prompt.id = 'notifPrompt';
+    prompt.style.cssText = `
+      position:fixed; bottom:5rem; left:50%; transform:translateX(-50%);
+      background:var(--card); border:1px solid var(--border);
+      border-radius:16px; padding:1.1rem 1.25rem;
+      box-shadow:0 8px 32px rgba(0,0,0,0.15);
+      z-index:9999; max-width:340px; width:90%;
+      display:flex; align-items:center; gap:0.9rem;
+      animation: slideUp 0.3s ease;
+    `;
+    prompt.innerHTML = `
+      <div style="font-size:1.8rem;flex-shrink:0">🔔</div>
+      <div style="flex:1">
+        <div style="font-weight:700;font-size:0.9rem;color:var(--text-900);margin-bottom:0.2rem">Get notified about new docs</div>
+        <div style="font-size:0.78rem;color:var(--text-500)">We'll ping you when new notes or exams are uploaded for your courses.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:0.4rem;flex-shrink:0">
+        <button onclick="window.BrainHubNotifications.subscribe();document.getElementById('notifPrompt')?.remove()"
+          style="background:var(--primary);color:white;border:none;border-radius:8px;padding:0.4rem 0.8rem;font-size:0.78rem;font-weight:700;cursor:pointer;font-family:inherit">
+          Enable
+        </button>
+        <button onclick="document.getElementById('notifPrompt')?.remove()"
+          style="background:var(--bg-muted);color:var(--text-700);border:none;border-radius:8px;padding:0.4rem 0.8rem;font-size:0.78rem;cursor:pointer;font-family:inherit">
+          Not now
+        </button>
+      </div>
+    `;
+    document.body.appendChild(prompt);
+    setTimeout(() => prompt.remove(), 12000); // auto-dismiss after 12s
+  }
+
+  // Run prompt logic on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', maybePrompt);
+  } else {
+    maybePrompt();
+  }
+
+  return { requestPermission, subscribe, unsubscribe, isSubscribed };
 })();

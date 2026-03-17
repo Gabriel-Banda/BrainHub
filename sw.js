@@ -1,107 +1,104 @@
-// BrainHub Service Worker v2.0
-// Handles offline caching for PWA support
-// IMPORTANT: Bump CACHE_VERSION on every deploy to force cache refresh
+// BrainHub Service Worker v4.0
+const CACHE_NAME     = 'brainhub-v4';
+const STATIC_CACHE   = 'brainhub-static-v4';
+const DYNAMIC_CACHE  = 'brainhub-dynamic-v4';
+const DOC_CACHE      = 'brainhub-docs-v2';
+const MAX_CACHED_DOCS = 20;
 
-const CACHE_VERSION  = 'v2';
-const CACHE_NAME     = `brainhub-${CACHE_VERSION}`;
-const STATIC_CACHE   = `brainhub-static-${CACHE_VERSION}`;
-const DYNAMIC_CACHE  = `brainhub-dynamic-${CACHE_VERSION}`;
-
-// Files to cache immediately on install (app shell)
+// App shell — HTML + images only. JS/CSS always fetched fresh.
 const STATIC_ASSETS = [
   '/',
   '/index.html',
-  '/src/style.css',
-  '/src/additions.css',
-  '/src/main.js',
   '/manifest.json',
   '/public/assets/images/favicon.png',
-  '/pages/universities.html',
-  '/pages/flashcards.html',
-  '/pages/quizzes.html',
-  '/pages/about.html',
-  '/pages/contact.html',
-  '/pages/privacy-policy.html',
-  '/pages/terms.html',
-  '/pages/universities/cbu.html',
-  '/pages/universities/cbu/programs/natural-sciences.html',
   '/404.html',
-  // External fonts and icons (cached on first load)
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css',
 ];
 
-// ── Install ──────────────────────────────────────────────
+// ── Install ───────────────────────────────────────────────
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(STATIC_CACHE)
       .then(cache => cache.addAll(STATIC_ASSETS))
       .then(() => self.skipWaiting())
-      .catch(err => console.warn('[SW] Failed to cache some static assets:', err))
+      .catch(err => console.warn('[SW] Cache install error:', err))
   );
 });
 
-// ── Activate — wipe ALL old caches on version bump ───────
+// ── Activate — delete ALL old caches ─────────────────────
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys()
-      .then(keys => Promise.all(
-        keys
-          .filter(key => !key.includes(CACHE_VERSION))
-          .map(key => {
-            console.log('[SW] Deleting old cache:', key);
-            return caches.delete(key);
-          })
-      ))
-      .then(() => self.clients.claim())
+    caches.keys().then(keys => Promise.all(
+      keys.filter(k => k !== STATIC_CACHE && k !== DYNAMIC_CACHE && k !== DOC_CACHE)
+          .map(k => caches.delete(k))
+    )).then(() => self.clients.claim())
   );
 });
 
-// ── Fetch Strategy ────────────────────────────────────────
-// - Static assets: Cache first, then network
-// - API calls (Anthropic, Formspree): Network only
-// - Everything else: Network first, fallback to cache, then offline page
-
+// ── Fetch ─────────────────────────────────────────────────
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // Skip non-GET requests
   if (request.method !== 'GET') return;
 
-  // Skip API calls and Worker calls — always use network
+  // Never cache: API calls, Supabase, worker endpoints
   if (
+    url.hostname.includes('supabase.co') ||
+    url.hostname.includes('workers.dev') ||
     url.hostname === 'api.anthropic.com' ||
     url.hostname === 'formspree.io' ||
-    url.hostname === 'brainhub-docs.gabrieljoshuabanda81.workers.dev' ||
-    url.pathname.includes('/v1/messages')
-  ) {
-    return; // let browser handle normally
-  }
+    url.pathname.includes('/v1/messages') ||
+    url.pathname.includes('/auth/')
+  ) return;
 
-  // JS and CSS — network first so users always get latest code
-  // Falls back to cache only when offline
+  // JS and CSS — always network first, update cache in background
+  // This ensures code changes are always picked up immediately
   if (url.pathname.endsWith('.js') || url.pathname.endsWith('.css')) {
-    event.respondWith(networkFirstWithFallback(request));
+    event.respondWith(networkFirstUpdateCache(request));
     return;
   }
 
-  // Other static assets (images, fonts, icons) — cache first is fine
+  // Worker doc requests — serve from doc cache when offline
+  if (url.hostname.includes('workers.dev') && url.pathname === '/doc') {
+    event.respondWith(
+      fetch(request).catch(async () => {
+        const cache  = await caches.open(DOC_CACHE);
+        const cached = await cache.match(request.url);
+        return cached || new Response(
+          '<h2 style="font-family:sans-serif;padding:2rem">Not available offline.</h2>',
+          { status: 503, headers: { 'Content-Type': 'text/html' } }
+        );
+      })
+    );
+    return;
+  }
+
+  // Images + fonts — cache first
   if (isStaticAsset(url)) {
     event.respondWith(cacheFirst(request));
     return;
   }
 
-  // HTML pages — network first, fallback to cache, then 404
+  // HTML — network first
   if (request.headers.get('accept')?.includes('text/html')) {
     event.respondWith(networkFirstWithFallback(request));
     return;
   }
 
-  // Everything else — stale-while-revalidate
   event.respondWith(staleWhileRevalidate(request));
 });
 
-// ── Caching Strategies ────────────────────────────────────
+// ── Strategies ────────────────────────────────────────────
+async function networkFirstUpdateCache(request) {
+  const cache = await caches.open(STATIC_CACHE);
+  try {
+    const response = await fetch(request);
+    if (response.ok) cache.put(request, response.clone());
+    return response;
+  } catch {
+    return await cache.match(request) || new Response('Offline', { status: 503 });
+  }
+}
 
 async function cacheFirst(request) {
   const cached = await caches.match(request);
@@ -114,7 +111,7 @@ async function cacheFirst(request) {
     }
     return response;
   } catch {
-    return caches.match('/offline.html') || new Response('Offline', { status: 503 });
+    return new Response('Offline', { status: 503 });
   }
 }
 
@@ -127,52 +124,89 @@ async function networkFirstWithFallback(request) {
     }
     return response;
   } catch {
-    const cached = await caches.match(request);
-    if (cached) return cached;
-    // Fallback to cached index for SPA-like navigation
-    const fallback = await caches.match('/index.html');
-    return fallback || await caches.match('/404.html') || new Response('<h1>Offline</h1><p>Please check your connection.</p>', {
-      status: 503,
-      headers: { 'Content-Type': 'text/html' }
-    });
+    return await caches.match(request) ||
+           await caches.match('/index.html') ||
+           await caches.match('/404.html') ||
+           new Response('<h1>Offline</h1>', { status: 503, headers: { 'Content-Type': 'text/html' } });
   }
 }
 
 async function staleWhileRevalidate(request) {
-  const cache = await caches.open(DYNAMIC_CACHE);
+  const cache  = await caches.open(DYNAMIC_CACHE);
   const cached = await cache.match(request);
-
-  const fetchPromise = fetch(request)
-    .then(response => {
-      if (response.ok) cache.put(request, response.clone());
-      return response;
-    })
-    .catch(() => cached);
-
-  return cached || fetchPromise;
+  const fetchP = fetch(request).then(r => { if (r.ok) cache.put(request, r.clone()); return r; }).catch(() => cached);
+  return cached || fetchP;
 }
-
-// ── Helpers ───────────────────────────────────────────────
 
 function isStaticAsset(url) {
   return (
-    url.pathname.endsWith('.css') ||
-    url.pathname.endsWith('.js') ||
-    url.pathname.endsWith('.png') ||
-    url.pathname.endsWith('.jpg') ||
-    url.pathname.endsWith('.jpeg') ||
-    url.pathname.endsWith('.svg') ||
-    url.pathname.endsWith('.ico') ||
-    url.pathname.endsWith('.woff2') ||
+    url.pathname.match(/\.(png|jpg|jpeg|svg|ico|woff2|gif|webp)$/) ||
     url.hostname === 'fonts.googleapis.com' ||
     url.hostname === 'fonts.gstatic.com' ||
     url.hostname === 'cdnjs.cloudflare.com'
   );
 }
 
-// ── Background Sync (future: bookmark sync) ───────────────
-self.addEventListener('message', (event) => {
-  if (event.data?.type === 'SKIP_WAITING') {
-    self.skipWaiting();
+// ── Messages ──────────────────────────────────────────────
+self.addEventListener('message', async (event) => {
+  if (event.data?.type === 'SKIP_WAITING') { self.skipWaiting(); return; }
+
+  if (event.data?.type === 'CACHE_DOCUMENT') {
+    const { url, title } = event.data;
+    try {
+      const cache = await caches.open(DOC_CACHE);
+      const keys  = await cache.keys();
+      if (keys.length >= MAX_CACHED_DOCS) await cache.delete(keys[0]);
+      const response = await fetch(url);
+      if (response.ok) {
+        await cache.put(url, response);
+        event.source?.postMessage({ type: 'DOC_CACHED', url, title, success: true });
+      }
+    } catch { event.source?.postMessage({ type: 'DOC_CACHED', url, title, success: false }); }
+    return;
   }
+
+  if (event.data?.type === 'REMOVE_CACHED_DOCUMENT') {
+    const cache = await caches.open(DOC_CACHE);
+    await cache.delete(event.data.url);
+    event.source?.postMessage({ type: 'DOC_REMOVED', url: event.data.url });
+    return;
+  }
+
+  if (event.data?.type === 'GET_CACHED_DOCS') {
+    const cache = await caches.open(DOC_CACHE);
+    const keys  = (await cache.keys()).map(r => r.url).filter(u => !u.includes('__meta__'));
+    event.source?.postMessage({ type: 'CACHED_DOCS_LIST', docs: keys });
+    return;
+  }
+});
+
+// ── Push Notifications ────────────────────────────────────
+self.addEventListener('push', (event) => {
+  if (!event.data) return;
+  let data;
+  try { data = event.data.json(); } catch { data = { title: 'BrainHub', body: event.data.text() }; }
+  event.waitUntil(self.registration.showNotification(data.title || 'BrainHub', {
+    body:    data.body || 'New update from BrainHub',
+    icon:    '/public/assets/images/favicon.png',
+    badge:   '/public/assets/images/favicon.png',
+    tag:     data.tag || 'brainhub-notif',
+    data:    { url: data.url || '/' },
+    actions: [{ action: 'view', title: '📖 View' }, { action: 'dismiss', title: '✕ Dismiss' }],
+    vibrate: [100, 50, 100],
+  }));
+});
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  if (event.action === 'dismiss') return;
+  const url = event.notification.data?.url || '/';
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
+      for (const c of list) {
+        if (c.url.includes(self.location.origin) && 'focus' in c) { c.navigate(url); return c.focus(); }
+      }
+      if (clients.openWindow) return clients.openWindow(url);
+    })
+  );
 });

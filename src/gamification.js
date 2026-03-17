@@ -73,6 +73,7 @@ function _load() {
 
 function _save(s) {
   localStorage.setItem('bh-gamification', JSON.stringify(s));
+  window.dispatchEvent(new Event('brainhub:xpchange'));
 }
 
 // ── Core engine — ONE read, ONE save ─────────────────────

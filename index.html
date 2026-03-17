@@ -70,7 +70,7 @@
 
 <!-- Announcement Banner -->
 <div class="announce-banner" id="announceBanner">
-  🎉 New courses added for ZUT COMS & SE — <a href="/pages/universities.html">Explore now →</a>
+  🎉 New courses added for CBU LA111 — <a href="/pages/universities.html?course=CBU-LA111">Explore now →</a>
   <button class="announce-close" id="announceClose" aria-label="Close"><i class="fas fa-times"></i></button>
 </div>
 
@@ -131,6 +131,21 @@
       <li><a href="/pages/search.html"><i class="fas fa-search"></i> Search</a></li>
       <li><a href="/pages/about.html">About</a></li>
       <li><a href="/pages/contact.html">Contact</a></li>
+      <!-- Show only when NOT logged in -->
+<li data-auth-show="guest">
+  <a href="/pages/auth.html" class="btn-primary" style="padding:0.4rem 0.9rem;border-radius:8px">
+    Sign In
+  </a>
+</li>
+
+<!-- Show only when logged in -->
+<li data-auth-show="authed" style="display:none">
+  <a href="/pages/profile.html" style="display:flex;align-items:center;gap:0.4rem">
+    <img data-auth-avatar src="" width="28" height="28"
+      style="border-radius:50%;object-fit:cover;display:none;border:2px solid var(--primary)">
+    <span data-auth-name style="font-weight:700;font-size:0.85rem"></span>
+  </a>
+</li>
       <li><button id="theme-toggle" class="btn-primary theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon" id="theme-icon"></i></button></li>
     </ul>
   </div>
@@ -556,6 +571,200 @@
 </style>
 
 <!-- Footer -->
+
+<!-- ═══════════ MOTIVATIONAL QUOTES ═══════════ -->
+<section style="padding:5rem 0;background:var(--bg-subtle);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div class="container">
+    <div class="section-header reveal" style="margin-bottom:3rem">
+      <div class="section-tag"><i class="fas fa-quote-left"></i> Daily Inspiration</div>
+      <h2>Words That Fuel Your Journey</h2>
+      <p>A fresh quote to keep you motivated. Come back every day.</p>
+    </div>
+    <div id="quoteDisplay" class="reveal" style="max-width:780px;margin:0 auto;text-align:center">
+      <div id="quoteCard" style="
+        background:var(--card);border:1px solid var(--border);border-radius:24px;
+        padding:3rem 2.5rem;box-shadow:var(--shadow-lg);
+        transition:opacity 0.6s ease,transform 0.6s ease;
+      ">
+        <div style="font-size:2.5rem;color:var(--primary);opacity:.3;margin-bottom:1rem;line-height:1">❝</div>
+        <p id="quoteText" style="
+          font-family:var(--font-display);font-size:clamp(1.1rem,2.5vw,1.4rem);
+          font-weight:600;color:var(--text-900);line-height:1.65;margin-bottom:1.5rem;
+        "></p>
+        <div style="display:flex;align-items:center;justify-content:center;gap:.75rem">
+          <div style="width:32px;height:2px;background:var(--primary);border-radius:2px"></div>
+          <p id="quoteAuthor" style="font-size:.9rem;font-weight:700;color:var(--primary)"></p>
+          <div style="width:32px;height:2px;background:var(--primary);border-radius:2px"></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:1rem;justify-content:center;margin-top:1.75rem;flex-wrap:wrap">
+        <button onclick="prevQuote()" class="btn-secondary" style="padding:.6rem 1.25rem;font-size:.85rem">
+          <i class="fas fa-chevron-left"></i> Previous
+        </button>
+        <span id="quoteDots" style="display:flex;align-items:center;gap:.4rem"></span>
+        <button onclick="nextQuote()" class="btn-primary" style="padding:.6rem 1.25rem;font-size:.85rem">
+          Next <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+const QUOTES = [
+  { text: "The secret of getting ahead is getting started.", author: "Mark Twain" },
+  { text: "Education is the most powerful weapon which you can use to change the world.", author: "Nelson Mandela" },
+  { text: "The beautiful thing about learning is that no one can take it away from you.", author: "B.B. King" },
+  { text: "Success is not final, failure is not fatal: it is the courage to continue that counts.", author: "Winston Churchill" },
+  { text: "The more that you read, the more things you will know. The more that you learn, the more places you'll go.", author: "Dr. Seuss" },
+  { text: "An investment in knowledge pays the best interest.", author: "Benjamin Franklin" },
+  { text: "Education is not preparation for life; education is life itself.", author: "John Dewey" },
+  { text: "The expert in anything was once a beginner.", author: "Helen Hayes" },
+  { text: "Don't watch the clock; do what it does. Keep going.", author: "Sam Levenson" },
+  { text: "It always seems impossible until it's done.", author: "Nelson Mandela" },
+  { text: "Believe you can and you're halfway there.", author: "Theodore Roosevelt" },
+  { text: "You don't have to be great to start, but you have to start to be great.", author: "Zig Ziglar" },
+  { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
+  { text: "Hard work beats talent when talent doesn't work hard.", author: "Tim Notke" },
+  { text: "Success usually comes to those who are too busy to be looking for it.", author: "Henry David Thoreau" },
+  { text: "Don't let what you cannot do interfere with what you can do.", author: "John Wooden" },
+  { text: "The mind is not a vessel to be filled, but a fire to be ignited.", author: "Plutarch" },
+  { text: "You have brains in your head. You have feet in your shoes. You can steer yourself any direction you choose.", author: "Dr. Seuss" },
+  { text: "The future belongs to those who believe in the beauty of their dreams.", author: "Eleanor Roosevelt" },
+  { text: "It does not matter how slowly you go as long as you do not stop.", author: "Confucius" },
+  { text: "Education is the passport to the future, for tomorrow belongs to those who prepare for it today.", author: "Malcolm X" },
+  { text: "The roots of education are bitter, but the fruit is sweet.", author: "Aristotle" },
+  { text: "Strive for progress, not perfection.", author: "Unknown" },
+  { text: "You are never too old to set another goal or to dream a new dream.", author: "C.S. Lewis" },
+  { text: "Push yourself, because no one else is going to do it for you.", author: "Unknown" },
+  { text: "Wake up with determination. Go to bed with satisfaction.", author: "Unknown" },
+  { text: "Dream big and dare to fail.", author: "Norman Vaughan" },
+  { text: "What seems to us as bitter trials are often blessings in disguise.", author: "Oscar Wilde" },
+  { text: "The pain you feel today will be the strength you feel tomorrow.", author: "Unknown" },
+  { text: "Do something today that your future self will thank you for.", author: "Sean Patrick Flanery" },
+  { text: "Little things make big days.", author: "Unknown" },
+  { text: "It's going to be hard, but hard does not mean impossible.", author: "Unknown" },
+  { text: "Don't stop when you're tired. Stop when you're done.", author: "Unknown" },
+  { text: "Wake up, hustle, repeat.", author: "Unknown" },
+  { text: "Your limitation — it's only your imagination.", author: "Unknown" },
+  { text: "Great things never come from comfort zones.", author: "Unknown" },
+  { text: "Dream it. Wish it. Do it.", author: "Unknown" },
+  { text: "Work hard in silence; let success make the noise.", author: "Frank Ocean" },
+  { text: "Failure is the opportunity to begin again more intelligently.", author: "Henry Ford" },
+  { text: "Try to be a rainbow in someone else's cloud.", author: "Maya Angelou" },
+  { text: "I find that the harder I work, the more luck I seem to have.", author: "Thomas Jefferson" },
+  { text: "Start where you are. Use what you have. Do what you can.", author: "Arthur Ashe" },
+  { text: "Good things come to people who wait, but better things come to those who go out and get them.", author: "Unknown" },
+  { text: "If you do what you always did, you will get what you always got.", author: "Anonymous" },
+  { text: "Knowledge is power.", author: "Francis Bacon" },
+  { text: "The capacity to learn is a gift; the ability to learn is a skill; the willingness to learn is a choice.", author: "Brian Herbert" },
+  { text: "The more I read, the more I acquire, the more certain I am that I know nothing.", author: "Voltaire" },
+  { text: "Intellectual growth should commence at birth and cease only at death.", author: "Albert Einstein" },
+  { text: "Anyone who stops learning is old, whether at twenty or eighty.", author: "Henry Ford" },
+  { text: "Live as if you were to die tomorrow. Learn as if you were to live forever.", author: "Mahatma Gandhi" },
+  { text: "The only true wisdom is in knowing you know nothing.", author: "Socrates" },
+  { text: "Tell me and I forget. Teach me and I remember. Involve me and I learn.", author: "Benjamin Franklin" },
+  { text: "Learning never exhausts the mind.", author: "Leonardo da Vinci" },
+  { text: "You learn something every day if you pay attention.", author: "Ray LeBlond" },
+  { text: "The goal of education is not to increase the amount of knowledge but to create the possibilities for a child to invent and discover.", author: "Jean Piaget" },
+  { text: "Education breeds confidence. Confidence breeds hope. Hope breeds peace.", author: "Confucius" },
+  { text: "The educated differ from the uneducated as much as the living from the dead.", author: "Aristotle" },
+  { text: "Change is the end result of all true learning.", author: "Leo Buscaglia" },
+  { text: "Develop a passion for learning. If you do, you will never cease to grow.", author: "Anthony J. D'Angelo" },
+  { text: "Learning is not attained by chance, it must be sought for with ardor and attended to with diligence.", author: "Abigail Adams" },
+  { text: "The world is a book, and those who do not travel read only one page.", author: "Augustine of Hippo" },
+  { text: "In learning you will teach, and in teaching you will learn.", author: "Phil Collins" },
+  { text: "The wisest mind has something yet to learn.", author: "George Santayana" },
+  { text: "Real learning comes about when the competitive spirit has ceased.", author: "Jiddu Krishnamurti" },
+  { text: "Motivation is what gets you started. Habit is what keeps you going.", author: "Jim Ryun" },
+  { text: "Discipline is the bridge between goals and accomplishment.", author: "Jim Rohn" },
+  { text: "The difference between a successful person and others is not a lack of strength, not a lack of knowledge, but rather a lack in will.", author: "Vince Lombardi" },
+  { text: "Success is the sum of small efforts, repeated day in and day out.", author: "Robert Collier" },
+  { text: "What you get by achieving your goals is not as important as what you become by achieving your goals.", author: "Zig Ziglar" },
+  { text: "In the middle of every difficulty lies opportunity.", author: "Albert Einstein" },
+  { text: "Perseverance is not a long race; it is many short races one after the other.", author: "Walter Elliot" },
+  { text: "The secret to success is to know something nobody else knows.", author: "Aristotle Onassis" },
+  { text: "If you're going through hell, keep going.", author: "Winston Churchill" },
+  { text: "Tough times never last, but tough people do.", author: "Robert H. Schuller" },
+  { text: "Our greatest glory is not in never falling, but in rising every time we fall.", author: "Confucius" },
+  { text: "You miss 100% of the shots you don't take.", author: "Wayne Gretzky" },
+  { text: "I've failed over and over and over again in my life and that is why I succeed.", author: "Michael Jordan" },
+  { text: "It is not the strongest of the species that survive, nor the most intelligent, but the one most responsive to change.", author: "Charles Darwin" },
+  { text: "The biggest risk is not taking any risk. In a world that is changing really quickly, the only strategy that is guaranteed to fail is not taking risks.", author: "Mark Zuckerberg" },
+  { text: "You must do the things you think you cannot do.", author: "Eleanor Roosevelt" },
+  { text: "Every champion was once a contender that refused to give up.", author: "Rocky Balboa" },
+  { text: "Energy and persistence conquer all things.", author: "Benjamin Franklin" },
+  { text: "One day or day one. You decide.", author: "Unknown" },
+  { text: "Be so good they can't ignore you.", author: "Steve Martin" },
+  { text: "Opportunities don't happen, you create them.", author: "Chris Grosser" },
+  { text: "If you want to achieve greatness stop asking for permission.", author: "Anonymous" },
+  { text: "Things work out best for those who make the best of how things work out.", author: "John Wooden" },
+  { text: "To live a creative life, we must lose our fear of being wrong.", author: "Anonymous" },
+  { text: "If you are not willing to risk the usual you will have to settle for the ordinary.", author: "Jim Rohn" },
+  { text: "All progress takes place outside the comfort zone.", author: "Michael John Bobak" },
+  { text: "People often say that motivation doesn't last. Well, neither does bathing, that's why we recommend it daily.", author: "Zig Ziglar" },
+  { text: "I am not a product of my circumstances. I am a product of my decisions.", author: "Stephen Covey" },
+  { text: "You only live once, but if you do it right, once is enough.", author: "Mae West" },
+  { text: "The best revenge is massive success.", author: "Frank Sinatra" },
+  { text: "I attribute my success to this: I never gave or took any excuse.", author: "Florence Nightingale" },
+  { text: "Certain things catch your eye, but pursue only those that capture the heart.", author: "Ancient Indian Proverb" },
+  { text: "Believe in yourself and all that you are. Know that there is something inside you that is greater than any obstacle.", author: "Christian D. Larson" },
+  { text: "In order to succeed, we must first believe that we can.", author: "Nikos Kazantzakis" },
+  { text: "Act as if what you do makes a difference. It does.", author: "William James" },
+  { text: "Success is not how high you have climbed, but how you make a positive difference to the world.", author: "Roy T. Bennett" },
+  { text: "Zambia is blessed with brilliant minds — yours is one of them. Use it.", author: "BrainHub" },
+  { text: "Every student in Zambia who keeps studying is building a better nation.", author: "BrainHub" },
+];
+
+let currentQuote = Math.floor(Math.random() * QUOTES.length);
+let quoteInterval;
+
+function showQuote(idx, direction) {
+  const card = document.getElementById('quoteCard');
+  card.style.opacity = '0';
+  card.style.transform = direction === 'next' ? 'translateX(-20px)' : 'translateX(20px)';
+  setTimeout(() => {
+    document.getElementById('quoteText').textContent = QUOTES[idx].text;
+    document.getElementById('quoteAuthor').textContent = '— ' + QUOTES[idx].author;
+    updateDots(idx);
+    card.style.opacity = '1';
+    card.style.transform = 'translateX(0)';
+  }, 300);
+}
+
+function updateDots(idx) {
+  const dots = document.getElementById('quoteDots');
+  const visible = 5;
+  let html = '';
+  for (let i = 0; i < visible; i++) {
+    const active = i === (idx % visible);
+    html += `<span style="width:${active?'20px':'8px'};height:8px;border-radius:4px;background:${active?'var(--primary)':'var(--border)'};transition:all .3s;display:inline-block"></span>`;
+  }
+  dots.innerHTML = html;
+}
+
+function nextQuote() {
+  currentQuote = (currentQuote + 1) % QUOTES.length;
+  showQuote(currentQuote, 'next');
+  resetAutoPlay();
+}
+
+function prevQuote() {
+  currentQuote = (currentQuote - 1 + QUOTES.length) % QUOTES.length;
+  showQuote(currentQuote, 'prev');
+  resetAutoPlay();
+}
+
+function resetAutoPlay() {
+  clearInterval(quoteInterval);
+  quoteInterval = setInterval(nextQuote, 8000);
+}
+
+// Init
+showQuote(currentQuote, 'next');
+resetAutoPlay();
+</script>
+
 <footer>
   <div class="container footer-content">
     <div class="footer-col">
@@ -622,8 +831,10 @@
   <source src="https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3" type="audio/mpeg">
 </audio>
 
+<script src="/src/i18n.js"></script>
 <script src="/src/main.js"></script>
 <script src="/src/gamification.js"></script>
+<script src="/src/supabase.js"></script>
 
 <script>
 // PWA Registration

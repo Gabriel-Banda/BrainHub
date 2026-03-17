@@ -1,16 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Quizzes | BrainHub</title>
-  <meta name="description" content="Test your knowledge with topic-based quizzes on BrainHub. Instant feedback, no login needed." />
+  <meta name="description" content="Test your knowledge with 100 topic-based quizzes. Instant feedback, no login needed." />
   <link rel="stylesheet" href="/src/style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <link rel="icon" type="image/x-icon" href="/public/assets/images/favicon.png" />
+  <style>
+    .quiz-page { padding: 3rem 0 6rem; }
+    .quiz-hero { text-align:center; padding:3rem 0 2.5rem; }
+    .quiz-hero h1 { font-family:var(--font-display); font-size:clamp(2rem,5vw,3rem); font-weight:800; color:var(--text-900); letter-spacing:-0.03em; margin-bottom:.5rem; }
+    .quiz-hero p { color:var(--text-500); font-size:1.05rem; margin-bottom:2rem; }
+
+    /* Category grid */
+    .quiz-categories { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:1rem; margin-bottom:3rem; }
+    .quiz-cat-card { background:var(--card); border:1.5px solid var(--border); border-radius:var(--radius-lg); padding:1.5rem 1.25rem; cursor:pointer; transition:var(--transition); text-align:center; }
+    .quiz-cat-card:hover, .quiz-cat-card.active { border-color:var(--primary); background:var(--primary-light); transform:translateY(-3px); box-shadow:var(--shadow); }
+    .quiz-cat-card.active .cat-icon, .quiz-cat-card.active h4 { color:var(--primary); }
+    .cat-icon { font-size:2rem; margin-bottom:.75rem; }
+    .quiz-cat-card h4 { font-family:var(--font-display); font-size:.95rem; font-weight:700; color:var(--text-900); margin-bottom:.25rem; }
+    .quiz-cat-card p { font-size:.78rem; color:var(--text-500); }
+
+    /* Quiz box */
+    .quiz-box { background:var(--card); border:1px solid var(--border); border-radius:var(--radius-xl); overflow:hidden; box-shadow:var(--shadow); max-width:780px; margin:0 auto; }
+    .quiz-top { background:linear-gradient(135deg,var(--primary),var(--primary-dark)); color:white; padding:1.5rem 2rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; }
+    .quiz-top h3 { font-family:var(--font-display); font-size:1.1rem; font-weight:800; }
+    .quiz-stats { display:flex; gap:1.5rem; font-size:.85rem; opacity:.9; }
+    .quiz-stats span { display:flex; align-items:center; gap:.4rem; }
+
+    .quiz-progress-bar { height:5px; background:rgba(255,255,255,.25); }
+    .quiz-progress-fill { height:100%; background:white; transition:width .4s ease; border-radius:0 3px 3px 0; }
+
+    .quiz-body { padding:2rem; }
+    .quiz-q-num { font-size:.8rem; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:.07em; margin-bottom:.75rem; }
+    .quiz-question { font-family:var(--font-display); font-size:1.15rem; font-weight:700; color:var(--text-900); line-height:1.5; margin-bottom:1.75rem; }
+    .quiz-options { display:flex; flex-direction:column; gap:.75rem; margin-bottom:1.5rem; }
+    .quiz-option {
+      padding:.85rem 1.25rem; border-radius:var(--radius-lg); border:1.5px solid var(--border);
+      background:var(--bg); color:var(--text-700); font-size:.95rem; font-weight:500;
+      cursor:pointer; text-align:left; transition:var(--transition); font-family:var(--font-body);
+      display:flex; align-items:center; gap:.75rem;
+    }
+    .quiz-option:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-light); color:var(--primary); }
+    .quiz-option.correct { border-color:#16a34a; background:#f0fdf4; color:#15803d; }
+    .quiz-option.wrong   { border-color:#dc2626; background:#fef2f2; color:#dc2626; }
+    .quiz-option:disabled { cursor:not-allowed; }
+    .opt-letter { width:28px; height:28px; border-radius:50%; border:1.5px solid currentColor; display:flex; align-items:center; justify-content:center; font-size:.8rem; font-weight:700; flex-shrink:0; }
+
+    .quiz-feedback { padding:.9rem 1.1rem; border-radius:var(--radius-lg); font-size:.9rem; font-weight:600; margin-bottom:1.25rem; display:none; }
+    .quiz-feedback.correct { background:#f0fdf4; color:#15803d; border:1px solid #86efac; display:flex; gap:.6rem; align-items:flex-start; }
+    .quiz-feedback.wrong   { background:#fef2f2; color:#dc2626; border:1px solid #fca5a5; display:flex; gap:.6rem; align-items:flex-start; }
+
+    .quiz-footer { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; }
+    .quiz-score-mini { font-size:.85rem; color:var(--text-500); font-weight:600; }
+
+    /* Results */
+    .quiz-result { text-align:center; padding:2.5rem 2rem; }
+    .result-emoji { font-size:4rem; margin-bottom:1rem; }
+    .result-score { font-family:var(--font-display); font-size:3rem; font-weight:900; color:var(--primary); margin-bottom:.5rem; }
+    .result-label { font-size:1.1rem; color:var(--text-700); margin-bottom:.5rem; }
+    .result-msg { font-size:.9rem; color:var(--text-500); margin-bottom:2rem; max-width:420px; margin-left:auto; margin-right:auto; }
+    .result-actions { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; }
+
+    /* Streak badge */
+    .quiz-streak { display:inline-flex; align-items:center; gap:.4rem; background:#fff7ed; color:#c2410c; border:1px solid #fed7aa; border-radius:60px; padding:.3rem .85rem; font-size:.8rem; font-weight:700; }
+    [data-theme="dark"] .quiz-streak { background:#431407; color:#fb923c; border-color:#7c2d12; }
+  </style>
 </head>
 <body>
 <div id="progress-bar"></div>
-<button class="back-to-top"><i class="fas fa-arrow-up"></i></button>
+<button class="back-to-top" aria-label="Back to top"><i class="fas fa-arrow-up"></i></button>
 <div class="pomodoro-widget" id="pomodoroWidget">
   <div class="timer-header"><h4><i class="fas fa-clock"></i> Study Timer</h4><button class="timer-close" id="timerClose"><i class="fas fa-times"></i></button></div>
   <div class="timer-display" id="timerDisplay">25:00</div>
@@ -21,83 +82,392 @@
   </div>
   <div class="timer-session">Sessions: <span id="sessionCount">0</span></div>
 </div>
-<nav class="navbar"><div class="container nav-container">
-  <a href="/index.html" class="logo">
-    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;color:var(--primary)"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M9 13a4.5 4.5 0 0 0 3-4"/><path d="M12 13h4"/><path d="M12 18h6a2 2 0 0 1 2 2v1"/><path d="M12 8h8"/><path d="M16 8V5a2 2 0 0 1 2-2"/><circle cx="16" cy="13" r=".5"/><circle cx="18" cy="3" r=".5"/><circle cx="20" cy="21" r=".5"/><circle cx="20" cy="8" r=".5"/></svg>
-    BrainHub<span class="dot">.</span>
-  </a>
-  <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
-  <ul class="nav-links">
-    <li><a href="/index.html">Home</a></li>
-    <li><a href="universities.html">Universities</a></li>
-    <li><a href="quizzes.html" class="active">Quizzes</a></li>
-    <li><a href="flashcards.html">Flashcards</a></li>
-    <li><a href="about.html">About</a></li>
-    <li><a href="contact.html">Contact</a></li>
-    <li><button id="theme-toggle" class="btn-primary theme-toggle"><i class="fas fa-moon" id="theme-icon"></i></button></li>
-  </ul>
-</div></nav>
-<main class="container" style="padding-top:3rem;padding-bottom:5rem;">
-  <div class="section-header reveal" style="text-align:center;margin-bottom:3rem;">
-    <div class="section-tag">Coming Soon</div>
-    <h2>Topic Quizzes</h2>
-    <p>We're building interactive, topic-based quizzes with instant feedback. Check back soon!</p>
+<nav class="navbar">
+  <div class="container nav-container">
+    <a href="/index.html" class="logo">
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;color:var(--primary)"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M9 13a4.5 4.5 0 0 0 3-4"/><path d="M12 13h4"/><path d="M12 18h6a2 2 0 0 1 2 2v1"/><path d="M12 8h8"/><path d="M16 8V5a2 2 0 0 1 2-2"/><circle cx="16" cy="13" r=".5"/><circle cx="18" cy="3" r=".5"/><circle cx="20" cy="21" r=".5"/><circle cx="20" cy="8" r=".5"/></svg>
+      BrainHub<span class="dot">.</span>
+    </a>
+    <button class="mobile-menu-btn" aria-label="Toggle navigation"><i class="fas fa-bars"></i></button>
+    <ul class="nav-links">
+      <li><a href="/index.html">Home</a></li>
+      <li><a href="universities.html">Universities</a></li>
+      <li><a href="quizzes.html" class="active">Quizzes</a></li>
+      <li><a href="flashcards.html">Flashcards</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li data-auth-show="guest"><a href="/pages/auth.html" class="btn-primary" style="padding:.4rem .9rem;border-radius:8px">Sign In</a></li>
+      <li data-auth-show="authed" style="display:none">
+        <a href="/pages/profile.html" style="display:flex;align-items:center;gap:.4rem">
+          <img data-auth-avatar src="" width="28" height="28" style="border-radius:50%;object-fit:cover;display:none;border:2px solid var(--primary)">
+          <span data-auth-name style="font-weight:700;font-size:.85rem"></span>
+        </a>
+      </li>
+      <li><button id="theme-toggle" class="btn-primary theme-toggle"><i class="fas fa-moon" id="theme-icon"></i></button></li>
+    </ul>
   </div>
-  <div class="brick-wall reveal" style="min-height:360px;">
-    <div class="brick-content">
-      <div class="brick-icon"><i class="fas fa-hammer"></i></div>
-      <h2>Under Construction</h2>
-      <p>Quizzes are on their way. In the meantime, try our flashcards or browse university notes.</p>
-      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
-        <a href="flashcards.html" class="brick-btn"><i class="fas fa-layer-group"></i> Try Flashcards</a>
-        <a href="universities.html" class="btn-secondary" style="padding:0.8rem 1.75rem;border-radius:60px;font-weight:600;">Browse Notes</a>
+</nav>
+
+<main class="quiz-page">
+  <div class="container">
+    <div class="quiz-hero reveal">
+      <div class="section-tag"><i class="fas fa-brain"></i> Test Your Knowledge</div>
+      <h1>Topic Quizzes</h1>
+      <p>100 questions across 5 subjects. Pick a category and start testing yourself.</p>
+    </div>
+
+    <!-- Category selector -->
+    <div class="quiz-categories reveal" id="quizCategories">
+      <div class="quiz-cat-card active" data-cat="all">
+        <div class="cat-icon">🎯</div>
+        <h4>All Topics</h4>
+        <p>100 questions</p>
+      </div>
+      <div class="quiz-cat-card" data-cat="biology">
+        <div class="cat-icon">🧬</div>
+        <h4>Biology</h4>
+        <p>20 questions</p>
+      </div>
+      <div class="quiz-cat-card" data-cat="chemistry">
+        <div class="cat-icon">⚗️</div>
+        <h4>Chemistry</h4>
+        <p>20 questions</p>
+      </div>
+      <div class="quiz-cat-card" data-cat="mathematics">
+        <div class="cat-icon">📐</div>
+        <h4>Mathematics</h4>
+        <p>20 questions</p>
+      </div>
+      <div class="quiz-cat-card" data-cat="physics">
+        <div class="cat-icon">⚡</div>
+        <h4>Physics</h4>
+        <p>20 questions</p>
+      </div>
+      <div class="quiz-cat-card" data-cat="general">
+        <div class="cat-icon">🌍</div>
+        <h4>General Knowledge</h4>
+        <p>20 questions</p>
+      </div>
+    </div>
+
+    <!-- Quiz box -->
+    <div class="quiz-box reveal" id="quizBox">
+      <div class="quiz-top">
+        <h3 id="quizCatTitle">All Topics</h3>
+        <div class="quiz-stats">
+          <span><i class="fas fa-check-circle"></i> <span id="scoreDisplay">0</span> correct</span>
+          <span><i class="fas fa-list"></i> <span id="totalDisplay">100</span> questions</span>
+          <span class="quiz-streak" id="streakBadge" style="display:none"><i class="fas fa-fire"></i> <span id="streakNum">0</span> streak</span>
+        </div>
+      </div>
+      <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quizProgressFill" style="width:0%"></div></div>
+      <div class="quiz-body" id="quizBody">
+        <div style="text-align:center;padding:3rem 1rem;color:var(--text-500)">
+          <div style="font-size:3rem;margin-bottom:1rem">🎯</div>
+          <h3 style="font-family:var(--font-display);color:var(--text-900);margin-bottom:.5rem">Ready to start?</h3>
+          <p style="margin-bottom:1.5rem">Choose a category above then click Start Quiz</p>
+          <button class="btn-primary" onclick="startQuiz()" style="padding:.85rem 2rem;font-size:1rem">
+            <i class="fas fa-play"></i> Start Quiz
+          </button>
+        </div>
       </div>
     </div>
   </div>
 </main>
+
 <footer>
   <div class="container footer-content">
     <div class="footer-col"><h3>BrainHub<span class="dot">.</span></h3><p>Free education for everyone.</p><button class="timer-toggle" id="timerToggle"><i class="fas fa-clock"></i> Study Timer</button></div>
-    <div class="footer-col"><h4>Platform</h4><a href="/index.html">Home</a><a href="universities.html">Universities</a><a href="flashcards.html">Flashcards</a></div>
-    <div class="footer-col"><h4>Support</h4><a href="contact.html">Contact Us</a><a href="privacy-policy.html">Privacy Policy</a><a href="terms.html">Terms</a></div>
+    <div class="footer-col"><h4>Platform</h4><a href="/index.html">Home</a><a href="universities.html">Universities</a><a href="flashcards.html">Flashcards</a><a href="quizzes.html">Quizzes</a></div>
+    <div class="footer-col"><h4>Support</h4><a href="about.html">About Us</a><a href="contact.html">Contact Us</a><a href="privacy-policy.html">Privacy Policy</a></div>
   </div>
   <div class="footer-bottom"><p>&copy; 2026 BrainHub. All rights reserved.</p><p id="realtime-clock" class="clock-text"></p></div>
 </footer>
-<audio id="timerBeep" preload="auto"><source src="https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3" type="audio/mpeg"></audio>
 
+<audio id="timerBeep" preload="auto"><source src="https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3" type="audio/mpeg"></audio>
+<script src="/src/i18n.js"></script>
 <script src="/src/main.js"></script>
 <script src="/src/gamification.js"></script>
-
-<!-- AI Chatbot -->
-<button class="chat-toggle-btn" id="chatToggleBtn" aria-label="Open AI Tutor">
-  <i class="fas fa-robot"></i>
-  <span class="chat-badge">AI</span>
-</button>
+<script src="/src/supabase.js"></script>
+<button class="chat-toggle-btn" id="chatToggleBtn" aria-label="Open AI Tutor"><i class="fas fa-robot"></i><span class="chat-badge">AI</span></button>
 <div class="ai-chat-window" id="aiChatWindow">
   <div class="chat-header">
     <div class="chat-avatar"><i class="fas fa-robot"></i></div>
-    <div class="chat-header-info">
-      <h4>BrainHub AI Tutor</h4>
-      <span><span class="chat-status-dot"></span> Online · Ready to help</span>
-    </div>
+    <div class="chat-header-info"><h4>BrainHub AI Tutor</h4><span><span class="chat-status-dot"></span> Online · Ready to help</span></div>
     <button class="chat-close-btn" id="chatCloseBtn"><i class="fas fa-times"></i></button>
   </div>
   <div class="chat-messages" id="chatMessages"></div>
-  <div class="chat-input-area">
-    <input type="text" id="chatInput" placeholder="Ask anything about your course…" autocomplete="off" />
-    <button id="chatSendBtn"><i class="fas fa-paper-plane"></i></button>
-  </div>
+  <div class="chat-input-area"><input type="text" id="chatInput" placeholder="Ask anything about your course…" autocomplete="off" /><button id="chatSendBtn"><i class="fas fa-paper-plane"></i></button></div>
   <div class="chat-footer-note">BrainHub AI Tutor</div>
 </div>
 <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
   <ul>
-    <li><a href="/index.html" data-page="home"><i class="fas fa-home"></i>Home</a></li>
-    <li><a href="/pages/universities.html" data-page="universities"><i class="fas fa-university"></i>Study</a></li>
-    <li><a href="/pages/flashcards.html" data-page="flashcards"><i class="fas fa-layer-group"></i>Cards</a></li>
-    <li><a href="/pages/quizzes.html" data-page="quizzes"><i class="fas fa-stopwatch"></i>Quizzes</a></li>
+    <li><a href="/index.html"><i class="fas fa-home"></i>Home</a></li>
+    <li><a href="/pages/universities.html"><i class="fas fa-university"></i>Study</a></li>
+    <li><a href="/pages/flashcards.html"><i class="fas fa-layer-group"></i>Cards</a></li>
+    <li><a href="/pages/quizzes.html"><i class="fas fa-stopwatch"></i>Quizzes</a></li>
     <li><button class="nav-ai-btn" onclick="document.getElementById('chatToggleBtn').click()"><i class="fas fa-robot"></i>AI Tutor</button></li>
   </ul>
 </nav>
 
+<script>
+const QUIZ_DATA = {
+  biology: [
+    { q:"What is the powerhouse of the cell?", opts:["Nucleus","Mitochondria","Ribosome","Golgi apparatus"], a:1, exp:"Mitochondria produce ATP through cellular respiration, providing energy for cell functions." },
+    { q:"Which blood type is the universal donor?", opts:["A","B","AB","O negative"], a:3, exp:"O negative red blood cells can be given to patients of any blood type in emergencies." },
+    { q:"How many chromosomes does a normal human cell have?", opts:["23","44","46","48"], a:2, exp:"Humans have 46 chromosomes arranged in 23 pairs — 22 autosomes and 1 sex chromosome pair." },
+    { q:"What is the process by which plants make food using sunlight?", opts:["Respiration","Fermentation","Photosynthesis","Transpiration"], a:2, exp:"Photosynthesis converts CO₂ and water into glucose using light energy in chloroplasts." },
+    { q:"Which organ produces insulin?", opts:["Liver","Kidney","Pancreas","Spleen"], a:2, exp:"The beta cells of the islets of Langerhans in the pancreas produce insulin." },
+    { q:"What is the basic unit of life?", opts:["Atom","Molecule","Cell","Tissue"], a:2, exp:"The cell is the smallest structural and functional unit of all living organisms." },
+    { q:"DNA stands for:", opts:["Deoxyribonucleic Acid","Dinitrogen Acid","Deoxyribose Nucleic Array","Diribose Nucleic Acid"], a:0, exp:"DNA (Deoxyribonucleic Acid) carries the genetic instructions for all known living organisms." },
+    { q:"Which part of the plant is responsible for absorbing water?", opts:["Leaves","Stem","Root hair cells","Flowers"], a:2, exp:"Root hair cells have a large surface area that maximises water and mineral absorption from the soil." },
+    { q:"What type of reproduction requires only one parent?", opts:["Sexual","Asexual","Binary","Conjugation"], a:1, exp:"Asexual reproduction involves a single parent and produces genetically identical offspring (clones)." },
+    { q:"Which gas do plants absorb during photosynthesis?", opts:["Oxygen","Nitrogen","Carbon dioxide","Hydrogen"], a:2, exp:"Plants absorb CO₂ through stomata and use it alongside water to synthesise glucose." },
+    { q:"What is the function of red blood cells?", opts:["Fight infection","Carry oxygen","Clot blood","Produce hormones"], a:1, exp:"Red blood cells contain haemoglobin which binds to oxygen and transports it around the body." },
+    { q:"Which enzyme breaks down starch in the mouth?", opts:["Pepsin","Lipase","Amylase","Trypsin"], a:2, exp:"Salivary amylase begins starch digestion in the mouth, breaking it into maltose." },
+    { q:"What is osmosis?", opts:["Movement of solute across a membrane","Movement of water from low to high concentration","Movement of water from high to low concentration solute","Active transport of ions"], a:2, exp:"Osmosis is the diffusion of water through a semi-permeable membrane from a dilute to a concentrated solution." },
+    { q:"The study of heredity is called:", opts:["Ecology","Genetics","Physiology","Taxonomy"], a:1, exp:"Genetics is the branch of biology concerned with genes, heredity, and variation in organisms." },
+    { q:"Which vitamin is produced when skin is exposed to sunlight?", opts:["Vitamin A","Vitamin B12","Vitamin C","Vitamin D"], a:3, exp:"Skin synthesises Vitamin D when exposed to UVB radiation, essential for calcium absorption." },
+    { q:"What is the largest organ in the human body?", opts:["Liver","Brain","Skin","Lungs"], a:2, exp:"The skin is the largest organ, covering approximately 1.5–2 m² in adults." },
+    { q:"Which part of the brain controls balance and coordination?", opts:["Cerebrum","Medulla oblongata","Cerebellum","Hypothalamus"], a:2, exp:"The cerebellum coordinates voluntary movements, balance, and fine motor control." },
+    { q:"Malaria is caused by:", opts:["A bacterium","A virus","A fungus","A protozoan (Plasmodium)"], a:3, exp:"Malaria is caused by Plasmodium parasites transmitted through the bites of infected female Anopheles mosquitoes." },
+    { q:"What is the role of the nucleus in a cell?", opts:["Energy production","Protein synthesis","Control centre containing DNA","Storage of water"], a:2, exp:"The nucleus contains the cell's DNA and controls cell activities, acting as the control centre." },
+    { q:"Which nutrient provides the most energy per gram?", opts:["Carbohydrates","Proteins","Fats","Vitamins"], a:2, exp:"Fats provide approximately 9 kcal per gram, more than twice that of carbohydrates or proteins (4 kcal/g each)." },
+  ],
+  chemistry: [
+    { q:"What is the chemical symbol for gold?", opts:["Go","Gd","Au","Ag"], a:2, exp:"Gold's symbol Au comes from the Latin word 'Aurum'. It's a transition metal with atomic number 79." },
+    { q:"How many elements are in the periodic table?", opts:["108","112","118","124"], a:2, exp:"As of 2016, there are 118 confirmed elements in the periodic table, up to oganesson (Og)." },
+    { q:"What is the pH of pure water?", opts:["5","6","7","8"], a:2, exp:"Pure water is neutral with a pH of 7, meaning equal concentrations of H⁺ and OH⁻ ions." },
+    { q:"Which gas is most abundant in Earth's atmosphere?", opts:["Oxygen","Carbon dioxide","Argon","Nitrogen"], a:3, exp:"Nitrogen makes up approximately 78% of Earth's atmosphere, followed by oxygen at 21%." },
+    { q:"What type of bond forms between Na and Cl in table salt?", opts:["Covalent","Metallic","Ionic","Hydrogen"], a:2, exp:"NaCl forms an ionic bond — sodium loses an electron to chlorine, creating oppositely charged ions that attract." },
+    { q:"What is the atomic number of carbon?", opts:["4","6","8","12"], a:1, exp:"Carbon has atomic number 6, meaning it has 6 protons. Its most common isotope is Carbon-12." },
+    { q:"Which acid is found in the stomach?", opts:["Sulphuric acid","Nitric acid","Hydrochloric acid","Citric acid"], a:2, exp:"The stomach produces hydrochloric acid (HCl) which aids digestion and kills harmful bacteria." },
+    { q:"What is the chemical formula for water?", opts:["HO","H₂O","H₂O₂","OH₂"], a:1, exp:"Water is H₂O — two hydrogen atoms covalently bonded to one oxygen atom." },
+    { q:"Which element is a liquid at room temperature (apart from mercury)?", opts:["Gallium","Bromine","Caesium","All three"], a:1, exp:"Bromine (Br₂) is one of only two elements that are liquid at standard room temperature and pressure." },
+    { q:"What is a catalyst?", opts:["A substance consumed in a reaction","A substance that slows reactions","A substance that speeds up reactions without being used up","A product of a reaction"], a:2, exp:"A catalyst increases reaction rate by providing an alternative pathway with lower activation energy, and is not consumed." },
+    { q:"The process of a solid changing directly to a gas is called:", opts:["Evaporation","Condensation","Sublimation","Deposition"], a:2, exp:"Sublimation is the direct phase transition from solid to gas without passing through the liquid state (e.g. dry ice, iodine)." },
+    { q:"Which of these is an alkali metal?", opts:["Calcium","Magnesium","Sodium","Aluminium"], a:2, exp:"Sodium (Na) is an alkali metal in Group 1 of the periodic table, highly reactive with water." },
+    { q:"What does 'pH' stand for?", opts:["Potential of Hydrogen","Power of Hydrogen","Percentage Hydronium","Phosphate Hydrogen"], a:0, exp:"pH stands for 'potential of Hydrogen' and measures the concentration of H⁺ ions in a solution." },
+    { q:"Rusting of iron is an example of:", opts:["Physical change","Nuclear reaction","Oxidation reaction","Reduction reaction"], a:2, exp:"Rusting is the oxidation of iron: 4Fe + 3O₂ + 6H₂O → 4Fe(OH)₃, which further dehydrates to rust." },
+    { q:"What is Avogadro's number?", opts:["6.02 × 10²³","3.14 × 10²³","9.8 × 10²³","1.38 × 10²³"], a:0, exp:"Avogadro's number (6.02 × 10²³) is the number of atoms, molecules, or ions in one mole of a substance." },
+    { q:"Which gas is produced when an acid reacts with a metal?", opts:["Oxygen","Carbon dioxide","Hydrogen","Nitrogen"], a:2, exp:"Acids react with metals to produce a salt and hydrogen gas: Zn + H₂SO₄ → ZnSO₄ + H₂." },
+    { q:"What is the hardest natural substance?", opts:["Gold","Iron","Diamond","Quartz"], a:2, exp:"Diamond (pure carbon in a cubic crystal lattice) scores 10 on the Mohs hardness scale — the maximum." },
+    { q:"Isotopes are atoms of the same element with different:", opts:["Proton numbers","Electron numbers","Neutron numbers","Atomic masses"], a:2, exp:"Isotopes have the same atomic number (protons) but different numbers of neutrons, giving different mass numbers." },
+    { q:"What colour does litmus paper turn in an acid?", opts:["Blue","Green","Red","Yellow"], a:2, exp:"Litmus paper turns red in acidic solutions (pH < 7) and blue in alkaline solutions (pH > 7)." },
+    { q:"Which state of matter has a definite volume but no definite shape?", opts:["Solid","Liquid","Gas","Plasma"], a:1, exp:"Liquids have a fixed volume but take the shape of their container — particles are close but mobile." },
+  ],
+  mathematics: [
+    { q:"What is the value of π (pi) to 2 decimal places?", opts:["3.12","3.14","3.16","3.18"], a:1, exp:"π ≈ 3.14159... It is the ratio of a circle's circumference to its diameter." },
+    { q:"What is 15% of 200?", opts:["20","25","30","35"], a:2, exp:"15% of 200 = (15/100) × 200 = 30." },
+    { q:"Solve: 3x + 7 = 22. What is x?", opts:["3","4","5","6"], a:2, exp:"3x = 22 − 7 = 15, so x = 15 ÷ 3 = 5." },
+    { q:"What is the area of a circle with radius 7 cm? (Use π ≈ 22/7)", opts:["44 cm²","132 cm²","154 cm²","176 cm²"], a:2, exp:"Area = πr² = (22/7) × 7² = (22/7) × 49 = 22 × 7 = 154 cm²." },
+    { q:"What is the HCF of 12 and 18?", opts:["3","4","6","9"], a:2, exp:"Factors of 12: 1,2,3,4,6,12. Factors of 18: 1,2,3,6,9,18. Highest common factor = 6." },
+    { q:"What is √144?", opts:["11","12","13","14"], a:1, exp:"12 × 12 = 144, so √144 = 12." },
+    { q:"What is the sum of angles in a triangle?", opts:["90°","120°","180°","360°"], a:2, exp:"The interior angles of any triangle always sum to 180°." },
+    { q:"Convert 3/4 to a percentage:", opts:["65%","70%","75%","80%"], a:2, exp:"3/4 = 0.75 = 75%. Multiply numerator by 100 and divide by denominator: (3×100)/4 = 75%." },
+    { q:"What is 2⁵?", opts:["16","25","32","64"], a:2, exp:"2⁵ = 2×2×2×2×2 = 32." },
+    { q:"The gradient of a horizontal line is:", opts:["-1","0","1","Undefined"], a:1, exp:"A horizontal line has no rise, so gradient = rise/run = 0/run = 0." },
+    { q:"What is the LCM of 4 and 6?", opts:["8","10","12","24"], a:2, exp:"Multiples of 4: 4,8,12... Multiples of 6: 6,12... Lowest common multiple = 12." },
+    { q:"Factorise: x² − 9", opts:["(x−3)(x−3)","(x+3)(x+3)","(x+3)(x−3)","(x−9)(x+1)"], a:2, exp:"x² − 9 is a difference of two squares: a² − b² = (a+b)(a−b), so x² − 9 = (x+3)(x−3)." },
+    { q:"What is the perimeter of a rectangle 8 cm × 5 cm?", opts:["13 cm","26 cm","40 cm","80 cm"], a:1, exp:"Perimeter = 2(l + w) = 2(8 + 5) = 2 × 13 = 26 cm." },
+    { q:"If a car travels 120 km in 2 hours, what is its speed?", opts:["40 km/h","50 km/h","60 km/h","70 km/h"], a:2, exp:"Speed = Distance ÷ Time = 120 ÷ 2 = 60 km/h." },
+    { q:"What is the median of: 3, 7, 2, 9, 5?", opts:["3","5","7","9"], a:1, exp:"Arrange in order: 2, 3, 5, 7, 9. The middle value (3rd of 5) = 5." },
+    { q:"What is 0.025 expressed as a fraction?", opts:["1/4","1/20","1/40","1/400"], a:2, exp:"0.025 = 25/1000 = 1/40 (divide numerator and denominator by 25)." },
+    { q:"Pythagoras' theorem states a² + b² =", opts:["c","c²","2c","√c"], a:1, exp:"In a right-angled triangle, a² + b² = c², where c is the hypotenuse (longest side)." },
+    { q:"What is the probability of rolling a 6 on a fair die?", opts:["1/4","1/5","1/6","1/3"], a:2, exp:"A fair die has 6 equally likely outcomes. P(6) = 1/6 ≈ 0.167." },
+    { q:"Simplify: 4a + 3b − 2a + b", opts:["2a + 4b","6a + 4b","2a + 2b","6a + 2b"], a:0, exp:"Collect like terms: (4a − 2a) + (3b + b) = 2a + 4b." },
+    { q:"The volume of a cube with side 3 cm is:", opts:["9 cm³","18 cm³","27 cm³","81 cm³"], a:2, exp:"Volume = side³ = 3³ = 3 × 3 × 3 = 27 cm³." },
+  ],
+  physics: [
+    { q:"What is the SI unit of force?", opts:["Watt","Joule","Newton","Pascal"], a:2, exp:"The Newton (N) is the SI unit of force. 1 N = 1 kg·m/s² — the force that accelerates 1 kg at 1 m/s²." },
+    { q:"What is the speed of light in a vacuum?", opts:["3 × 10⁶ m/s","3 × 10⁸ m/s","3 × 10¹⁰ m/s","3 × 10¹² m/s"], a:1, exp:"The speed of light in a vacuum is exactly 299,792,458 m/s ≈ 3 × 10⁸ m/s (symbol: c)." },
+    { q:"Which law states that every action has an equal and opposite reaction?", opts:["Newton's 1st law","Newton's 2nd law","Newton's 3rd law","Hooke's law"], a:2, exp:"Newton's Third Law: for every action there is an equal and opposite reaction." },
+    { q:"What is the formula for kinetic energy?", opts:["mgh","½mv²","mv","F×d"], a:1, exp:"Kinetic energy KE = ½mv², where m = mass (kg) and v = velocity (m/s)." },
+    { q:"What type of wave is sound?", opts:["Transverse","Electromagnetic","Longitudinal","Surface"], a:2, exp:"Sound is a longitudinal mechanical wave — particles vibrate parallel to the direction of wave propagation." },
+    { q:"What is the unit of electrical resistance?", opts:["Ampere","Volt","Watt","Ohm"], a:3, exp:"The Ohm (Ω) is the SI unit of electrical resistance, defined by V = IR (Ohm's Law)." },
+    { q:"Which electromagnetic wave has the shortest wavelength?", opts:["Radio waves","Visible light","X-rays","Gamma rays"], a:3, exp:"Gamma rays have the shortest wavelength (< 0.01 nm) and highest frequency in the electromagnetic spectrum." },
+    { q:"What is the gravitational field strength on Earth's surface?", opts:["8.9 N/kg","9.8 N/kg","10.8 N/kg","11.2 N/kg"], a:1, exp:"Earth's gravitational field strength g ≈ 9.8 N/kg (often approximated as 10 N/kg in calculations)." },
+    { q:"Ohm's Law states V =", opts:["I/R","I+R","IR","I²R"], a:2, exp:"Ohm's Law: V = IR, where V = voltage (volts), I = current (amperes), R = resistance (ohms)." },
+    { q:"What does a transformer do?", opts:["Converts AC to DC","Changes voltage of AC supply","Stores electrical energy","Amplifies current"], a:1, exp:"A transformer changes (steps up or steps down) the voltage of an alternating current supply using electromagnetic induction." },
+    { q:"The bending of light as it passes from one medium to another is called:", opts:["Reflection","Diffraction","Refraction","Dispersion"], a:2, exp:"Refraction is the change in direction of a wave due to a change in speed as it moves between media." },
+    { q:"What particle has no charge?", opts:["Proton","Electron","Neutron","Positron"], a:2, exp:"Neutrons are electrically neutral subatomic particles found in the nucleus alongside protons." },
+    { q:"Power is defined as:", opts:["Force × distance","Energy ÷ time","Mass × acceleration","Charge × voltage"], a:1, exp:"Power = Energy ÷ Time (P = E/t), measured in watts (W). 1 W = 1 J/s." },
+    { q:"What type of mirror is used in car rear-view mirrors?", opts:["Concave","Plane","Convex","Parabolic"], a:2, exp:"Convex mirrors give a wider field of view with an upright, diminished image — ideal for rear-view mirrors." },
+    { q:"What is the half-life of a radioactive substance?", opts:["Time for all atoms to decay","Time for half the atoms to decay","Time for activity to double","Time for one atom to decay"], a:1, exp:"Half-life is the time taken for half the radioactive nuclei in a sample to decay." },
+    { q:"Which colour of visible light has the highest frequency?", opts:["Red","Orange","Green","Violet"], a:3, exp:"Violet light has the highest frequency (≈750 THz) and shortest wavelength in the visible spectrum." },
+    { q:"What is the unit of frequency?", opts:["Metre","Pascal","Hertz","Watt"], a:2, exp:"The Hertz (Hz) is the SI unit of frequency, equal to one cycle per second." },
+    { q:"A body is in equilibrium when:", opts:["Net force is maximum","Net torque is maximum","Net force and net torque are both zero","Velocity is constant"], a:2, exp:"Equilibrium requires both the net force AND net torque on a body to be zero." },
+    { q:"What energy conversion occurs in a solar cell?", opts:["Chemical to electrical","Light to electrical","Heat to electrical","Mechanical to electrical"], a:1, exp:"Solar cells (photovoltaic cells) convert light energy directly into electrical energy via the photovoltaic effect." },
+    { q:"The loudness of sound is measured in:", opts:["Hertz","Decibels","Watts","Pascals"], a:1, exp:"Loudness (sound intensity level) is measured in decibels (dB) on a logarithmic scale." },
+  ],
+  general: [
+    { q:"What is the capital city of Zambia?", opts:["Kitwe","Ndola","Livingstone","Lusaka"], a:3, exp:"Lusaka has been the capital city of Zambia since independence in 1964." },
+    { q:"In what year did Zambia gain independence?", opts:["1960","1962","1964","1966"], a:2, exp:"Zambia gained independence from Britain on 24 October 1964, with Kenneth Kaunda becoming the first president." },
+    { q:"Which river flows over Victoria Falls?", opts:["Congo","Kafue","Zambezi","Luangwa"], a:2, exp:"The Zambezi River flows over Victoria Falls (Mosi-oa-Tunya), one of the Seven Natural Wonders of the World." },
+    { q:"What is the largest planet in our solar system?", opts:["Saturn","Neptune","Uranus","Jupiter"], a:3, exp:"Jupiter is the largest planet, with a mass greater than all other planets combined." },
+    { q:"Who wrote 'Romeo and Juliet'?", opts:["Charles Dickens","William Shakespeare","Jane Austen","Homer"], a:1, exp:"Romeo and Juliet was written by William Shakespeare, probably between 1594 and 1596." },
+    { q:"What is the longest river in the world?", opts:["Amazon","Congo","Mississippi","Nile"], a:3, exp:"The Nile River in Africa is generally considered the world's longest river at approximately 6,650 km." },
+    { q:"How many sides does a hexagon have?", opts:["5","6","7","8"], a:1, exp:"A hexagon has 6 sides. The prefix 'hexa' means six in Greek." },
+    { q:"What is the main language spoken in Brazil?", opts:["Spanish","French","Portuguese","English"], a:2, exp:"Portuguese is the official language of Brazil, spoken by virtually the entire population." },
+    { q:"Which continent is the Sahara Desert located in?", opts:["Asia","South America","Australia","Africa"], a:3, exp:"The Sahara is the world's largest hot desert, covering much of North Africa." },
+    { q:"What does CPU stand for?", opts:["Central Processing Unit","Computer Personal Unit","Central Program Utility","Core Processing Unit"], a:0, exp:"CPU (Central Processing Unit) is the primary component that executes instructions in a computer." },
+    { q:"Which planet is known as the Red Planet?", opts:["Venus","Mercury","Mars","Jupiter"], a:2, exp:"Mars appears red due to iron oxide (rust) on its surface. It has two small moons, Phobos and Deimos." },
+    { q:"How many bones are in the adult human body?", opts:["186","196","206","216"], a:2, exp:"An adult human body has 206 bones. Babies are born with around 270–300, which fuse as they grow." },
+    { q:"What is the boiling point of water at sea level (°C)?", opts:["90°C","95°C","100°C","105°C"], a:2, exp:"Water boils at 100°C (212°F) at standard atmospheric pressure (1 atm / 101.325 kPa)." },
+    { q:"Which country is the world's largest by land area?", opts:["China","USA","Canada","Russia"], a:3, exp:"Russia is the world's largest country by land area at approximately 17.1 million km²." },
+    { q:"What is the chemical symbol for oxygen?", opts:["O","Ox","Om","Oz"], a:0, exp:"Oxygen's chemical symbol is O. It has atomic number 8 and is essential for respiration." },
+    { q:"In computing, what does 'RAM' stand for?", opts:["Random Access Memory","Read Access Module","Rapid Action Memory","Run Access Mode"], a:0, exp:"RAM (Random Access Memory) is a computer's short-term memory used to store data currently in use." },
+    { q:"The Great Wall of China was built to protect against invasions from the:", opts:["South","East","West","North"], a:3, exp:"The Great Wall was built primarily to protect against raids from northern nomadic groups, particularly the Mongols." },
+    { q:"What is the currency of South Africa?", opts:["Kwacha","Rand","Shilling","Pula"], a:1, exp:"The South African Rand (ZAR) has been the country's currency since 1961, replacing the South African pound." },
+    { q:"Which ocean is the largest?", opts:["Atlantic","Indian","Arctic","Pacific"], a:3, exp:"The Pacific Ocean is the largest and deepest ocean, covering about 46% of Earth's water surface." },
+    { q:"What does 'www' stand for in a website address?", opts:["World Wide Web","Wide World Web","World Web Wide","Web World Wide"], a:0, exp:"WWW stands for World Wide Web, the information system of interlinked hypertext documents on the internet." },
+  ]
+};
+
+// Build full pool
+let allQuestions = [];
+for (const [cat, qs] of Object.entries(QUIZ_DATA)) {
+  qs.forEach(q => allQuestions.push({...q, cat}));
+}
+
+let currentPool = [...allQuestions];
+let currentIndex = 0;
+let score = 0;
+let streak = 0;
+let answered = false;
+let selectedCat = 'all';
+
+function startQuiz() {
+  currentIndex = 0; score = 0; streak = 0; answered = false;
+  currentPool = selectedCat === 'all' ? shuffle([...allQuestions]) : shuffle([...QUIZ_DATA[selectedCat]]);
+  document.getElementById('totalDisplay').textContent = currentPool.length;
+  renderQuestion();
+}
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function renderQuestion() {
+  if (currentIndex >= currentPool.length) { showResult(); return; }
+  const q = currentPool[currentIndex];
+  const pct = (currentIndex / currentPool.length) * 100;
+  document.getElementById('quizProgressFill').style.width = pct + '%';
+  document.getElementById('scoreDisplay').textContent = score;
+  const sb = document.getElementById('streakBadge');
+  if (streak >= 3) { sb.style.display = 'inline-flex'; document.getElementById('streakNum').textContent = streak; }
+  else sb.style.display = 'none';
+
+  const letters = ['A','B','C','D'];
+  document.getElementById('quizBody').innerHTML = `
+    <div class="quiz-q-num">Question ${currentIndex + 1} of ${currentPool.length}</div>
+    <div class="quiz-question">${q.q}</div>
+    <div class="quiz-options">
+      ${q.opts.map((opt, i) => `
+        <button class="quiz-option" onclick="answer(${i})" data-idx="${i}">
+          <span class="opt-letter">${letters[i]}</span>
+          ${opt}
+        </button>`).join('')}
+    </div>
+    <div class="quiz-feedback" id="quizFeedback"></div>
+    <div class="quiz-footer">
+      <span class="quiz-score-mini">Score: <strong>${score}</strong> / ${currentIndex}</span>
+      <button class="btn-primary" id="nextBtn" onclick="nextQuestion()" style="display:none;padding:.65rem 1.5rem">
+        ${currentIndex + 1 >= currentPool.length ? 'See Results' : 'Next Question'} <i class="fas fa-arrow-right"></i>
+      </button>
+    </div>
+  `;
+  answered = false;
+}
+
+function answer(idx) {
+  if (answered) return;
+  answered = true;
+  const q = currentPool[currentIndex];
+  const opts = document.querySelectorAll('.quiz-option');
+  const fb   = document.getElementById('quizFeedback');
+  opts.forEach(b => b.disabled = true);
+  opts[q.a].classList.add('correct');
+  if (idx === q.a) {
+    score++; streak++;
+    fb.className = 'quiz-feedback correct';
+    fb.innerHTML = `<i class="fas fa-check-circle"></i><span><strong>Correct!</strong> ${q.exp}</span>`;
+    if (window.BrainHubGamification) window.BrainHubGamification.addXP(5, 'Quiz correct answer');
+  } else {
+    streak = 0;
+    opts[idx].classList.add('wrong');
+    fb.className = 'quiz-feedback wrong';
+    fb.innerHTML = `<i class="fas fa-times-circle"></i><span><strong>Not quite.</strong> ${q.exp}</span>`;
+  }
+  document.getElementById('scoreDisplay').textContent = score;
+  const sb = document.getElementById('streakBadge');
+  if (streak >= 3) { sb.style.display = 'inline-flex'; document.getElementById('streakNum').textContent = streak; }
+  else sb.style.display = 'none';
+  document.getElementById('nextBtn').style.display = 'inline-flex';
+}
+
+function nextQuestion() {
+  currentIndex++;
+  renderQuestion();
+}
+
+function showResult() {
+  const total = currentPool.length;
+  const pct   = Math.round((score / total) * 100);
+  let emoji = '😔', msg = 'Keep studying — you\'ll improve with practice!';
+  if (pct >= 90) { emoji = '🏆'; msg = 'Outstanding! You have mastered this material!'; }
+  else if (pct >= 75) { emoji = '🎉'; msg = 'Great work! You really know your stuff.'; }
+  else if (pct >= 60) { emoji = '👍'; msg = 'Good effort! Review the topics you missed.'; }
+  else if (pct >= 40) { emoji = '📚'; msg = 'Keep studying — you\'re making progress!'; }
+
+  document.getElementById('quizProgressFill').style.width = '100%';
+  document.getElementById('quizBody').innerHTML = `
+    <div class="quiz-result">
+      <div class="result-emoji">${emoji}</div>
+      <div class="result-score">${score}/${total}</div>
+      <div class="result-label">${pct}% Score</div>
+      <div class="result-msg">${msg}</div>
+      <div class="result-actions">
+        <button class="btn-primary" onclick="startQuiz()" style="padding:.85rem 2rem">
+          <i class="fas fa-redo"></i> Try Again
+        </button>
+        <a href="flashcards.html" class="btn-secondary" style="padding:.85rem 2rem">
+          <i class="fas fa-layer-group"></i> Study Flashcards
+        </a>
+      </div>
+    </div>
+  `;
+  if (window.BrainHubGamification) window.BrainHubGamification.addXP(20, 'Completed a quiz');
+}
+
+// Category selection
+document.querySelectorAll('.quiz-cat-card').forEach(card => {
+  card.addEventListener('click', () => {
+    document.querySelectorAll('.quiz-cat-card').forEach(c => c.classList.remove('active'));
+    card.classList.add('active');
+    selectedCat = card.dataset.cat;
+    const titles = { all:'All Topics', biology:'Biology', chemistry:'Chemistry', mathematics:'Mathematics', physics:'Physics', general:'General Knowledge' };
+    document.getElementById('quizCatTitle').textContent = titles[selectedCat];
+    document.getElementById('totalDisplay').textContent = selectedCat === 'all' ? 100 : 20;
+    document.getElementById('quizBody').innerHTML = `
+      <div style="text-align:center;padding:3rem 1rem;color:var(--text-500)">
+        <div style="font-size:3rem;margin-bottom:1rem">${card.querySelector('.cat-icon').textContent}</div>
+        <h3 style="font-family:var(--font-display);color:var(--text-900);margin-bottom:.5rem">${titles[selectedCat]}</h3>
+        <p style="margin-bottom:1.5rem">${selectedCat === 'all' ? '100 questions' : '20 questions'} ready</p>
+        <button class="btn-primary" onclick="startQuiz()" style="padding:.85rem 2rem;font-size:1rem">
+          <i class="fas fa-play"></i> Start Quiz
+        </button>
+      </div>`;
+    document.getElementById('quizProgressFill').style.width = '0%';
+    score = 0; currentIndex = 0; streak = 0;
+    document.getElementById('scoreDisplay').textContent = 0;
+    document.getElementById('streakBadge').style.display = 'none';
+  });
+});
+</script>
 </body>
 </html>
