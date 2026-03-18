@@ -3,235 +3,330 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Profile | BrainHub</title>
-  <meta name="description" content="Your BrainHub study profile — XP, level, badges and stats." />
+  <title>My Dashboard | BrainHub</title>
+  <meta name="description" content="Your BrainHub student dashboard — XP, progress, badges, bookmarks and study stats." />
   <link rel="stylesheet" href="/src/style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <link rel="icon" type="image/x-icon" href="/public/assets/images/favicon.png" />
   <style>
-    .profile-page { padding: 2rem 0 6rem; }
+    :root {
+      --dash-gap: 1.25rem;
+    }
+    .dash-page { padding: 2rem 0 6rem; }
 
-    /* Hero card */
-    .profile-hero {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-      border-radius: var(--radius-xl);
-      padding: 2.5rem 2rem;
+    /* ── Hero Banner ─────────────────────────────────────── */
+    .dash-hero {
+      background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+      border-radius: 20px;
+      padding: 0;
       color: white;
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-      flex-wrap: wrap;
-      position: relative;
+      margin-bottom: var(--dash-gap);
       overflow: hidden;
+      position: relative;
     }
-    .profile-hero::before {
-      content: '';
-      position: absolute;
-      top: -40px; right: -40px;
-      width: 200px; height: 200px;
-      background: rgba(255,255,255,0.07);
-      border-radius: 50%;
+    .dash-hero-bg {
+      position: absolute; inset: 0;
+      background-image: radial-gradient(circle at 80% 20%, rgba(255,255,255,.08) 0%, transparent 60%),
+                        radial-gradient(circle at 10% 80%, rgba(255,255,255,.05) 0%, transparent 50%);
     }
-    .profile-avatar {
-      width: 80px; height: 80px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.2);
+    .dash-hero-inner {
+      position: relative;
+      padding: 2rem 2rem 1.5rem;
+      display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;
+    }
+    .dash-avatar-wrap { position: relative; flex-shrink: 0; }
+    .dash-avatar {
+      width: 88px; height: 88px; border-radius: 50%;
+      background: rgba(255,255,255,.18);
+      border: 3px solid rgba(255,255,255,.4);
       display: flex; align-items: center; justify-content: center;
-      font-size: 2.5rem;
-      flex-shrink: 0;
-      border: 3px solid rgba(255,255,255,0.4);
-    }
-    .profile-hero-info { flex: 1; }
-    .profile-hero-info h1 {
-      font-family: var(--font-display);
-      font-size: 1.6rem; font-weight: 800;
-      margin-bottom: 0.25rem;
-    }
-    .profile-hero-info .level-badge {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      background: rgba(255,255,255,0.2);
-      padding: 0.3rem 0.85rem;
-      border-radius: 60px;
-      font-size: 0.85rem; font-weight: 700;
-      margin-bottom: 0.75rem;
-    }
-    .profile-xp-bar-wrap { margin-top: 0.5rem; }
-    .profile-xp-label { font-size: 0.78rem; opacity: 0.85; margin-bottom: 0.35rem; }
-    .profile-xp-bar {
-      height: 8px;
-      background: rgba(255,255,255,0.25);
-      border-radius: 60px;
-      overflow: hidden;
-      max-width: 300px;
-    }
-    .profile-xp-fill {
-      height: 100%;
-      background: white;
-      border-radius: 60px;
-      transition: width 1s cubic-bezier(0.4,0,0.2,1);
-    }
-    .profile-hero-xp {
-      text-align: right;
-      flex-shrink: 0;
-    }
-    .profile-hero-xp .xp-big {
-      font-family: var(--font-display);
-      font-size: 2.5rem; font-weight: 900;
-      line-height: 1;
-    }
-    .profile-hero-xp .xp-label { font-size: 0.8rem; opacity: 0.8; }
-
-    /* Stats grid */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-    .stat-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 1.25rem;
-      text-align: center;
-      transition: var(--transition);
-    }
-    .stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
-    .stat-card .stat-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
-    .stat-card .stat-val {
-      font-family: var(--font-display);
-      font-size: 1.75rem; font-weight: 900;
-      color: var(--text-900);
-      line-height: 1;
-      margin-bottom: 0.25rem;
-    }
-    .stat-card .stat-lbl { font-size: 0.78rem; color: var(--text-500); font-weight: 600; }
-
-    /* Streak */
-    .streak-card {
-      background: linear-gradient(135deg, #fff7ed, #fef3c7);
-      border: 1.5px solid #fcd34d;
-      border-radius: var(--radius-lg);
-      padding: 1.25rem 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-    [data-theme="dark"] .streak-card { background: linear-gradient(135deg, #1c1917, #292524); border-color: #78350f; }
-    .streak-flame { font-size: 2.5rem; }
-    .streak-info h3 { font-family: var(--font-display); font-size: 1rem; font-weight: 700; color: var(--text-900); }
-    .streak-info p { font-size: 0.82rem; color: var(--text-500); }
-    .streak-days {
-      margin-left: auto;
-      font-family: var(--font-display);
-      font-size: 2rem; font-weight: 900;
-      color: #f59e0b;
-    }
-
-    /* Section headers */
-    .section-title {
-      font-family: var(--font-display);
-      font-size: 1.1rem; font-weight: 800;
-      color: var(--text-900);
-      margin-bottom: 1rem;
-      display: flex; align-items: center; gap: 0.5rem;
-    }
-
-    /* Badges grid */
-    .badges-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-    .badge-card {
-      background: var(--card);
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 1.25rem 1rem;
-      text-align: center;
-      transition: var(--transition);
-      position: relative;
-    }
-    .badge-card.earned {
-      border-color: #fcd34d;
-      background: linear-gradient(135deg, #fffbeb, var(--card));
-    }
-    .badge-card.earned:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(251,191,36,0.2); }
-    .badge-card.locked { opacity: 0.45; filter: grayscale(1); }
-    .badge-icon { font-size: 2rem; margin-bottom: 0.5rem; }
-    .badge-name { font-family: var(--font-display); font-size: 0.82rem; font-weight: 700; color: var(--text-900); margin-bottom: 0.2rem; }
-    .badge-desc { font-size: 0.72rem; color: var(--text-500); }
-    .badge-earned-tag {
-      position: absolute; top: 0.5rem; right: 0.5rem;
-      background: #fcd34d; color: #78350f;
-      font-size: 0.6rem; font-weight: 800;
-      padding: 0.1rem 0.4rem;
-      border-radius: 60px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    /* XP Log */
-    .xp-log { margin-bottom: 2rem; }
-    .xp-log-item {
-      display: flex; align-items: center; gap: 0.75rem;
-      padding: 0.65rem 0;
-      border-bottom: 1px solid var(--border);
-      font-size: 0.85rem;
-    }
-    .xp-log-item:last-child { border-bottom: none; }
-    .xp-log-amount { font-weight: 800; color: var(--primary); font-family: var(--font-display); flex-shrink: 0; min-width: 48px; }
-    .xp-log-label { color: var(--text-700); flex: 1; }
-    .xp-log-time { color: var(--text-400); font-size: 0.75rem; flex-shrink: 0; }
-
-    /* Levels roadmap */
-    .levels-list { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2rem; }
-    .level-row {
-      display: flex; align-items: center; gap: 1rem;
-      padding: 0.85rem 1.1rem;
-      background: var(--card);
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius-lg);
-      transition: var(--transition);
-    }
-    .level-row.current { border-color: var(--primary); background: var(--primary-light); }
-    .level-row.achieved { border-color: #86efac; background: #f0fdf4; }
-    [data-theme="dark"] .level-row.achieved { background: #052e16; border-color: #166534; }
-    .level-row-icon { font-size: 1.4rem; flex-shrink: 0; }
-    .level-row-info { flex: 1; }
-    .level-row-name { font-family: var(--font-display); font-size: 0.9rem; font-weight: 700; color: var(--text-900); }
-    .level-row-xp { font-size: 0.78rem; color: var(--text-500); }
-    .level-row-status { font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 60px; }
-    .status-current { background: var(--primary); color: white; }
-    .status-achieved { background: #86efac; color: #14532d; }
-    .status-locked { background: var(--bg-muted); color: var(--text-400); }
-
-    /* Reset button */
-    .danger-zone {
-      background: var(--card);
-      border: 1px solid #fca5a5;
-      border-radius: var(--radius-lg);
-      padding: 1.25rem;
-      display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
-    }
-    .danger-zone p { font-size: 0.85rem; color: var(--text-500); }
-    .danger-zone strong { color: var(--text-900); display: block; font-size: 0.9rem; margin-bottom: 0.2rem; }
-    .btn-danger {
-      padding: 0.55rem 1.25rem;
-      background: #fef2f2;
-      border: 1.5px solid #fca5a5;
-      color: #dc2626;
-      border-radius: var(--radius);
-      font-size: 0.85rem; font-weight: 700;
+      font-size: 2.8rem;
       cursor: pointer;
+      transition: transform .2s;
+    }
+    .dash-avatar:hover { transform: scale(1.05); }
+    .dash-avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: none; }
+    .dash-avatar-edit {
+      position: absolute; bottom: 0; right: 0;
+      width: 26px; height: 26px; border-radius: 50%;
+      background: white; color: var(--primary);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .65rem; cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,.2);
+    }
+    .dash-hero-info { flex: 1; min-width: 200px; }
+    .dash-hero-name {
+      font-family: var(--font-display);
+      font-size: 1.7rem; font-weight: 900; line-height: 1.1;
+      margin-bottom: .25rem;
+    }
+    .dash-hero-meta {
+      display: flex; gap: .75rem; flex-wrap: wrap;
+      font-size: .8rem; opacity: .85; margin-bottom: .85rem;
+    }
+    .dash-hero-meta span { display: flex; align-items: center; gap: .3rem; }
+    .dash-level-pill {
+      display: inline-flex; align-items: center; gap: .4rem;
+      background: rgba(255,255,255,.2);
+      backdrop-filter: blur(8px);
+      padding: .3rem .9rem;
+      border-radius: 60px;
+      font-size: .82rem; font-weight: 700;
+    }
+    .dash-xp-row {
+      margin-top: .75rem;
+      display: flex; align-items: center; gap: .75rem; flex-wrap: wrap;
+    }
+    .dash-xp-bar-wrap { flex: 1; min-width: 150px; }
+    .dash-xp-lbl { font-size: .72rem; opacity: .8; margin-bottom: .3rem; }
+    .dash-xp-track {
+      height: 7px; background: rgba(255,255,255,.25); border-radius: 60px; overflow: hidden;
+    }
+    .dash-xp-fill { height: 100%; background: white; border-radius: 60px; transition: width 1.2s cubic-bezier(.4,0,.2,1); }
+    .dash-xp-total {
+      text-align: right; flex-shrink: 0;
+    }
+    .dash-xp-total .big { font-family: var(--font-display); font-size: 2.2rem; font-weight: 900; line-height: 1; }
+    .dash-xp-total .lbl { font-size: .72rem; opacity: .75; }
+
+    /* Tabs strip */
+    .dash-hero-tabs {
+      position: relative;
+      display: flex; gap: 0;
+      border-top: 1px solid rgba(255,255,255,.15);
+    }
+    .dash-tab {
+      flex: 1; padding: .75rem; text-align: center;
+      font-size: .8rem; font-weight: 700;
+      color: rgba(255,255,255,.65);
+      cursor: pointer; border: none; background: transparent;
       font-family: var(--font-body);
+      border-bottom: 3px solid transparent;
+      transition: color .2s, border-color .2s;
+    }
+    .dash-tab.active { color: white; border-bottom-color: white; }
+    .dash-tab:hover { color: white; }
+
+    /* ── Tab Panels ──────────────────────────────────────── */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── Grid layouts ────────────────────────────────────── */
+    .dash-grid-2 {
+      display: grid; grid-template-columns: 1fr 1fr; gap: var(--dash-gap);
+      margin-bottom: var(--dash-gap);
+    }
+    .dash-grid-3 {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: var(--dash-gap);
+      margin-bottom: var(--dash-gap);
+    }
+    @media(max-width: 860px) { .dash-grid-2 { grid-template-columns: 1fr; } }
+    @media(max-width: 680px) { .dash-grid-3 { grid-template-columns: 1fr 1fr; } }
+    @media(max-width: 480px) { .dash-grid-3 { grid-template-columns: 1fr; } }
+
+    /* ── Card base ───────────────────────────────────────── */
+    .d-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 1.4rem;
       transition: var(--transition);
-      flex-shrink: 0;
+    }
+    .d-card-title {
+      font-family: var(--font-display); font-size: .82rem; font-weight: 800;
+      text-transform: uppercase; letter-spacing: .07em;
+      color: var(--text-400); margin-bottom: 1rem;
+      display: flex; align-items: center; gap: .45rem;
+    }
+
+    /* ── Stat pills row ──────────────────────────────────── */
+    .stats-row {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(120px,1fr));
+      gap: var(--dash-gap); margin-bottom: var(--dash-gap);
+    }
+    .stat-pill {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 1.1rem 1rem; text-align: center;
+      transition: var(--transition);
+    }
+    .stat-pill:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+    .stat-pill .sp-icon { font-size: 1.6rem; margin-bottom: .4rem; }
+    .stat-pill .sp-val {
+      font-family: var(--font-display); font-size: 1.7rem; font-weight: 900;
+      color: var(--text-900); line-height: 1; margin-bottom: .2rem;
+    }
+    .stat-pill .sp-lbl { font-size: .73rem; color: var(--text-500); font-weight: 600; }
+
+    /* ── Streak card ─────────────────────────────────────── */
+    .streak-banner {
+      background: linear-gradient(135deg, #fff7ed, #fef3c7);
+      border: 1.5px solid #fcd34d; border-radius: 14px;
+      padding: 1.1rem 1.4rem; display: flex; align-items: center; gap: 1rem;
+      margin-bottom: var(--dash-gap);
+    }
+    [data-theme="dark"] .streak-banner { background: linear-gradient(135deg,#1c1917,#292524); border-color:#78350f; }
+    .streak-fire { font-size: 2.2rem; }
+    .streak-text { flex: 1; }
+    .streak-text strong { font-family: var(--font-display); font-size: .95rem; color: var(--text-900); display: block; }
+    .streak-text span { font-size: .78rem; color: var(--text-500); }
+    .streak-num { font-family: var(--font-display); font-size: 2.5rem; font-weight: 900; color: #f59e0b; }
+
+    /* ── Activity heatmap ────────────────────────────────── */
+    .heatmap-grid {
+      display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;
+      margin-top: .5rem;
+    }
+    .heatmap-cell {
+      aspect-ratio: 1; border-radius: 3px;
+      background: var(--bg-muted); transition: transform .15s;
+      cursor: default;
+    }
+    .heatmap-cell:hover { transform: scale(1.3); }
+    .heatmap-cell.level-1 { background: #bbf7d0; }
+    .heatmap-cell.level-2 { background: #4ade80; }
+    .heatmap-cell.level-3 { background: #16a34a; }
+    .heatmap-cell.level-4 { background: #14532d; }
+    [data-theme="dark"] .heatmap-cell.level-1 { background: #14532d; }
+    [data-theme="dark"] .heatmap-cell.level-2 { background: #166534; }
+    [data-theme="dark"] .heatmap-cell.level-3 { background: #15803d; }
+    [data-theme="dark"] .heatmap-cell.level-4 { background: #16a34a; }
+    .heatmap-days { display: flex; justify-content: space-between; font-size: .65rem; color: var(--text-400); margin-top: .4rem; }
+
+    /* ── Weekly bar chart ────────────────────────────────── */
+    .bar-chart { display: flex; align-items: flex-end; gap: 6px; height: 80px; margin-top: .75rem; }
+    .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .bar-fill {
+      width: 100%; border-radius: 4px 4px 0 0;
+      background: linear-gradient(to top, var(--primary), var(--accent));
+      min-height: 4px; transition: height .8s cubic-bezier(.4,0,.2,1);
+    }
+    .bar-lbl { font-size: .62rem; color: var(--text-400); }
+
+    /* ── Progress items ──────────────────────────────────── */
+    .progress-item { margin-bottom: .85rem; }
+    .progress-item:last-child { margin-bottom: 0; }
+    .pi-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: .3rem; }
+    .pi-name { font-size: .85rem; font-weight: 600; color: var(--text-900); }
+    .pi-pct { font-size: .78rem; font-weight: 700; color: var(--primary); }
+    .pi-track { height: 6px; background: var(--bg-muted); border-radius: 60px; overflow: hidden; }
+    .pi-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); border-radius: 60px; transition: width 1s ease; }
+
+    /* ── Badges ──────────────────────────────────────────── */
+    .badges-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(140px,1fr));
+      gap: .85rem; margin-bottom: var(--dash-gap);
+    }
+    .bdg {
+      background: var(--card); border: 1.5px solid var(--border);
+      border-radius: 14px; padding: 1.1rem .85rem; text-align: center;
+      transition: var(--transition); position: relative;
+    }
+    .bdg.earned { border-color: #fcd34d; background: linear-gradient(135deg,#fffbeb,var(--card)); }
+    .bdg.earned:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(251,191,36,.2); }
+    .bdg.locked { opacity: .38; filter: grayscale(1); }
+    .bdg-icon { font-size: 1.9rem; margin-bottom: .4rem; }
+    .bdg-name { font-family: var(--font-display); font-size: .78rem; font-weight: 700; color: var(--text-900); margin-bottom: .15rem; }
+    .bdg-desc { font-size: .67rem; color: var(--text-500); }
+    .bdg-tag {
+      position: absolute; top: .45rem; right: .45rem;
+      background: #fcd34d; color: #78350f;
+      font-size: .55rem; font-weight: 800;
+      padding: .1rem .35rem; border-radius: 60px;
+      text-transform: uppercase; letter-spacing: .05em;
+    }
+
+    /* ── Bookmarks ───────────────────────────────────────── */
+    .bm-list { display: flex; flex-direction: column; gap: .5rem; }
+    .bm-row {
+      display: flex; align-items: center; gap: .75rem;
+      padding: .65rem .85rem; border-radius: 10px;
+      background: var(--bg); border: 1px solid var(--border);
+      text-decoration: none; color: var(--text-700);
+      font-size: .85rem; transition: var(--transition);
+    }
+    .bm-row:hover { border-color: var(--primary); color: var(--primary); transform: translateX(4px); }
+    .bm-row i { color: var(--primary); flex-shrink: 0; }
+    .bm-row span { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .bm-row .bm-time { font-size: .7rem; color: var(--text-400); flex-shrink: 0; }
+
+    /* ── XP Log ──────────────────────────────────────────── */
+    .xp-log-list { display: flex; flex-direction: column; }
+    .xp-row {
+      display: flex; align-items: center; gap: .75rem;
+      padding: .6rem 0; border-bottom: 1px solid var(--border);
+      font-size: .83rem;
+    }
+    .xp-row:last-child { border-bottom: none; }
+    .xp-row .amt { font-weight: 900; color: var(--primary); font-family: var(--font-display); min-width: 44px; }
+    .xp-row .act { flex: 1; color: var(--text-700); }
+    .xp-row .ago { font-size: .72rem; color: var(--text-400); flex-shrink: 0; }
+
+    /* ── Levels roadmap ──────────────────────────────────── */
+    .levels-roadmap { display: flex; flex-direction: column; gap: .6rem; }
+    .lv-row {
+      display: flex; align-items: center; gap: 1rem;
+      padding: .8rem 1rem; border-radius: 12px;
+      background: var(--card); border: 1.5px solid var(--border);
+      transition: var(--transition);
+    }
+    .lv-row.lv-current { border-color: var(--primary); background: var(--primary-light); }
+    .lv-row.lv-done { border-color: #86efac; background: #f0fdf4; }
+    [data-theme="dark"] .lv-row.lv-done { background: #052e16; border-color: #166534; }
+    .lv-icon { font-size: 1.3rem; flex-shrink: 0; }
+    .lv-info { flex: 1; }
+    .lv-name { font-family: var(--font-display); font-size: .88rem; font-weight: 700; color: var(--text-900); }
+    .lv-xp { font-size: .73rem; color: var(--text-500); }
+    .lv-badge { font-size: .72rem; font-weight: 700; padding: .18rem .55rem; border-radius: 60px; }
+    .lv-badge.cur { background: var(--primary); color: white; }
+    .lv-badge.done { background: #86efac; color: #14532d; }
+    .lv-badge.lock { background: var(--bg-muted); color: var(--text-400); }
+
+    /* ── Account tab ─────────────────────────────────────── */
+    .account-form { display: flex; flex-direction: column; gap: .85rem; max-width: 480px; }
+    .account-form label { font-size: .82rem; font-weight: 700; color: var(--text-700); margin-bottom: .3rem; display: block; }
+    .account-form input, .account-form select {
+      width: 100%; padding: .7rem 1rem;
+      border: 1.5px solid var(--border); border-radius: 10px;
+      background: var(--bg); color: var(--text-900);
+      font-family: var(--font-body); font-size: .9rem;
+      transition: border-color .2s;
+    }
+    .account-form input:focus, .account-form select:focus { outline: none; border-color: var(--primary); }
+    .danger-zone {
+      background: var(--card); border: 1px solid #fca5a5;
+      border-radius: 14px; padding: 1.2rem 1.4rem;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem;
+    }
+    .danger-zone strong { color: var(--text-900); display: block; margin-bottom: .2rem; }
+    .danger-zone p { font-size: .82rem; color: var(--text-500); }
+    .btn-danger {
+      padding: .55rem 1.2rem; background: #fef2f2;
+      border: 1.5px solid #fca5a5; color: #dc2626;
+      border-radius: 10px; font-size: .85rem; font-weight: 700;
+      cursor: pointer; font-family: var(--font-body); transition: var(--transition); flex-shrink: 0;
     }
     .btn-danger:hover { background: #dc2626; color: white; }
+
+    /* ── Empty state ─────────────────────────────────────── */
+    .empty-state { text-align: center; padding: 2.5rem 1rem; color: var(--text-400); }
+    .empty-state i { font-size: 2.5rem; margin-bottom: .75rem; opacity: .4; }
+    .empty-state p { font-size: .88rem; }
+
+    /* ── Section heading ─────────────────────────────────── */
+    .dash-section-head {
+      font-family: var(--font-display); font-size: 1rem; font-weight: 800;
+      color: var(--text-900); margin-bottom: 1rem;
+      display: flex; align-items: center; gap: .5rem;
+    }
+
+    /* Sign-in prompt */
+    .signin-prompt {
+      background: linear-gradient(135deg, var(--primary-light), var(--card));
+      border: 1.5px solid var(--primary);
+      border-radius: 16px; padding: 2rem; text-align: center;
+      margin-bottom: var(--dash-gap);
+    }
+    .signin-prompt h3 { font-family: var(--font-display); font-size: 1.1rem; margin-bottom: .5rem; color: var(--text-900); }
+    .signin-prompt p { font-size: .88rem; color: var(--text-500); margin-bottom: 1.25rem; }
   </style>
 </head>
 <body>
@@ -251,108 +346,285 @@
       <li><a href="/pages/universities.html">Universities</a></li>
       <li><a href="/pages/flashcards.html">Flashcards</a></li>
       <li><a href="/pages/about.html">About</a></li>
-      <li><a href="/pages/contact.html">Contact</a></li>
-      <!-- Show only when NOT logged in -->
-<li data-auth-show="guest">
-  <a href="/pages/auth.html" class="btn-primary" style="padding:0.4rem 0.9rem;border-radius:8px">
-    Sign In
-  </a>
-</li>
-
-<!-- Show only when logged in -->
-<li data-auth-show="authed" style="display:none">
-  <a href="/pages/profile.html" style="display:flex;align-items:center;gap:0.4rem">
-    <img data-auth-avatar src="" width="28" height="28"
-      style="border-radius:50%;object-fit:cover;display:none;border:2px solid var(--primary)">
-    <span data-auth-name style="font-weight:700;font-size:0.85rem"></span>
-  </a>
-</li>
+      <li data-auth-show="guest"><a href="/pages/auth.html" class="btn-primary" style="padding:.4rem .9rem;border-radius:8px">Sign In</a></li>
+      <li data-auth-show="authed" style="display:none">
+        <a href="/pages/profile.html" style="display:flex;align-items:center;gap:.4rem">
+          <img data-auth-avatar src="" width="28" height="28" style="border-radius:50%;object-fit:cover;display:none;border:2px solid var(--primary)">
+          <span data-auth-name style="font-weight:700;font-size:.85rem"></span>
+        </a>
+      </li>
       <li><button id="theme-toggle" class="btn-primary theme-toggle"><i class="fas fa-moon" id="theme-icon"></i></button></li>
     </ul>
   </div>
 </nav>
 
-<main class="container profile-page">
+<main class="container dash-page">
 
-  <!-- Profile hero -->
-  <div class="profile-hero" id="profileHero">
-    <div class="profile-avatar" id="profileAvatar">🎒</div>
-    <div class="profile-hero-info">
-      <h1 id="profileLevelName">Freshman</h1>
-      <div class="level-badge" id="profileLevelBadge">🎒 Level 1</div>
-      <div class="profile-xp-bar-wrap">
-        <div class="profile-xp-label" id="profileXPLabel">0 XP — 100 XP to next level</div>
-        <div class="profile-xp-bar">
-          <div class="profile-xp-fill" id="profileXPFill" style="width:0%"></div>
+  <!-- Hero -->
+  <div class="dash-hero reveal">
+    <div class="dash-hero-bg"></div>
+    <div class="dash-hero-inner">
+      <div class="dash-avatar-wrap">
+        <div class="dash-avatar" id="dashAvatar">🎒
+          <img id="dashAvatarImg" src="" alt="Avatar">
+        </div>
+        <div class="dash-avatar-edit" title="Change avatar"><i class="fas fa-camera"></i></div>
+      </div>
+      <div class="dash-hero-info">
+        <div class="dash-hero-name" id="dashName">Student</div>
+        <div class="dash-hero-meta">
+          <span id="dashUni"><i class="fas fa-university"></i> University</span>
+          <span id="dashYear"><i class="fas fa-graduation-cap"></i> Year of Study</span>
+          <span id="dashJoined"><i class="fas fa-calendar"></i> Joined 2026</span>
+        </div>
+        <div class="dash-level-pill" id="dashLevelPill">🎒 Freshman</div>
+        <div class="dash-xp-row">
+          <div class="dash-xp-bar-wrap">
+            <div class="dash-xp-lbl" id="dashXPLbl">0 XP — 100 XP to next level</div>
+            <div class="dash-xp-track"><div class="dash-xp-fill" id="dashXPFill" style="width:0%"></div></div>
+          </div>
+          <div class="dash-xp-total">
+            <div class="big" id="dashXPBig">0</div>
+            <div class="lbl">Total XP</div>
+          </div>
         </div>
       </div>
     </div>
-    <div class="profile-hero-xp">
-      <div class="xp-big" id="profileXPBig">0</div>
-      <div class="xp-label">Total XP</div>
+    <div class="dash-hero-tabs">
+      <button class="dash-tab active" data-tab="overview"><i class="fas fa-th-large"></i> Overview</button>
+      <button class="dash-tab" data-tab="progress"><i class="fas fa-chart-bar"></i> Progress</button>
+      <button class="dash-tab" data-tab="achievements"><i class="fas fa-medal"></i> Achievements</button>
+      <button class="dash-tab" data-tab="bookmarks"><i class="fas fa-bookmark"></i> Saved</button>
+      <button class="dash-tab" data-tab="account"><i class="fas fa-cog"></i> Account</button>
     </div>
   </div>
 
-  <!-- Streak -->
-  <div class="streak-card">
-    <div class="streak-flame">🔥</div>
-    <div class="streak-info">
-      <h3 id="streakTitle">0-day streak</h3>
-      <p id="streakDesc">Study every day to build your streak and earn bonus XP!</p>
+  <!-- ── OVERVIEW TAB ────────────────────────────────────── -->
+  <div class="tab-panel active" id="tab-overview">
+
+    <!-- Streak -->
+    <div class="streak-banner">
+      <div class="streak-fire">🔥</div>
+      <div class="streak-text">
+        <strong id="streakTitle">0-day streak</strong>
+        <span id="streakDesc">Study every day to build your streak and earn bonus XP!</span>
+      </div>
+      <div class="streak-num" id="streakNum">0</div>
     </div>
-    <div class="streak-days" id="streakDays">0</div>
+
+    <!-- Stats pills -->
+    <div class="stats-row">
+      <div class="stat-pill"><div class="sp-icon">📚</div><div class="sp-val" id="sDocs">0</div><div class="sp-lbl">Docs opened</div></div>
+      <div class="stat-pill"><div class="sp-icon">✅</div><div class="sp-val" id="sCompleted">0</div><div class="sp-lbl">Completed</div></div>
+      <div class="stat-pill"><div class="sp-icon">🏅</div><div class="sp-val" id="sBadges">0</div><div class="sp-lbl">Badges</div></div>
+      <div class="stat-pill"><div class="sp-icon">🔥</div><div class="sp-val" id="sBestStreak">0</div><div class="sp-lbl">Best streak</div></div>
+      <div class="stat-pill"><div class="sp-icon">🔍</div><div class="sp-val" id="sSearches">0</div><div class="sp-lbl">Searches</div></div>
+      <div class="stat-pill"><div class="sp-icon">📅</div><div class="sp-val" id="sVisits">0</div><div class="sp-lbl">Total visits</div></div>
+    </div>
+
+    <div class="dash-grid-2">
+      <!-- Weekly activity chart -->
+      <div class="d-card">
+        <div class="d-card-title"><i class="fas fa-chart-bar" style="color:var(--primary)"></i> This Week's Activity</div>
+        <div class="bar-chart" id="weeklyChart"></div>
+        <div style="display:flex;justify-content:space-between;margin-top:.4rem">
+          <span style="font-size:.65rem;color:var(--text-400)" id="weeklyMin">0</span>
+          <span style="font-size:.65rem;color:var(--text-400)">XP earned per day</span>
+          <span style="font-size:.65rem;color:var(--text-400)" id="weeklyMax">0</span>
+        </div>
+      </div>
+
+      <!-- Activity heatmap (last 28 days) -->
+      <div class="d-card">
+        <div class="d-card-title"><i class="fas fa-calendar-alt" style="color:#10b981"></i> 28-Day Study Heatmap</div>
+        <div class="heatmap-grid" id="heatmapGrid"></div>
+        <div class="heatmap-days">
+          <span>4 wks ago</span><span>3 wks ago</span><span>2 wks ago</span><span>This week</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent XP -->
+    <div class="d-card" style="margin-bottom:var(--dash-gap)">
+      <div class="d-card-title"><i class="fas fa-history" style="color:var(--accent)"></i> Recent XP Activity</div>
+      <div class="xp-log-list" id="xpLogOverview"></div>
+    </div>
+
+    <!-- Quick access -->
+    <div class="dash-grid-2">
+      <div class="d-card">
+        <div class="d-card-title"><i class="fas fa-bolt" style="color:#f59e0b"></i> Quick Study</div>
+        <div style="display:flex;flex-direction:column;gap:.6rem">
+          <a href="/pages/universities.html" class="bm-row"><i class="fas fa-university"></i><span>Browse University Notes</span><i class="fas fa-chevron-right" style="font-size:.7rem;color:var(--text-400)"></i></a>
+          <a href="/pages/flashcards.html" class="bm-row"><i class="fas fa-layer-group"></i><span>Study Flashcards</span><i class="fas fa-chevron-right" style="font-size:.7rem;color:var(--text-400)"></i></a>
+          <a href="/pages/quizzes.html" class="bm-row"><i class="fas fa-brain"></i><span>Take a Quiz</span><i class="fas fa-chevron-right" style="font-size:.7rem;color:var(--text-400)"></i></a>
+          <a href="/pages/search.html" class="bm-row"><i class="fas fa-search"></i><span>Search Resources</span><i class="fas fa-chevron-right" style="font-size:.7rem;color:var(--text-400)"></i></a>
+        </div>
+      </div>
+      <div class="d-card">
+        <div class="d-card-title"><i class="fas fa-bookmark" style="color:var(--primary)"></i> Recent Bookmarks</div>
+        <div id="recentBookmarks"><div class="empty-state"><i class="fas fa-bookmark"></i><p>No bookmarks yet</p></div></div>
+      </div>
+    </div>
   </div>
 
-  <!-- Stats -->
-  <div class="stats-grid" id="statsGrid">
-    <div class="stat-card"><div class="stat-icon">📚</div><div class="stat-val" id="statDocs">0</div><div class="stat-lbl">Docs opened</div></div>
-    <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-val" id="statCompleted">0</div><div class="stat-lbl">Completed</div></div>
-    <div class="stat-card"><div class="stat-icon">🏅</div><div class="stat-val" id="statBadges">0</div><div class="stat-lbl">Badges earned</div></div>
-    <div class="stat-card"><div class="stat-icon">📅</div><div class="stat-val" id="statVisits">0</div><div class="stat-lbl">Total visits</div></div>
-    <div class="stat-card"><div class="stat-icon">💪</div><div class="stat-val" id="statMaxStreak">0</div><div class="stat-lbl">Best streak</div></div>
-    <div class="stat-card"><div class="stat-icon">🔍</div><div class="stat-val" id="statSearches">0</div><div class="stat-lbl">Searches</div></div>
+  <!-- ── PROGRESS TAB ────────────────────────────────────── -->
+  <div class="tab-panel" id="tab-progress">
+    <div class="dash-grid-2">
+      <div class="d-card">
+        <div class="d-card-title"><i class="fas fa-route" style="color:var(--primary)"></i> Level Roadmap</div>
+        <div class="levels-roadmap" id="levelsRoadmap"></div>
+      </div>
+      <div class="d-card">
+        <div class="d-card-title"><i class="fas fa-tasks" style="color:#10b981"></i> Course Progress</div>
+        <div id="courseProgress">
+          <div class="progress-item">
+            <div class="pi-header"><span class="pi-name">BIO 110 — Biology</span><span class="pi-pct" id="pBio">0%</span></div>
+            <div class="pi-track"><div class="pi-fill" id="pfBio" style="width:0%"></div></div>
+          </div>
+          <div class="progress-item">
+            <div class="pi-header"><span class="pi-name">CH 110 — Chemistry</span><span class="pi-pct" id="pChem">0%</span></div>
+            <div class="pi-track"><div class="pi-fill" id="pfChem" style="width:0%"></div></div>
+          </div>
+          <div class="progress-item">
+            <div class="pi-header"><span class="pi-name">MA 110 — Mathematics</span><span class="pi-pct" id="pMath">0%</span></div>
+            <div class="pi-track"><div class="pi-fill" id="pfMath" style="width:0%"></div></div>
+          </div>
+          <div class="progress-item">
+            <div class="pi-header"><span class="pi-name">PH 110 — Physics</span><span class="pi-pct" id="pPhys">0%</span></div>
+            <div class="pi-track"><div class="pi-fill" id="pfPhys" style="width:0%"></div></div>
+          </div>
+          <div class="progress-item">
+            <div class="pi-header"><span class="pi-name">LA 111 — Language Skills</span><span class="pi-pct" id="pLang">0%</span></div>
+            <div class="pi-track"><div class="pi-fill" id="pfLang" style="width:0%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-card">
+      <div class="d-card-title"><i class="fas fa-history" style="color:var(--accent)"></i> Full XP History</div>
+      <div class="xp-log-list" id="xpLogFull"></div>
+    </div>
   </div>
 
-  <!-- Badges -->
-  <div class="section-title"><i class="fas fa-medal" style="color:#f59e0b"></i> Badges</div>
-  <div class="badges-grid" id="badgesGrid"></div>
-
-  <!-- Levels roadmap -->
-  <div class="section-title"><i class="fas fa-layer-group" style="color:var(--primary)"></i> Levels</div>
-  <div class="levels-list" id="levelsList"></div>
-
-  <!-- XP Log -->
-  <div class="section-title"><i class="fas fa-history" style="color:var(--accent)"></i> Recent XP</div>
-  <div class="xp-log" id="xpLog"></div>
-
-  <!-- Danger zone -->
-  <div class="section-title" style="color:#dc2626"><i class="fas fa-exclamation-triangle"></i> Reset</div>
-  <div class="danger-zone">
-    <div>
-      <strong>Reset all progress</strong>
-      <p>This will permanently delete your XP, badges, and streak. This cannot be undone.</p>
+  <!-- ── ACHIEVEMENTS TAB ────────────────────────────────── -->
+  <div class="tab-panel" id="tab-achievements">
+    <div class="d-card" style="margin-bottom:var(--dash-gap)">
+      <div class="d-card-title"><i class="fas fa-trophy" style="color:#f59e0b"></i> Badges Earned <span id="badgeCount" style="font-size:.8rem;color:var(--text-400);font-weight:400;text-transform:none;letter-spacing:0"></span></div>
+      <div class="badges-grid" id="badgesGrid"></div>
     </div>
-    <button class="btn-danger" onclick="confirmReset()">Reset progress</button>
+    <div class="d-card">
+      <div class="d-card-title"><i class="fas fa-fire" style="color:#ef4444"></i> Streak Stats</div>
+      <div style="display:flex;gap:2rem;flex-wrap:wrap">
+        <div style="text-align:center">
+          <div style="font-family:var(--font-display);font-size:3rem;font-weight:900;color:#f59e0b" id="bigStreak">0</div>
+          <div style="font-size:.78rem;color:var(--text-500);font-weight:600">Current Streak</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-family:var(--font-display);font-size:3rem;font-weight:900;color:var(--primary)" id="bigMaxStreak">0</div>
+          <div style="font-size:.78rem;color:var(--text-500);font-weight:600">Best Ever</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-family:var(--font-display);font-size:3rem;font-weight:900;color:#10b981" id="bigChallenges">0</div>
+          <div style="font-size:.78rem;color:var(--text-500);font-weight:600">Challenges Done</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-family:var(--font-display);font-size:3rem;font-weight:900;color:#8b5cf6" id="bigShares">0</div>
+          <div style="font-size:.78rem;color:var(--text-500);font-weight:600">Times Shared</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── BOOKMARKS TAB ───────────────────────────────────── -->
+  <div class="tab-panel" id="tab-bookmarks">
+    <div class="d-card">
+      <div class="d-card-title"><i class="fas fa-bookmark" style="color:var(--primary)"></i> All Saved Resources</div>
+      <div class="bm-list" id="allBookmarks"></div>
+    </div>
+  </div>
+
+  <!-- ── ACCOUNT TAB ─────────────────────────────────────── -->
+  <div class="tab-panel" id="tab-account">
+    <div class="dash-grid-2">
+      <div class="d-card">
+        <div class="d-card-title"><i class="fas fa-user-edit" style="color:var(--primary)"></i> Edit Profile</div>
+        <div class="account-form">
+          <div>
+            <label>Display Name</label>
+            <input type="text" id="editName" placeholder="Your name" />
+          </div>
+          <div>
+            <label>University</label>
+            <select id="editUni">
+              <option value="">Select university…</option>
+              <option value="CBU">Copperbelt University (CBU)</option>
+              <option value="UNZA">University of Zambia (UNZA)</option>
+              <option value="ZUT">Zambia University of Technology (ZUT)</option>
+              <option value="MU">Mulungushi University (MU)</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div>
+            <label>Year of Study</label>
+            <select id="editYear">
+              <option value="">Select year…</option>
+              <option value="1st Year">1st Year</option>
+              <option value="2nd Year">2nd Year</option>
+              <option value="3rd Year">3rd Year</option>
+              <option value="4th Year">4th Year</option>
+              <option value="Postgraduate">Postgraduate</option>
+            </select>
+          </div>
+          <button class="btn-primary" onclick="saveProfile()" style="padding:.7rem 1.5rem;align-self:flex-start">
+            <i class="fas fa-save"></i> Save Changes
+          </button>
+        </div>
+      </div>
+      <div class="d-card">
+        <div class="d-card-title"><i class="fas fa-shield-alt" style="color:#10b981"></i> Account Info</div>
+        <div id="accountInfoBox" style="font-size:.88rem;color:var(--text-700);line-height:1.9">
+          <div><i class="fas fa-envelope" style="color:var(--primary);width:18px"></i> <span id="accountEmail">Not signed in</span></div>
+          <div><i class="fas fa-user" style="color:var(--primary);width:18px"></i> <span id="accountProvider">—</span></div>
+          <div style="margin-top:1rem">
+            <a href="/pages/auth.html?action=update-password" class="btn-secondary" style="padding:.55rem 1.1rem;font-size:.82rem;display:inline-flex;align-items:center;gap:.4rem;text-decoration:none">
+              <i class="fas fa-key"></i> Change Password
+            </a>
+          </div>
+          <div style="margin-top:.75rem" id="signOutWrap">
+            <button onclick="signOutUser()" class="btn-secondary" style="padding:.55rem 1.1rem;font-size:.82rem">
+              <i class="fas fa-sign-out-alt"></i> Sign Out
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="danger-zone">
+      <div>
+        <strong>Reset all progress</strong>
+        <p>Permanently deletes your XP, badges, streak and study history. This cannot be undone.</p>
+      </div>
+      <button class="btn-danger" onclick="confirmReset()">Reset progress</button>
+    </div>
   </div>
 
 </main>
 
-<!-- Mobile Bottom Nav -->
 <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
   <ul>
-    <li><a href="/index.html" data-page="home"><i class="fas fa-home"></i>Home</a></li>
-    <li><a href="/pages/universities.html" data-page="universities"><i class="fas fa-university"></i>Study</a></li>
-    <li><a href="/pages/flashcards.html" data-page="flashcards"><i class="fas fa-layer-group"></i>Cards</a></li>
-    <li><a href="/pages/search.html" data-page="search"><i class="fas fa-search"></i>Search</a></li>
-    <li><a href="/pages/profile.html" data-page="profile" class="active"><i class="fas fa-user"></i>Profile</a></li>
+    <li><a href="/index.html"><i class="fas fa-home"></i>Home</a></li>
+    <li><a href="/pages/universities.html"><i class="fas fa-university"></i>Study</a></li>
+    <li><a href="/pages/flashcards.html"><i class="fas fa-layer-group"></i>Cards</a></li>
+    <li><a href="/pages/search.html"><i class="fas fa-search"></i>Search</a></li>
+    <li><a href="/pages/profile.html" class="active"><i class="fas fa-user"></i>Profile</a></li>
   </ul>
 </nav>
 
 <footer>
   <div class="container footer-content">
     <div class="footer-col"><h3>BrainHub<span class="dot">.</span></h3><p>Free education for everyone.</p></div>
-    <div class="footer-col"><h4>Platform</h4><a href="/index.html">Home</a><a href="/pages/universities.html">Universities</a></div>
-    <div class="footer-col"><h4>Support</h4><a href="/pages/contact.html">Contact</a><a href="/pages/privacy-policy.html">Privacy Policy</a></div>
+    <div class="footer-col"><h4>Platform</h4><a href="/index.html">Home</a><a href="/pages/universities.html">Universities</a><a href="/pages/flashcards.html">Flashcards</a></div>
+    <div class="footer-col"><h4>Support</h4><a href="/pages/contact.html">Contact</a><a href="/pages/privacy-policy.html">Privacy Policy</a><a href="/pages/changelog.html">Changelog</a></div>
   </div>
   <div class="footer-bottom"><p>&copy; 2026 BrainHub. All rights reserved.</p><p id="realtime-clock" class="clock-text"></p></div>
 </footer>
@@ -362,115 +634,308 @@
 <script src="/src/gamification.js"></script>
 <script src="/src/supabase.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-  // Wait a tick for gamification.js to init
-  setTimeout(renderProfile, 100);
+// ── Tab switching ─────────────────────────────────────────
+document.querySelectorAll('.dash-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.dash-tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
 });
 
-function renderProfile() {
+// ── Helpers ───────────────────────────────────────────────
+function timeAgo(ts) {
+  const d = Date.now() - ts;
+  if (d < 60000) return 'just now';
+  if (d < 3600000) return Math.floor(d/60000) + 'm ago';
+  if (d < 86400000) return Math.floor(d/3600000) + 'h ago';
+  return Math.floor(d/86400000) + 'd ago';
+}
+
+// ── Main render ───────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  loadProfilePrefs();
+  setTimeout(renderDashboard, 120);
+});
+
+function renderDashboard() {
   const G = window.BrainHubXP;
   if (!G) return;
 
-  const stats  = G.getStats();
-  const level  = G.getLevel(stats.xp);
+  const s      = G.getStats();
   const levels = G.LEVELS;
   const badges = G.BADGES;
+  const level  = G.getLevel(s.xp);
+  const nextLv = levels.find(l => l.min > s.xp);
+  const pct    = nextLv ? Math.round(((s.xp - level.min) / (nextLv.min - level.min)) * 100) : 100;
 
   // Hero
-  document.getElementById('profileAvatar').textContent = level.icon;
-  document.getElementById('profileLevelName').textContent = level.name;
-  document.getElementById('profileLevelBadge').textContent = `${level.icon} ${level.name}`;
-  document.getElementById('profileXPBig').textContent = stats.xp.toLocaleString();
+  const emoji = level.icon;
+  const avatarEl = document.getElementById('dashAvatar');
+  avatarEl.childNodes[0].textContent = emoji;
 
-  const nextLevel = levels.find(l => l.min > stats.xp);
-  const progress  = nextLevel
-    ? Math.round(((stats.xp - level.min) / (nextLevel.min - level.min)) * 100)
-    : 100;
-  document.getElementById('profileXPFill').style.width = progress + '%';
-  document.getElementById('profileXPLabel').textContent = nextLevel
-    ? `${stats.xp} XP — ${nextLevel.min - stats.xp} XP to ${nextLevel.icon} ${nextLevel.name}`
-    : `${stats.xp} XP — Maximum level reached!`;
+  document.getElementById('dashXPBig').textContent  = s.xp.toLocaleString();
+  document.getElementById('dashLevelPill').textContent = `${emoji} ${level.name}`;
+  document.getElementById('dashXPFill').style.width = pct + '%';
+  document.getElementById('dashXPLbl').textContent  = nextLv
+    ? `${s.xp} XP — ${nextLv.min - s.xp} XP to ${nextLv.icon} ${nextLv.name}`
+    : `${s.xp} XP — Maximum level reached! 🏆`;
 
   // Streak
-  document.getElementById('streakDays').textContent = stats.currentStreak;
-  document.getElementById('streakTitle').textContent = `${stats.currentStreak}-day streak`;
-  document.getElementById('streakDesc').textContent = stats.currentStreak >= 3
-    ? `🔥 You're on fire! Best streak: ${stats.maxStreak} days`
-    : `Study every day to build your streak and earn +${20} bonus XP daily!`;
+  document.getElementById('streakNum').textContent   = s.currentStreak;
+  document.getElementById('bigStreak').textContent   = s.currentStreak;
+  document.getElementById('bigMaxStreak').textContent= s.maxStreak;
+  document.getElementById('bigChallenges').textContent = s.challengesAttempted || 0;
+  document.getElementById('bigShares').textContent   = s.shares || 0;
+  document.getElementById('streakTitle').textContent = `${s.currentStreak}-day streak`;
+  document.getElementById('streakDesc').textContent  = s.currentStreak >= 3
+    ? `🔥 You're on fire! Best ever: ${s.maxStreak} days`
+    : `Study every day to build your streak and earn bonus XP!`;
 
-  // Stats
-  document.getElementById('statDocs').textContent     = stats.docsOpened;
-  document.getElementById('statCompleted').textContent= stats.docsCompleted;
-  document.getElementById('statBadges').textContent   = stats.earnedBadges.length;
-  document.getElementById('statVisits').textContent   = stats.totalVisits;
-  document.getElementById('statMaxStreak').textContent= stats.maxStreak;
-  document.getElementById('statSearches').textContent = stats.searches;
+  // Stats pills
+  document.getElementById('sDocs').textContent       = s.docsOpened;
+  document.getElementById('sCompleted').textContent  = s.docsCompleted;
+  document.getElementById('sBadges').textContent     = s.earnedBadges.length;
+  document.getElementById('sBestStreak').textContent = s.maxStreak;
+  document.getElementById('sSearches').textContent   = s.searches;
+  document.getElementById('sVisits').textContent     = s.totalVisits;
+
+  // Weekly bar chart
+  renderWeeklyChart(s);
+
+  // Heatmap
+  renderHeatmap(s);
+
+  // XP Log (overview = 8 entries)
+  renderXPLog('xpLogOverview', s.xpLog || [], 8);
+  renderXPLog('xpLogFull', s.xpLog || [], 50);
 
   // Badges
-  const badgesGrid = document.getElementById('badgesGrid');
-  const earned = badges.filter(b => stats.earnedBadges.includes(b.id));
-  const locked  = badges.filter(b => !stats.earnedBadges.includes(b.id));
-  badgesGrid.innerHTML = [...earned, ...locked].map(badge => {
-    const isEarned = stats.earnedBadges.includes(badge.id);
-    return `
-      <div class="badge-card ${isEarned ? 'earned' : 'locked'}" title="${badge.desc}">
-        ${isEarned ? '<span class="badge-earned-tag">Earned</span>' : ''}
-        <div class="badge-icon">${badge.icon}</div>
-        <div class="badge-name">${badge.name}</div>
-        <div class="badge-desc">${badge.desc}</div>
-      </div>`;
+  renderBadges(badges, s);
+
+  // Levels roadmap
+  renderLevels(levels, s, level);
+
+  // Course progress
+  renderCourseProgress(s);
+
+  // Bookmarks
+  renderBookmarks();
+}
+
+function renderWeeklyChart(s) {
+  const log = s.xpLog || [];
+  const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const today = new Date();
+  const data = Array(7).fill(0);
+  const dayLabels = [];
+
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - i);
+    dayLabels.push(days[d.getDay()]);
+    const dateStr = d.toDateString();
+    log.forEach(e => {
+      const eDate = new Date(e.ts).toDateString();
+      if (eDate === dateStr) data[6-i] += e.amount;
+    });
+  }
+
+  const max = Math.max(...data, 1);
+  const chart = document.getElementById('weeklyChart');
+  chart.innerHTML = dayLabels.map((lbl, i) => {
+    const h = Math.round((data[i] / max) * 70) + 4;
+    return `<div class="bar-col">
+      <div class="bar-fill" style="height:${h}px" title="${data[i]} XP on ${lbl}"></div>
+      <span class="bar-lbl">${lbl}</span>
+    </div>`;
   }).join('');
 
-  // Levels
-  const levelsList = document.getElementById('levelsList');
-  levelsList.innerHTML = levels.map((l, i) => {
-    const isCurrentLevel = level.min === l.min;
-    const isAchieved = stats.xp >= l.min && !isCurrentLevel;
-    const statusClass = isCurrentLevel ? 'status-current' : isAchieved ? 'status-achieved' : 'status-locked';
-    const statusText  = isCurrentLevel ? 'Current' : isAchieved ? '✓ Achieved' : `${l.min} XP`;
-    const rowClass    = isCurrentLevel ? 'current' : isAchieved ? 'achieved' : '';
-    return `
-      <div class="level-row ${rowClass}">
-        <div class="level-row-icon">${l.icon}</div>
-        <div class="level-row-info">
-          <div class="level-row-name">${l.name}</div>
-          <div class="level-row-xp">Requires ${l.min.toLocaleString()} XP</div>
-        </div>
-        <span class="level-row-status ${statusClass}">${statusText}</span>
-      </div>`;
-  }).join('');
+  document.getElementById('weeklyMin').textContent = '0';
+  document.getElementById('weeklyMax').textContent = max + ' XP';
+}
 
-  // XP Log
-  const xpLog = document.getElementById('xpLog');
-  const log = (stats.xpLog || []).slice(0, 15);
-  if (!log.length) {
-    xpLog.innerHTML = '<p style="color:var(--text-400);font-size:0.85rem">No activity yet — start studying to earn XP!</p>';
-  } else {
-    xpLog.innerHTML = log.map(entry => `
-      <div class="xp-log-item">
-        <span class="xp-log-amount">+${entry.amount}</span>
-        <span class="xp-log-label">${entry.label || entry.action}</span>
-        <span class="xp-log-time">${timeAgo(entry.ts)}</span>
-      </div>`).join('');
+function renderHeatmap(s) {
+  const log = s.xpLog || [];
+  const grid = document.getElementById('heatmapGrid');
+  const today = new Date();
+  const cells = [];
+  for (let i = 27; i >= 0; i--) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - i);
+    const dateStr = d.toDateString();
+    const xp = log.filter(e => new Date(e.ts).toDateString() === dateStr)
+                   .reduce((sum, e) => sum + e.amount, 0);
+    const lvl = xp === 0 ? 0 : xp < 20 ? 1 : xp < 50 ? 2 : xp < 100 ? 3 : 4;
+    cells.push(`<div class="heatmap-cell level-${lvl}" title="${xp} XP on ${d.toLocaleDateString()}"></div>`);
+  }
+  grid.innerHTML = cells.join('');
+}
+
+function renderXPLog(elId, log, limit) {
+  const el = document.getElementById(elId);
+  const items = log.slice(0, limit);
+  if (!items.length) {
+    el.innerHTML = '<div class="empty-state"><i class="fas fa-history"></i><p>No XP activity yet — start studying!</p></div>';
+    return;
+  }
+  el.innerHTML = items.map(e => `
+    <div class="xp-row">
+      <span class="amt">+${e.amount}</span>
+      <span class="act">${e.label || e.action}</span>
+      <span class="ago">${timeAgo(e.ts)}</span>
+    </div>`).join('');
+}
+
+function renderBadges(badges, s) {
+  const earned = badges.filter(b => s.earnedBadges.includes(b.id));
+  const locked = badges.filter(b => !s.earnedBadges.includes(b.id));
+  document.getElementById('badgeCount').textContent = `${earned.length} / ${badges.length}`;
+  document.getElementById('badgesGrid').innerHTML = [...earned, ...locked].map(b => {
+    const isEarned = s.earnedBadges.includes(b.id);
+    return `<div class="bdg ${isEarned ? 'earned' : 'locked'}" title="${b.desc}">
+      ${isEarned ? '<span class="bdg-tag">Earned</span>' : ''}
+      <div class="bdg-icon">${b.icon}</div>
+      <div class="bdg-name">${b.name}</div>
+      <div class="bdg-desc">${b.desc}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderLevels(levels, s, current) {
+  document.getElementById('levelsRoadmap').innerHTML = levels.map(l => {
+    const isCur  = l.min === current.min;
+    const isDone = s.xp >= l.min && !isCur;
+    return `<div class="lv-row ${isCur ? 'lv-current' : isDone ? 'lv-done' : ''}">
+      <div class="lv-icon">${l.icon}</div>
+      <div class="lv-info">
+        <div class="lv-name">${l.name}</div>
+        <div class="lv-xp">Requires ${l.min.toLocaleString()} XP</div>
+      </div>
+      <span class="lv-badge ${isCur ? 'cur' : isDone ? 'done' : 'lock'}">
+        ${isCur ? 'Current' : isDone ? '✓ Done' : l.min + ' XP'}
+      </span>
+    </div>`;
+  }).join('');
+}
+
+function renderCourseProgress(s) {
+  const completed = s.completedDocs || {};
+  const courses = {
+    Bio:  { id: 'bio110',  total: 4, pEl: 'pBio',  fEl: 'pfBio'  },
+    Chem: { id: 'ch110',   total: 4, pEl: 'pChem', fEl: 'pfChem' },
+    Math: { id: 'ma110',   total: 4, pEl: 'pMath', fEl: 'pfMath' },
+    Phys: { id: 'ph110',   total: 4, pEl: 'pPhys', fEl: 'pfPhys' },
+    Lang: { id: 'la111',   total: 4, pEl: 'pLang', fEl: 'pfLang' },
+  };
+  for (const [, c] of Object.entries(courses)) {
+    const done = Object.keys(completed).filter(k => k.includes(c.id)).length;
+    const pct  = Math.round((done / c.total) * 100);
+    const pEl  = document.getElementById(c.pEl);
+    const fEl  = document.getElementById(c.fEl);
+    if (pEl) pEl.textContent = pct + '%';
+    if (fEl) fEl.style.width = pct + '%';
   }
 }
 
-function timeAgo(ts) {
-  const diff = Date.now() - ts;
-  if (diff < 60000) return 'just now';
-  if (diff < 3600000) return Math.floor(diff/60000) + 'm ago';
-  if (diff < 86400000) return Math.floor(diff/3600000) + 'h ago';
-  return Math.floor(diff/86400000) + 'd ago';
+function renderBookmarks() {
+  const raw = localStorage.getItem('bh-bookmarks');
+  let bms = [];
+  try { bms = JSON.parse(raw) || []; } catch {}
+
+  // Overview: last 4
+  const recentEl = document.getElementById('recentBookmarks');
+  if (!bms.length) {
+    recentEl.innerHTML = '<div class="empty-state"><i class="fas fa-bookmark"></i><p>No bookmarks yet</p></div>';
+  } else {
+    recentEl.innerHTML = bms.slice(0, 4).map(b => `
+      <a href="${b.url}" class="bm-row">
+        <i class="fas fa-file-alt"></i>
+        <span>${b.title || b.url}</span>
+        <span class="bm-time">${timeAgo(b.ts || Date.now())}</span>
+      </a>`).join('');
+  }
+
+  // Full list
+  const allEl = document.getElementById('allBookmarks');
+  if (!bms.length) {
+    allEl.innerHTML = '<div class="empty-state"><i class="fas fa-bookmark"></i><p>No saved resources yet. Open any document and click the bookmark icon.</p></div>';
+  } else {
+    allEl.innerHTML = bms.map(b => `
+      <a href="${b.url}" class="bm-row">
+        <i class="fas fa-file-alt"></i>
+        <span>${b.title || b.url}</span>
+        <span class="bm-time">${timeAgo(b.ts || Date.now())}</span>
+      </a>`).join('');
+  }
+}
+
+// ── Profile prefs (name, uni, year stored locally) ────────
+function loadProfilePrefs() {
+  const prefs = JSON.parse(localStorage.getItem('bh-profile-prefs') || '{}');
+  if (prefs.name) {
+    document.getElementById('dashName').textContent = prefs.name;
+    document.getElementById('editName').value = prefs.name;
+  }
+  if (prefs.uni) {
+    document.getElementById('dashUni').innerHTML = `<i class="fas fa-university"></i> ${prefs.uni}`;
+    document.getElementById('editUni').value = prefs.uni;
+  }
+  if (prefs.year) {
+    document.getElementById('dashYear').innerHTML = `<i class="fas fa-graduation-cap"></i> ${prefs.year}`;
+    document.getElementById('editYear').value = prefs.year;
+  }
+  // Supabase user info
+  if (window.BrainHubAuth) {
+    const user = window.BrainHubAuth.getUser?.();
+    if (user) {
+      const email = user.email || '—';
+      const provider = user.app_metadata?.provider || 'email';
+      document.getElementById('accountEmail').textContent = email;
+      document.getElementById('accountProvider').textContent = 'Signed in via ' + provider;
+      if (!prefs.name && user.user_metadata?.full_name) {
+        document.getElementById('dashName').textContent = user.user_metadata.full_name;
+      }
+      const avatarUrl = user.user_metadata?.avatar_url;
+      if (avatarUrl) {
+        const img = document.getElementById('dashAvatarImg');
+        img.src = avatarUrl;
+        img.style.display = 'block';
+        document.getElementById('dashAvatar').childNodes[0].textContent = '';
+      }
+    }
+  }
+}
+
+function saveProfile() {
+  const prefs = {
+    name: document.getElementById('editName').value.trim(),
+    uni:  document.getElementById('editUni').value,
+    year: document.getElementById('editYear').value,
+  };
+  localStorage.setItem('bh-profile-prefs', JSON.stringify(prefs));
+  if (prefs.name) document.getElementById('dashName').textContent = prefs.name;
+  if (prefs.uni)  document.getElementById('dashUni').innerHTML = `<i class="fas fa-university"></i> ${prefs.uni}`;
+  if (prefs.year) document.getElementById('dashYear').innerHTML = `<i class="fas fa-graduation-cap"></i> ${prefs.year}`;
+  if (typeof showToast === 'function') showToast('✅ Profile saved!');
+}
+
+function signOutUser() {
+  if (window.BrainHubAuth?.signOut) {
+    window.BrainHubAuth.signOut().then(() => { window.location.href = '/index.html'; });
+  } else {
+    window.location.href = '/pages/auth.html';
+  }
 }
 
 function confirmReset() {
-  if (confirm('Are you sure? This will permanently delete all your XP, badges and streaks.')) {
+  if (confirm('Reset ALL progress? This cannot be undone.')) {
     localStorage.removeItem('bh-gamification');
-    showToast('Progress reset.');
+    if (typeof showToast === 'function') showToast('Progress reset.');
     setTimeout(() => location.reload(), 800);
   }
 }
 </script>
-
 </body>
 </html>

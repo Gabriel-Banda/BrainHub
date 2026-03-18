@@ -129,7 +129,7 @@
       <li><a href="/pages/quizzes.html">Quizzes</a></li>
       <li><a href="/pages/flashcards.html">Flashcards</a></li>
       <li><a href="/pages/search.html"><i class="fas fa-search"></i> Search</a></li>
-      <li><a href="/pages/about.html">About</a></li>
+      <li><a href="/pages/contributors.html">Contributors</a></li>
       <li><a href="/pages/contact.html">Contact</a></li>
       <!-- Show only when NOT logged in -->
 <li data-auth-show="guest">
@@ -612,6 +612,9 @@
 
 <script>
 const QUOTES = [
+  { text: "To me the very definition of broken suggests that something can be fixed.", author: "Elijah Mikaelson" },
+  { text: "Zambia is blessed with brilliant minds — yours is one of them. Use it.", author: "Gabriel J. Banda" },
+  { text: "Every student in Zambia who keeps studying is building a better nation.", author: "Gabriel J. Banda" },
   { text: "The secret of getting ahead is getting started.", author: "Mark Twain" },
   { text: "Education is the most powerful weapon which you can use to change the world.", author: "Nelson Mandela" },
   { text: "The beautiful thing about learning is that no one can take it away from you.", author: "B.B. King" },
@@ -712,8 +715,6 @@ const QUOTES = [
   { text: "In order to succeed, we must first believe that we can.", author: "Nikos Kazantzakis" },
   { text: "Act as if what you do makes a difference. It does.", author: "William James" },
   { text: "Success is not how high you have climbed, but how you make a positive difference to the world.", author: "Roy T. Bennett" },
-  { text: "Zambia is blessed with brilliant minds — yours is one of them. Use it.", author: "BrainHub" },
-  { text: "Every student in Zambia who keeps studying is building a better nation.", author: "BrainHub" },
 ];
 
 let currentQuote = Math.floor(Math.random() * QUOTES.length);
@@ -823,6 +824,7 @@ resetAutoPlay();
     <li><a href="/pages/search.html" data-page="search"><i class="fas fa-search"></i>Search</a></li>
     <li><a href="/pages/flashcards.html" data-page="flashcards"><i class="fas fa-layer-group"></i>Cards</a></li>
     <li><a href="/pages/profile.html" data-page="profile"><i class="fas fa-user"></i>Profile</a></li>
+    <li><a href="/pages/contributors.html" data-page="contributors"><i class="fas fa-users"></i>Contributors</a></li>
   </ul>
 </nav>
 

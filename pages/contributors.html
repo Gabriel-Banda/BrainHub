@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contributors | BrainHub</title>
+  <meta name="description" content="Meet the people who built and contribute to BrainHub — Zambia's free student study platform." />
+  <link rel="stylesheet" href="/src/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link rel="icon" type="image/x-icon" href="/public/assets/images/favicon.png" />
+  <style>
+    /* ── Page shell ──────────────────────────────────────── */
+    .contrib-page { padding: 0 0 6rem; }
+
+    /* ── Hero ────────────────────────────────────────────── */
+    .contrib-hero {
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+      padding: 6rem 0 4rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 4rem;
+    }
+    .contrib-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(circle at 20% 50%, rgba(99,102,241,.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(139,92,246,.12) 0%, transparent 45%),
+        radial-gradient(circle at 60% 80%, rgba(37,99,235,.1) 0%, transparent 40%);
+    }
+    /* Floating dots decoration */
+    .hero-dots {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image: radial-gradient(circle, rgba(255,255,255,.06) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+    .contrib-hero-inner { position: relative; z-index: 1; }
+    .contrib-hero-tag {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: rgba(99,102,241,.25);
+      border: 1px solid rgba(99,102,241,.4);
+      color: #a5b4fc;
+      padding: .35rem 1rem; border-radius: 60px;
+      font-size: .78rem; font-weight: 700;
+      letter-spacing: .06em; text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+    .contrib-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 900; color: white;
+      line-height: 1.05; letter-spacing: -.03em;
+      margin-bottom: 1rem;
+    }
+    .contrib-hero h1 span {
+      background: linear-gradient(135deg, #818cf8, #c084fc);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .contrib-hero p {
+      font-size: 1.1rem; color: rgba(255,255,255,.65);
+      max-width: 560px; margin: 0 auto 2.5rem; line-height: 1.7;
+    }
+    .contrib-hero-stats {
+      display: flex; justify-content: center; gap: 2.5rem; flex-wrap: wrap;
+    }
+    .hs { text-align: center; }
+    .hs-num {
+      font-family: var(--font-display); font-size: 2rem; font-weight: 900; color: white;
+    }
+    .hs-lbl { font-size: .75rem; color: rgba(255,255,255,.5); font-weight: 600; text-transform: uppercase; letter-spacing: .05em; }
+
+    /* ── Section heading ─────────────────────────────────── */
+    .contrib-section { margin-bottom: 4rem; }
+    .contrib-section-title {
+      display: flex; align-items: center; gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .contrib-section-title h2 {
+      font-family: var(--font-display); font-size: 1.5rem; font-weight: 800;
+      color: var(--text-900); letter-spacing: -.02em;
+    }
+    .contrib-section-title .line {
+      flex: 1; height: 1px; background: var(--border);
+    }
+
+    /* ── FOUNDER card ─────────────────────────────────────── */
+    .founder-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 24px; overflow: hidden;
+      display: flex; gap: 0; flex-wrap: wrap;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+    }
+    .founder-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 4px;
+      background: linear-gradient(90deg, var(--primary), #8b5cf6, #06b6d4);
+    }
+    .founder-left {
+      background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+      padding: 3rem 2.5rem;
+      display: flex; flex-direction: column; align-items: center;
+      text-align: center; min-width: 260px; flex-shrink: 0;
+    }
+    .founder-avatar {
+      width: 110px; height: 110px; border-radius: 50%;
+      background: rgba(255,255,255,.18);
+      border: 4px solid rgba(255,255,255,.35);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3rem; margin-bottom: 1.25rem;
+      font-weight: 900; color: white;
+    }
+    .founder-name {
+      font-family: var(--font-display); font-size: 1.3rem;
+      font-weight: 900; color: white; margin-bottom: .3rem;
+    }
+    .founder-role {
+      background: rgba(255,255,255,.2); color: white;
+      padding: .3rem .85rem; border-radius: 60px;
+      font-size: .75rem; font-weight: 700; margin-bottom: 1.25rem;
+    }
+    .founder-socials { display: flex; gap: .6rem; }
+    .founder-social {
+      width: 34px; height: 34px; border-radius: 8px;
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.25);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: .85rem;
+      text-decoration: none; transition: background .2s;
+    }
+    .founder-social:hover { background: rgba(255,255,255,.3); }
+    .founder-right { flex: 1; padding: 2.5rem; min-width: 280px; }
+    .founder-right h3 {
+      font-family: var(--font-display); font-size: 1.3rem;
+      font-weight: 800; color: var(--text-900); margin-bottom: .25rem;
+    }
+    .founder-right .title { color: var(--primary); font-weight: 700; font-size: .9rem; margin-bottom: 1rem; }
+    .founder-right p { color: var(--text-600); font-size: .92rem; line-height: 1.75; margin-bottom: 1.25rem; }
+    .founder-chips { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.5rem; }
+    .chip {
+      display: inline-flex; align-items: center; gap: .35rem;
+      background: var(--primary-light); color: var(--primary);
+      border: 1px solid rgba(37,99,235,.2);
+      padding: .28rem .75rem; border-radius: 60px;
+      font-size: .75rem; font-weight: 700;
+    }
+    .founder-achievements { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+    .fa-stat { text-align: center; }
+    .fa-stat .n {
+      font-family: var(--font-display); font-size: 1.6rem;
+      font-weight: 900; color: var(--text-900);
+    }
+    .fa-stat .l { font-size: .7rem; color: var(--text-500); font-weight: 600; }
+
+    /* ── Core contributors grid ──────────────────────────── */
+    .core-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .core-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 20px; padding: 1.75rem;
+      transition: var(--transition); position: relative;
+      overflow: hidden;
+    }
+    .core-card::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--primary), #8b5cf6);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform .3s ease;
+    }
+    .core-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+    .core-card:hover::after { transform: scaleX(1); }
+    .core-card-top { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+    .core-avatar {
+      width: 60px; height: 60px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; font-weight: 900; flex-shrink: 0;
+      border: 2px solid var(--border);
+    }
+    .core-info { flex: 1; }
+    .core-name { font-family: var(--font-display); font-size: 1rem; font-weight: 800; color: var(--text-900); }
+    .core-role { font-size: .75rem; font-weight: 700; color: var(--primary); margin-top: .1rem; }
+    .core-desc { font-size: .84rem; color: var(--text-600); line-height: 1.65; margin-bottom: 1rem; }
+    .core-tags { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .ctag {
+      font-size: .68rem; font-weight: 700; padding: .18rem .55rem;
+      border-radius: 60px; background: var(--bg-muted); color: var(--text-500);
+    }
+
+    /* ── Community contributors ──────────────────────────── */
+    .community-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 1rem;
+    }
+    .comm-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 1.25rem 1rem;
+      text-align: center; transition: var(--transition);
+    }
+    .comm-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: var(--primary); }
+    .comm-avatar {
+      width: 52px; height: 52px; border-radius: 50%;
+      margin: 0 auto .75rem;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; font-weight: 900; border: 2px solid var(--border);
+    }
+    .comm-name { font-family: var(--font-display); font-size: .88rem; font-weight: 800; color: var(--text-900); margin-bottom: .15rem; }
+    .comm-contrib { font-size: .72rem; color: var(--text-500); }
+    .comm-badge {
+      display: inline-block; margin-top: .5rem;
+      font-size: .62rem; font-weight: 800; padding: .12rem .45rem;
+      border-radius: 60px; text-transform: uppercase; letter-spacing: .05em;
+    }
+
+    /* ── Tech stack ──────────────────────────────────────── */
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 1rem;
+    }
+    .tech-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 1.25rem 1rem;
+      text-align: center; transition: var(--transition);
+    }
+    .tech-card:hover { transform: translateY(-3px); border-color: var(--primary); }
+    .tech-icon { font-size: 2rem; margin-bottom: .5rem; }
+    .tech-name { font-family: var(--font-display); font-size: .85rem; font-weight: 700; color: var(--text-900); }
+    .tech-role { font-size: .7rem; color: var(--text-400); margin-top: .15rem; }
+
+    /* ── CTA ─────────────────────────────────────────────── */
+    .contrib-cta {
+      background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+      border-radius: 24px; padding: 3.5rem 2rem;
+      text-align: center; color: white; position: relative; overflow: hidden;
+    }
+    .contrib-cta::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: radial-gradient(circle at 30% 50%, rgba(255,255,255,.07) 0%, transparent 60%);
+    }
+    .contrib-cta h2 {
+      font-family: var(--font-display); font-size: 2rem;
+      font-weight: 900; margin-bottom: .75rem; position: relative;
+    }
+    .contrib-cta p { font-size: 1rem; opacity: .8; margin-bottom: 2rem; position: relative; max-width: 480px; margin-left: auto; margin-right: auto; }
+    .cta-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; position: relative; }
+    .cta-btn-white {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: white; color: var(--primary);
+      padding: .85rem 2rem; border-radius: 60px;
+      font-weight: 800; font-size: .95rem;
+      text-decoration: none; transition: transform .2s, box-shadow .2s;
+    }
+    .cta-btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.2); }
+    .cta-btn-outline {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: transparent; color: white;
+      border: 2px solid rgba(255,255,255,.5);
+      padding: .85rem 2rem; border-radius: 60px;
+      font-weight: 700; font-size: .95rem;
+      text-decoration: none; transition: border-color .2s, background .2s;
+    }
+    .cta-btn-outline:hover { border-color: white; background: rgba(255,255,255,.1); }
+
+    @media(max-width:640px) {
+      .founder-left { min-width: 100%; }
+      .contrib-hero h1 { font-size: 2.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<button class="back-to-top" aria-label="Back to top"><i class="fas fa-arrow-up"></i></button>
+
+<nav class="navbar">
+  <div class="container nav-container">
+    <a href="/index.html" class="logo">
+      <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;color:var(--primary)"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M9 13a4.5 4.5 0 0 0 3-4"/><path d="M12 13h4"/><path d="M12 18h6a2 2 0 0 1 2 2v1"/><path d="M12 8h8"/><path d="M16 8V5a2 2 0 0 1 2-2"/><circle cx="16" cy="13" r=".5"/><circle cx="18" cy="3" r=".5"/><circle cx="20" cy="21" r=".5"/><circle cx="20" cy="8" r=".5"/></svg>
+      BrainHub<span class="dot">.</span>
+    </a>
+    <button class="mobile-menu-btn" aria-label="Toggle navigation"><i class="fas fa-bars"></i></button>
+    <ul class="nav-links">
+      <li><a href="/index.html">Home</a></li>
+      <li><a href="/pages/universities.html">Universities</a></li>
+      <li><a href="/pages/about.html">About</a></li>
+      <li><a href="/pages/contact.html">Contact</a></li>
+      <li data-auth-show="guest"><a href="/pages/auth.html" class="btn-primary" style="padding:.4rem .9rem;border-radius:8px">Sign In</a></li>
+      <li data-auth-show="authed" style="display:none">
+        <a href="/pages/profile.html" style="display:flex;align-items:center;gap:.4rem">
+          <img data-auth-avatar src="" width="28" height="28" style="border-radius:50%;object-fit:cover;display:none;border:2px solid var(--primary)">
+          <span data-auth-name style="font-weight:700;font-size:.85rem"></span>
+        </a>
+      </li>
+      <li><button id="theme-toggle" class="btn-primary theme-toggle"><i class="fas fa-moon" id="theme-icon"></i></button></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="contrib-hero">
+  <div class="hero-dots"></div>
+  <div class="contrib-hero-inner container">
+    <div class="contrib-hero-tag"><i class="fas fa-users"></i> The People Behind BrainHub</div>
+    <h1>Built with <span>passion</span><br>for Zambian students.</h1>
+    <p>BrainHub is open-source and community-driven. Every feature, fix, and piece of content is built by people who believe education should be free and accessible for everyone.</p>
+    <div class="contrib-hero-stats">
+      <div class="hs"><div class="hs-num">6</div><div class="hs-lbl">Contributors</div></div>
+      <div class="hs"><div class="hs-num">3</div><div class="hs-lbl">Universities</div></div>
+      <div class="hs"><div class="hs-num">55+</div><div class="hs-lbl">Features shipped</div></div>
+      <div class="hs"><div class="hs-num">50+</div><div class="hs-lbl">Students helped</div></div>
+      <div class="hs"><div class="hs-num">Open</div><div class="hs-lbl">Source</div></div>
+    </div>
+  </div>
+</div>
+
+<main class="container contrib-page">
+
+  <!-- ── FOUNDER ─────────────────────────────────────────── -->
+  <div class="contrib-section">
+    <div class="contrib-section-title">
+      <h2>Founder</h2>
+      <div class="line"></div>
+    </div>
+    <div class="founder-card reveal">
+      <div class="founder-left">
+        <div class="founder-avatar">G</div>
+        <div class="founder-name">Gabriel J. Banda</div>
+        <div class="founder-role">Founder &amp; Lead Developer</div>
+        <div class="founder-socials">
+          <a href="https://github.com/Gabriel-Banda" target="_blank" rel="noopener" class="founder-social" title="GitHub"><i class="fab fa-github"></i></a>
+          <a href="/cdn-cgi/l/email-protection#b8dfd9dacad1ddd4d2d7cbd0cdd9dad9d6dcd98089f8dfd5d9d1d496dbd7d5" class="founder-social" title="Email"><i class="fas fa-envelope"></i></a>
+        </div>
+      </div>
+      <div class="founder-right">
+        <h3>Gabriel Joshua Banda</h3>
+        <div class="title">Founder · Lead Developer · Designer · Content Author</div>
+        <p>
+          Gabriel built BrainHub from the ground up — designing every page, writing every line of code, and curating every piece of study content. Driven by a vision to make quality university education accessible and completely free for every Zambian student, he has shipped 55+ features across 5 major releases in just a few months.
+        </p>
+        <p>
+          From the AI tutor to the gamification system, offline PWA support, multi-language translation engine, Supabase authentication, and 100-question quiz system — every feature was built solo with a relentless focus on student experience.
+        </p>
+        <div class="founder-chips">
+          <span class="chip"><i class="fas fa-code"></i> Dev</span>
+          <span class="chip"><i class="fas fa-paint-brush"></i> UI/UX Design</span>
+          <span class="chip"><i class="fas fa-robot"></i> AI Integration</span>
+          <span class="chip"><i class="fas fa-cloud"></i> Cloudflare</span>
+          <span class="chip"><i class="fas fa-database"></i> Supabase</span>
+          <!--<span class="chip"><i class="fas fa-graduation-cap"></i> CBU Student</span>-->
+        </div>
+        <div class="founder-achievements">
+          <div class="fa-stat"><div class="n">5</div><div class="l">Releases</div></div>
+          <div class="fa-stat"><div class="n">55+</div><div class="l">Features</div></div>
+          <div class="fa-stat"><div class="n">21</div><div class="l">Pages built</div></div>
+          <div class="fa-stat"><div class="n">3</div><div class="l">Unis covered</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CORE TEAM (open slots) ─────────────────────────── -->
+  <div class="contrib-section">
+    <div class="contrib-section-title">
+      <h2>Core Team</h2>
+      <div class="line"></div>
+    </div>
+    <div class="core-grid">
+
+      <!-- Davis Kahembi Saleji -->
+      <div class="core-card reveal">
+        <div class="core-card-top">
+          <img src="/public/assets/images/contributors/Davies.jpeg" alt="Davies Kahembi Saleji"
+    style="width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid var(--border);flex-shrink:0;">
+          <div class="core-info">
+            <div class="core-name">Davies Kahembi Saleji</div>
+            <div class="core-role">Document Contributor</div>
+          </div>
+        </div>
+        <div class="core-desc">
+          Davies was one of the first people to step up and help source academic materials for BrainHub. His dedication to collecting and organising lecture notes and past papers for UNZA Natural Sciences directly put study resources in the hands of hundreds of students. A true believer in the mission from day one.
+        </div>
+        <div class="core-tags">
+          <span class="ctag">📄 Notes</span>
+          <span class="ctag">📝 Past Papers</span>
+          <span class="ctag">UNZA</span>
+        </div>
+      </div>
+
+      <!-- Kisu Njapau -->
+      <div class="core-card reveal">
+        <div class="core-card-top">
+          <img src="/public/assets/images/contributors/Kisu.jpeg" alt="Kisu Njapau"
+    style="width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid var(--border);flex-shrink:0;">
+          <div class="core-info">
+            <div class="core-name">Kisu Njapau</div>
+            <div class="core-role">Document Contributor</div>
+          </div>
+        </div>
+        <div class="core-desc">
+          Kisu played a vital role in expanding BrainHub's resource library by sourcing hard-to-find lecture materials and examination papers. His network across university faculties helped unlock content that students couldn't easily access on their own. His contributions have made BrainHub more complete and more useful for every student who visits.
+        </div>
+        <div class="core-tags">
+          <span class="ctag">📄 Notes</span>
+          <span class="ctag">📝 Past Papers</span>
+          <span class="ctag">ZUT</span>
+        </div>
+      </div>
+
+      <!-- Chimpuki Mununga -->
+      <div class="core-card reveal">
+        <div class="core-card-top">
+          <img src="/public/assets/images/contributors/Chimpuki.jpeg" alt="Chimpuki Mununga"
+    style="width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid var(--border);flex-shrink:0;">
+          <div class="core-info">
+            <div class="core-name">Chimpuki Mununga</div>
+            <div class="core-role">Document Contributor</div>
+          </div>
+        </div>
+        <div class="core-desc">
+          Chimpuki contributed a significant collection of study materials, bringing together notes and resources from multiple courses and making them available to the entire BrainHub community. Beyond just sourcing files, he provided valuable feedback on how students actually use study materials — insight that shaped the platform's document viewer and navigation design.
+        </div>
+        <div class="core-tags">
+          <span class="ctag">📄 Notes</span>
+          <span class="ctag">🗂️ Resources</span>
+          <span class="ctag">CBU</span>
+        </div>
+      </div>
+
+      <!-- Gift Kapeshi -->
+      <div class="core-card reveal">
+        <div class="core-card-top">
+          <img src="/public/assets/images/contributors/Gift.jpeg" alt="Gift Kapeshi"
+    style="width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid var(--border);flex-shrink:0;">
+          <div class="core-info">
+            <div class="core-name">Gift Kapeshi</div>
+            <div class="core-role">Document Contributor</div>
+          </div>
+        </div>
+        <div class="core-desc">
+          Gift was instrumental in sourcing examination papers and supplementary notes that students needed most during exam season. Her attention to ensuring the accuracy and completeness of uploaded materials raised the standard for everything on the platform. She embodies the spirit of BrainHub — students helping students, freely and without hesitation.
+        </div>
+        <div class="core-tags">
+          <span class="ctag">📝 Exams</span>
+          <span class="ctag">📄 Notes</span>
+          <span class="ctag">ZUT</span>
+        </div>
+      </div>
+
+      <!-- Moses Kadima -->
+      <div class="core-card reveal">
+        <div class="core-card-top">
+          <img src="/public/assets/images/contributors/Moses.jpeg" alt="Moses Kadima"
+    style="width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid var(--border);flex-shrink:0;">
+          <div class="core-info">
+            <div class="core-name">Moses Kadima</div>
+            <div class="core-role">Document Contributor</div>
+          </div>
+        </div>
+        <div class="core-desc">
+          Moses brought energy and commitment to building out the document library, tracking down resources across courses and semesters that were genuinely difficult to find. His persistent efforts to gather quality study materials — particularly past papers — have saved countless students hours of searching and given them a real edge when preparing for exams.
+        </div>
+        <div class="core-tags">
+          <span class="ctag">📝 Past Papers</span>
+          <span class="ctag">📄 Notes</span>
+          <span class="ctag">CBU</span>
+        </div>
+      </div>
+
+      <!-- Open slot -->
+      <div class="core-card reveal" style="border-style:dashed;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:220px;gap:.75rem">
+        <div style="font-size:2.5rem;opacity:.25">➕</div>
+        <div style="font-family:var(--font-display);font-weight:800;color:var(--text-400);font-size:.95rem">Your Name Here?</div>
+        <div style="font-size:.8rem;color:var(--text-400);max-width:200px">Help add notes, past papers, or translations. Every contribution counts.</div>
+        <a href="/pages/contact.html" class="btn-primary" style="padding:.5rem 1.2rem;font-size:.8rem;margin-top:.5rem">Get Involved</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── COMMUNITY ────────────────────────────────────────── -->
+  <div class="contrib-section">
+    <div class="contrib-section-title">
+      <h2>Community</h2>
+      <div class="line"></div>
+    </div>
+    <p style="color:var(--text-500);font-size:.9rem;margin-bottom:1.75rem">Students who have shared BrainHub, reported bugs, or suggested features that made it into the platform.</p>
+    <div class="community-grid">
+
+      <div class="comm-card reveal">
+        <div class="comm-avatar" style="background:linear-gradient(135deg,#dbeafe,#bfdbfe)">🎓</div>
+        <div class="comm-name">CBU Students</div>
+        <div class="comm-contrib">Early testers &amp; feedback</div>
+        <span class="comm-badge" style="background:#dbeafe;color:#1e40af">Testers</span>
+      </div>
+
+      <div class="comm-card reveal">
+        <div class="comm-avatar" style="background:linear-gradient(135deg,#dcfce7,#bbf7d0)">🌱</div>
+        <div class="comm-name">UNZA Students</div>
+        <div class="comm-contrib">Resource requests</div>
+        <span class="comm-badge" style="background:#dcfce7;color:#166534">Requesters</span>
+      </div>
+
+      <div class="comm-card reveal">
+        <div class="comm-avatar" style="background:linear-gradient(135deg,#fef9c3,#fef08a)">⚡</div>
+        <div class="comm-name">ZUT Students</div>
+        <div class="comm-contrib">Feature suggestions</div>
+        <span class="comm-badge" style="background:#fef9c3;color:#854d0e">Ideas</span>
+      </div>
+
+      <div class="comm-card reveal" style="border-style:dashed;background:transparent">
+        <div class="comm-avatar" style="background:var(--bg-muted)">🤝</div>
+        <div class="comm-name">You?</div>
+        <div class="comm-contrib">Join the community</div>
+        <a href="/pages/contact.html" class="comm-badge" style="background:var(--primary);color:white;text-decoration:none;display:block;margin-top:.5rem">Join Us</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── TECH STACK ──────────────────────────────────────── -->
+  <div class="contrib-section">
+    <div class="contrib-section-title">
+      <h2>Built With</h2>
+      <div class="line"></div>
+    </div>
+    <div class="tech-grid">
+      <div class="tech-card reveal">
+        <div class="tech-icon">🤖</div>
+        <div class="tech-name">BrainHub</div>
+        <div class="tech-role">AI Tutor</div>
+      </div>
+      <div class="tech-card reveal">
+        <div class="tech-icon">📦</div>
+        <div class="tech-name">Vanilla JS</div>
+        <div class="tech-role">Frontend Logic</div>
+      </div>
+      <div class="tech-card reveal">
+        <div class="tech-icon">🎨</div>
+        <div class="tech-name">CSS Variables</div>
+        <div class="tech-role">Theming System</div>
+      </div>
+      <div class="tech-card reveal">
+        <div class="tech-icon">📲</div>
+        <div class="tech-name">PWA / Service Worker</div>
+        <div class="tech-role">Offline Support</div>
+      </div>
+      <div class="tech-card reveal">
+        <div class="tech-icon">🔤</div>
+        <div class="tech-name">Font Awesome</div>
+        <div class="tech-role">Icons</div>
+      </div>
+      <div class="tech-card reveal">
+        <div class="tech-icon">🐙</div>
+        <div class="tech-name">GitHub</div>
+        <div class="tech-role">Version Control</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CTA ────────────────────────────────────────────── -->
+  <div class="contrib-cta reveal">
+    <h2>Want to contribute?</h2>
+    <p>BrainHub is open source and always looking for students who want to help. Whether it's adding notes, fixing bugs, translating content, or spreading the word — every contribution matters.</p>
+    <div class="cta-btns">
+      <a href="https://github.com/Gabriel-Banda/BrainHub" target="_blank" rel="noopener" class="cta-btn-white">
+        <i class="fab fa-github"></i> View on GitHub
+      </a>
+      <a href="/pages/contact.html" class="cta-btn-outline">
+        <i class="fas fa-envelope"></i> Get in Touch
+      </a>
+    </div>
+  </div>
+
+</main>
+
+<nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+  <ul>
+    <li><a href="/index.html"><i class="fas fa-home"></i>Home</a></li>
+    <li><a href="/pages/universities.html"><i class="fas fa-university"></i>Study</a></li>
+    <li><a href="/pages/flashcards.html"><i class="fas fa-layer-group"></i>Cards</a></li>
+    <li><a href="/pages/quizzes.html"><i class="fas fa-stopwatch"></i>Quizzes</a></li>
+    <li><a href="/pages/profile.html"><i class="fas fa-user"></i>Profile</a></li>
+  </ul>
+</nav>
+
+<footer>
+  <div class="container footer-content">
+    <div class="footer-col">
+      <h3>BrainHub<span class="dot">.</span></h3>
+      <p>Making quality education accessible and free for everyone.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Platform</h4>
+      <a href="/index.html">Home</a>
+      <a href="/pages/universities.html">Universities</a>
+      <a href="/pages/flashcards.html">Flashcards</a>
+      <a href="/pages/quizzes.html">Quizzes</a>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <a href="/pages/about.html">About Us</a>
+      <a href="/pages/contact.html">Contact Us</a>
+      <a href="/pages/changelog.html">Changelog</a>
+      <a href="https://github.com/Gabriel-Banda/BrainHub" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 BrainHub. All rights reserved.</p>
+    <p id="realtime-clock" class="clock-text"></p>
+  </div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<script src="/src/main.js"></script>
+<script src="/src/gamification.js"></script>
+<script>
+  // Reveal animations
+  document.addEventListener('DOMContentLoaded', () => {
+    const revealElements = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    revealElements.forEach(el => observer.observe(el));
+  }); 
+  </script>
+</body>
+</html>

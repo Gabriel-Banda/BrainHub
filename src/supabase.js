@@ -233,13 +233,24 @@ function initBrainHubAuth() {
   function updateNavUI() {
     const session = window.BrainHubAuth?._session;
     const loggedIn = !!session;
-    // Show/hide sign-in vs profile links
+
+    // Apply immediately
+    _applyNavUI(session, loggedIn);
+
+    // Retry a few times to catch elements injected by i18n.js or components
+    let attempts = 0;
+    const retry = setInterval(() => {
+      _applyNavUI(session, loggedIn);
+      if (++attempts >= 6) clearInterval(retry);
+    }, 250);
+  }
+
+  function _applyNavUI(session, loggedIn) {
     document.querySelectorAll('[data-auth-show]').forEach(el => {
       const mode = el.dataset.authShow;
       el.style.display = (mode === 'authed' ? loggedIn : !loggedIn) ? '' : 'none';
     });
-    // Show user name/avatar
-    if (loggedIn) {
+    if (loggedIn && session) {
       const name = session.user?.user_metadata?.full_name ||
                    session.user?.email?.split('@')[0] || 'Student';
       document.querySelectorAll('[data-auth-name]').forEach(el => el.textContent = name);
@@ -297,15 +308,23 @@ function initBrainHubAuth() {
     getUserId:  () => window.BrainHubAuth._session?.user?.id || null,
   };
 
-  // Init session on page load
-  getSession().then(session => {
-    window.BrainHubAuth._session = session;
-    updateNavUI();
-    if (session) {
-      onSignIn(session.user.id);
-      startPeriodicSync(session.user.id);
-    }
-  });
+  // Init session on page load — wait for DOM before touching nav elements
+  function initSession() {
+    getSession().then(session => {
+      window.BrainHubAuth._session = session;
+      updateNavUI();
+      if (session) {
+        onSignIn(session.user.id);
+        startPeriodicSync(session.user.id);
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSession);
+  } else {
+    initSession();
+  }
 
   // Sync to cloud when progress/bookmarks change
   window.addEventListener('brainhub:progresschange', () => {
