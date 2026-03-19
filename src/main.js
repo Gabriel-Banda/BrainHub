@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initLiveSearch();
   initPomodoroTimer();
   initWhatsNewModal();
+  initOnboarding();
   // User features
   initProgressTracker();
   initBookmarks();
@@ -865,6 +866,154 @@ function showToast(message, duration = 2800) {
 }
 
 // ==================== WHAT'S NEW MODAL ====================
+
+// ==================== ONBOARDING ====================
+function initOnboarding() {
+  // Only show on index page
+  if (!document.getElementById('onboardingModal')) return;
+  // Don't show if already completed
+  if (localStorage.getItem('bh-onboarded')) return;
+  // Show after a short delay
+  setTimeout(() => showOnboarding(), 900);
+}
+
+function showOnboarding() {
+  const modal = document.getElementById('onboardingModal');
+  if (!modal) return;
+  modal.classList.add('ob-open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeOnboarding(completed) {
+  const modal = document.getElementById('onboardingModal');
+  if (!modal) return;
+  modal.classList.remove('ob-open');
+  modal.classList.add('ob-closing');
+  document.body.style.overflow = '';
+  setTimeout(() => { modal.classList.remove('ob-closing'); }, 400);
+  if (completed) localStorage.setItem('bh-onboarded', '1');
+}
+
+function obSelectUni(el, value) {
+  document.querySelectorAll('.ob-uni-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('obNextStep1').disabled = false;
+  window._obUni = value;
+}
+
+function obSelectYear(el, value) {
+  document.querySelectorAll('.ob-year-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('obNextStep2').disabled = false;
+  window._obYear = value;
+}
+
+function obGoStep(step) {
+  document.querySelectorAll('.ob-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('ob-step-' + step).classList.add('active');
+  // Update progress dots
+  document.querySelectorAll('.ob-dot').forEach((d, i) => {
+    d.classList.toggle('active', i < step);
+    d.classList.toggle('done', i < step - 1);
+  });
+}
+
+function obFinish() {
+  const uni  = window._obUni  || 'all';
+  const year = window._obYear || '1';
+
+  // Save prefs
+  const prefs = JSON.parse(localStorage.getItem('bh-profile-prefs') || '{}');
+  prefs.uni  = uni;
+  prefs.year = year;
+  localStorage.setItem('bh-profile-prefs', JSON.stringify(prefs));
+
+  // Show step 3 (results)
+  obGoStep(3);
+  obBuildResults(uni, year);
+  closeOnboarding(true);
+
+  // Re-show step 3 content (it's inside the modal on step 3)
+  const modal = document.getElementById('onboardingModal');
+  if (modal) {
+    modal.classList.add('ob-open');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function obBuildResults(uni, year) {
+  const ROUTES = {
+    CBU:  {
+      name: 'Copperbelt University',
+      programs: [
+        { name: 'Natural Sciences',      url: '/pages/universities/cbu/programs/natural-sciences.html', icon: '🔬' },
+        { name: 'Engineering Drawing',   url: '/pages/universities/cbu/programs/engineering-drawing.html', icon: '📐' },
+      ]
+    },
+    UNZA: {
+      name: 'University of Zambia',
+      programs: [
+        { name: 'Natural Sciences',      url: '/pages/universities/unza/programs/natural-sciences.html', icon: '🔬' },
+      ]
+    },
+    ZUT:  {
+      name: 'Zambia University of Technology',
+      programs: [
+        { name: 'Communication Skills',  url: '/pages/universities/zut/programs/communication-skills.html', icon: '💬' },
+        { name: 'Software Engineering',  url: '/pages/universities/zut/programs/software-engineering.html', icon: '💻' },
+      ]
+    },
+  };
+
+  const yearLabels = { '1':'1st Year', '2':'2nd Year', '3':'3rd Year', '4':'4th Year+' };
+  const el = document.getElementById('obResults');
+  if (!el) return;
+
+  const r = ROUTES[uni];
+  const uniName = r ? r.name : 'Your University';
+  const programs = r ? r.programs : [];
+
+  el.innerHTML = `
+    <div class="ob-result-greeting">
+      <div class="ob-result-avatar">${uni === 'CBU' ? '🔬' : uni === 'UNZA' ? '🎓' : uni === 'ZUT' ? '💻' : '📚'}</div>
+      <div>
+        <div class="ob-result-name">Welcome to BrainHub! 🎉</div>
+        <div class="ob-result-sub">${uniName} · ${yearLabels[year] || year}</div>
+      </div>
+    </div>
+    <p class="ob-result-msg">Here's what we've prepared for you:</p>
+    <div class="ob-result-links">
+      ${programs.map(p => `
+        <a href="${p.url}" class="ob-result-link" onclick="closeOnboarding(true)">
+          <span class="ob-rl-icon">${p.icon}</span>
+          <span class="ob-rl-text">
+            <span class="ob-rl-title">${p.name}</span>
+            <span class="ob-rl-sub">Notes, past papers & resources</span>
+          </span>
+          <i class="fas fa-arrow-right ob-rl-arrow"></i>
+        </a>`).join('')}
+      <a href="/pages/quizzes.html" class="ob-result-link" onclick="closeOnboarding(true)">
+        <span class="ob-rl-icon">🧠</span>
+        <span class="ob-rl-text">
+          <span class="ob-rl-title">Topic Quizzes</span>
+          <span class="ob-rl-sub">100 questions · Biology, Chemistry, Maths & more</span>
+        </span>
+        <i class="fas fa-arrow-right ob-rl-arrow"></i>
+      </a>
+      <a href="/pages/flashcards.html" class="ob-result-link" onclick="closeOnboarding(true)">
+        <span class="ob-rl-icon">🃏</span>
+        <span class="ob-rl-text">
+          <span class="ob-rl-title">Flashcard Decks</span>
+          <span class="ob-rl-sub">Flip cards · Test your memory</span>
+        </span>
+        <i class="fas fa-arrow-right ob-rl-arrow"></i>
+      </a>
+    </div>
+    <button class="ob-btn-primary" onclick="closeOnboarding(true)" style="margin-top:1.25rem;width:100%">
+      Let's go <i class="fas fa-arrow-right"></i>
+    </button>`;
+}
+
 function initWhatsNewModal() {
   const modal = document.getElementById('whatsNewModal');
   const closeBtn = document.getElementById('closeModalBtn');
