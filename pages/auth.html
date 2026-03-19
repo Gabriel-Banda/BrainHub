@@ -6,374 +6,658 @@
   <title>Sign In | BrainHub</title>
   <link rel="stylesheet" href="/src/style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
   <link rel="icon" type="image/x-icon" href="/public/assets/images/favicon.png" />
   <style>
-    body { min-height: 100vh; display: flex; flex-direction: column; }
-    .auth-wrapper {
-      flex: 1;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --auth-bg: #0a0a0f;
+      --auth-card: #111118;
+      --auth-border: rgba(255,255,255,0.07);
+      --auth-text: #f0f0f8;
+      --auth-muted: rgba(255,255,255,0.45);
+      --auth-primary: #6366f1;
+      --auth-primary-glow: rgba(99,102,241,0.35);
+      --auth-accent: #a78bfa;
+      --auth-success: #34d399;
+      --auth-error: #f87171;
+      --auth-input-bg: rgba(255,255,255,0.04);
+      --auth-input-border: rgba(255,255,255,0.1);
+      --auth-input-focus: rgba(99,102,241,0.5);
+    }
+    [data-theme="light"] {
+      --auth-bg: #f5f5fa;
+      --auth-card: #ffffff;
+      --auth-border: rgba(0,0,0,0.08);
+      --auth-text: #0f0f1a;
+      --auth-muted: rgba(0,0,0,0.45);
+      --auth-primary: #4f46e5;
+      --auth-primary-glow: rgba(79,70,229,0.2);
+      --auth-input-bg: rgba(0,0,0,0.02);
+      --auth-input-border: rgba(0,0,0,0.12);
+      --auth-input-focus: rgba(79,70,229,0.3);
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--auth-bg);
+      color: var(--auth-text);
+      font-family: var(--font-body, 'Inter', sans-serif);
+    }
+
+    /* ── Layout ────────────────────────────────────────────── */
+    .auth-shell {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 100vh;
+    }
+    @media(max-width: 860px) {
+      .auth-shell { grid-template-columns: 1fr; }
+      .auth-left  { display: none; }
+    }
+
+    /* ── Left panel ─────────────────────────────────────────── */
+    .auth-left {
+      position: relative;
+      background: linear-gradient(160deg, #0d0d1a 0%, #1a0d2e 50%, #0d1a2e 100%);
       display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem 1rem;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 3rem;
+      overflow: hidden;
     }
-    .auth-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 22px;
-      padding: 2.5rem 2rem;
-      width: 100%;
-      max-width: 420px;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+
+    /* Animated mesh background */
+    .mesh {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 30%, rgba(99,102,241,0.25) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 80% 70%, rgba(167,139,250,0.15) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 60% 10%, rgba(52,211,153,0.1) 0%, transparent 60%);
+      animation: meshDrift 12s ease-in-out infinite alternate;
     }
-    .auth-logo {
-      text-align: center;
-      margin-bottom: 1.75rem;
+    @keyframes meshDrift {
+      0%   { transform: scale(1) rotate(0deg); }
+      100% { transform: scale(1.08) rotate(2deg); }
     }
-    .auth-logo a {
-      font-size: 1.6rem;
+
+    /* Floating orbs */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      pointer-events: none;
+      animation: orbFloat linear infinite;
+    }
+    .orb-1 { width: 300px; height: 300px; background: rgba(99,102,241,0.2); top: -80px; left: -80px; animation-duration: 20s; }
+    .orb-2 { width: 200px; height: 200px; background: rgba(167,139,250,0.2); bottom: 10%; right: -50px; animation-duration: 15s; animation-direction: reverse; }
+    .orb-3 { width: 150px; height: 150px; background: rgba(52,211,153,0.15); top: 40%; left: 30%; animation-duration: 25s; }
+    @keyframes orbFloat {
+      0%   { transform: translate(0,0) scale(1); }
+      33%  { transform: translate(30px,-20px) scale(1.1); }
+      66%  { transform: translate(-20px,30px) scale(0.95); }
+      100% { transform: translate(0,0) scale(1); }
+    }
+
+    /* Grid pattern overlay */
+    .auth-grid {
+      position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+
+    .auth-left-content { position: relative; z-index: 1; }
+
+    .auth-brand {
+      display: flex; align-items: center; gap: .6rem;
+      font-family: 'Syne', sans-serif;
+      font-size: 1.5rem; font-weight: 800;
+      color: white; text-decoration: none; margin-bottom: 4rem;
+    }
+    .auth-brand-dot { color: var(--auth-primary); }
+
+    .auth-left-headline {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 3vw, 2.8rem);
       font-weight: 900;
-      color: var(--text-900);
-      text-decoration: none;
+      line-height: 1.1;
       letter-spacing: -0.03em;
+      color: white;
+      margin-bottom: 1.25rem;
     }
-    .auth-logo span { color: var(--primary); }
+    .auth-left-headline em {
+      font-style: normal;
+      background: linear-gradient(135deg, #818cf8, #a78bfa, #34d399);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .auth-left-sub {
+      font-size: .95rem; color: rgba(255,255,255,.55);
+      line-height: 1.75; max-width: 340px; margin-bottom: 2.5rem;
+    }
+
+    /* Feature pills */
+    .auth-features { display: flex; flex-direction: column; gap: .75rem; }
+    .auth-feature {
+      display: flex; align-items: center; gap: .85rem;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 12px;
+      padding: .8rem 1rem;
+      animation: featureIn .6s ease both;
+    }
+    .auth-feature:nth-child(1) { animation-delay: .1s; }
+    .auth-feature:nth-child(2) { animation-delay: .2s; }
+    .auth-feature:nth-child(3) { animation-delay: .3s; }
+    @keyframes featureIn {
+      from { opacity: 0; transform: translateX(-16px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    .af-icon {
+      width: 36px; height: 36px; border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .9rem; flex-shrink: 0;
+    }
+    .af-icon.indigo { background: rgba(99,102,241,.2); color: #818cf8; }
+    .af-icon.violet { background: rgba(167,139,250,.2); color: #c4b5fd; }
+    .af-icon.emerald{ background: rgba(52,211,153,.2); color: #34d399; }
+    .af-text strong { display: block; font-size: .84rem; font-weight: 700; color: white; }
+    .af-text span   { font-size: .73rem; color: rgba(255,255,255,.45); }
+
+    /* Left bottom quote */
+    .auth-left-footer {
+      position: relative; z-index: 1;
+      border-top: 1px solid rgba(255,255,255,.07);
+      padding-top: 1.5rem;
+      font-size: .78rem; color: rgba(255,255,255,.35);
+      line-height: 1.6;
+    }
+    .auth-left-footer strong { color: rgba(255,255,255,.6); display: block; margin-bottom: .25rem; }
+
+    /* ── Right panel ─────────────────────────────────────────── */
+    .auth-right {
+      display: flex; align-items: center; justify-content: center;
+      padding: 2rem 1.5rem;
+      background: var(--auth-bg);
+    }
+
+    .auth-card {
+      width: 100%; max-width: 420px;
+      animation: cardIn .5s cubic-bezier(.4,0,.2,1) both;
+    }
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Top logo (mobile / right panel) */
+    .auth-card-logo {
+      text-align: center; margin-bottom: 2rem;
+    }
+    .auth-card-logo a {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.7rem; font-weight: 900;
+      color: var(--auth-text); text-decoration: none;
+    }
+    .auth-card-logo .dot { color: var(--auth-primary); }
+    .auth-card-logo p {
+      font-size: .82rem; color: var(--auth-muted);
+      margin-top: .25rem; line-height: 1.5;
+    }
+
+    /* Tabs */
     .auth-tabs {
       display: flex;
-      background: var(--bg-muted);
-      border-radius: 10px;
-      padding: 3px;
+      background: var(--auth-input-bg);
+      border: 1px solid var(--auth-border);
+      border-radius: 12px;
+      padding: 4px; gap: 4px;
       margin-bottom: 1.75rem;
-      gap: 3px;
     }
     .auth-tab {
-      flex: 1;
-      padding: 0.55rem;
-      border: none;
-      border-radius: 8px;
+      flex: 1; padding: .55rem .75rem;
+      border: none; border-radius: 9px;
       background: transparent;
-      color: var(--text-500);
-      font-size: 0.875rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s;
+      color: var(--auth-muted);
+      font-size: .83rem; font-weight: 700;
+      cursor: pointer; transition: all .2s;
       font-family: inherit;
     }
     .auth-tab.active {
-      background: var(--card);
-      color: var(--primary);
-      box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+      background: var(--auth-primary);
+      color: white;
+      box-shadow: 0 2px 12px var(--auth-primary-glow);
     }
+    .auth-tab:not(.active):hover { color: var(--auth-text); }
+
+    /* Panels */
     .auth-panel { display: none; }
-    .auth-panel.active { display: block; }
+    .auth-panel.active { display: block; animation: panelIn .3s ease both; }
+    @keyframes panelIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
 
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-      margin-bottom: 1rem;
+    /* Form groups */
+    .form-group { margin-bottom: 1rem; }
+    .form-label {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: .78rem; font-weight: 700;
+      color: var(--auth-muted);
+      margin-bottom: .45rem;
+      text-transform: uppercase; letter-spacing: .05em;
     }
-    .form-group label {
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: var(--text-700);
+    .form-label a {
+      font-size: .76rem; color: var(--auth-primary);
+      text-decoration: none; font-weight: 600;
+      text-transform: none; letter-spacing: 0;
     }
-    .input-wrap {
-      position: relative;
-      display: flex;
-      align-items: center;
+    .form-label a:hover { text-decoration: underline; }
+
+    .input-wrap { position: relative; }
+    .input-icon {
+      position: absolute; left: .95rem; top: 50%; transform: translateY(-50%);
+      color: var(--auth-muted); font-size: .8rem; pointer-events: none;
+      transition: color .2s;
     }
-    .input-wrap i {
-      position: absolute;
-      left: 0.9rem;
-      color: var(--text-300);
-      font-size: 0.85rem;
-      pointer-events: none;
-    }
-    .input-wrap input {
+    .input-wrap:focus-within .input-icon { color: var(--auth-primary); }
+
+    .auth-input {
       width: 100%;
-      padding: 0.75rem 1rem 0.75rem 2.5rem;
-      border-radius: 10px;
-      border: 1.5px solid var(--border);
-      background: var(--bg);
-      color: var(--text-900);
-      font-size: 0.9rem;
-      font-family: inherit;
+      padding: .8rem 1rem .8rem 2.6rem;
+      background: var(--auth-input-bg);
+      border: 1.5px solid var(--auth-input-border);
+      border-radius: 11px;
+      color: var(--auth-text);
+      font-size: .9rem; font-family: inherit;
       outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      box-sizing: border-box;
+      transition: border-color .2s, box-shadow .2s, background .2s;
     }
-    .input-wrap input:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+    .auth-input::placeholder { color: rgba(255,255,255,.2); }
+    [data-theme="light"] .auth-input::placeholder { color: rgba(0,0,0,.25); }
+    .auth-input:focus {
+      border-color: var(--auth-primary);
+      background: rgba(99,102,241,.04);
+      box-shadow: 0 0 0 3px var(--auth-primary-glow);
     }
-    .toggle-pw {
-      position: absolute;
-      right: 0.75rem;
-      background: none;
-      border: none;
-      color: var(--text-300);
-      cursor: pointer;
-      padding: 0.2rem;
-      font-size: 0.85rem;
-    }
-    .toggle-pw:hover { color: var(--text-700); }
+    .auth-input:focus + .input-icon { color: var(--auth-primary); }
 
+    .toggle-pw {
+      position: absolute; right: .75rem; top: 50%; transform: translateY(-50%);
+      background: none; border: none;
+      color: var(--auth-muted); cursor: pointer;
+      padding: .3rem; font-size: .8rem; transition: color .2s;
+    }
+    .toggle-pw:hover { color: var(--auth-text); }
+
+    /* Strength bar */
+    .strength-wrap { margin-top: .45rem; display: flex; gap: 4px; }
+    .strength-seg {
+      flex: 1; height: 3px; border-radius: 99px;
+      background: var(--auth-input-border);
+      transition: background .3s;
+    }
+    .strength-label { font-size: .68rem; color: var(--auth-muted); margin-top: .3rem; }
+
+    /* Primary button */
     .auth-btn {
       width: 100%;
-      padding: 0.85rem;
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 12px;
-      font-size: 0.95rem;
-      font-weight: 700;
-      cursor: pointer;
-      font-family: inherit;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      margin-top: 0.25rem;
+      padding: .9rem;
+      background: linear-gradient(135deg, var(--auth-primary), var(--auth-accent));
+      color: white; border: none; border-radius: 12px;
+      font-size: .92rem; font-weight: 700;
+      cursor: pointer; font-family: inherit;
+      display: flex; align-items: center; justify-content: center; gap: .5rem;
+      transition: opacity .2s, transform .2s, box-shadow .2s;
+      position: relative; overflow: hidden;
+      margin-top: .25rem;
     }
-    .auth-btn:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(37,99,235,0.3); }
-    .auth-btn:disabled { opacity: 0.65; pointer-events: none; transform: none; }
+    .auth-btn::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,.15), transparent);
+      opacity: 0; transition: opacity .2s;
+    }
+    .auth-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px var(--auth-primary-glow); }
+    .auth-btn:hover::before { opacity: 1; }
+    .auth-btn:active { transform: translateY(0); }
+    .auth-btn:disabled { opacity: .55; pointer-events: none; transform: none; }
 
+    /* Spinner inside button */
+    .btn-spinner {
+      width: 16px; height: 16px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,.3);
+      border-top-color: white;
+      animation: spin .6s linear infinite;
+      display: none;
+    }
+    .auth-btn.loading .btn-spinner { display: block; }
+    .auth-btn.loading .btn-label { display: none; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Divider */
     .divider {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
+      display: flex; align-items: center; gap: .75rem;
       margin: 1.25rem 0;
-      color: var(--text-300);
-      font-size: 0.78rem;
-      font-weight: 600;
+      font-size: .72rem; font-weight: 700;
+      color: var(--auth-muted);
+      text-transform: uppercase; letter-spacing: .08em;
     }
     .divider::before, .divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border);
+      content: ''; flex: 1; height: 1px;
+      background: var(--auth-border);
     }
 
+    /* Google button */
     .google-btn {
-      width: 100%;
-      padding: 0.8rem;
-      background: var(--bg);
-      color: var(--text-900);
-      border: 1.5px solid var(--border);
-      border-radius: 12px;
-      font-size: 0.875rem;
-      font-weight: 700;
-      cursor: pointer;
-      font-family: inherit;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.65rem;
-      transition: all 0.2s;
+      width: 100%; padding: .8rem;
+      background: var(--auth-input-bg);
+      border: 1.5px solid var(--auth-input-border);
+      border-radius: 12px; color: var(--auth-text);
+      font-size: .875rem; font-weight: 700;
+      cursor: pointer; font-family: inherit;
+      display: flex; align-items: center; justify-content: center; gap: .65rem;
+      transition: all .2s;
     }
-    .google-btn:hover { border-color: var(--primary); box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
-    .google-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
-
-    .forgot-link {
-      font-size: 0.8rem;
-      color: var(--primary);
-      text-decoration: none;
-      float: right;
-      margin-top: 0.25rem;
+    .google-btn:hover {
+      border-color: var(--auth-primary);
+      background: rgba(99,102,241,.05);
+      transform: translateY(-1px);
     }
-    .forgot-link:hover { text-decoration: underline; }
+    .google-btn svg { width: 17px; height: 17px; flex-shrink: 0; }
 
-    .auth-error {
-      display: none;
-      background: rgba(239,68,68,0.08);
-      border: 1px solid rgba(239,68,68,0.25);
-      color: #dc2626;
-      border-radius: 10px;
-      padding: 0.75rem 1rem;
-      font-size: 0.83rem;
+    /* Alert messages */
+    .auth-alert {
+      display: none; border-radius: 11px;
+      padding: .8rem 1rem;
+      font-size: .82rem; line-height: 1.5;
       margin-bottom: 1rem;
-      align-items: center;
-      gap: 0.5rem;
+      align-items: flex-start; gap: .6rem;
     }
-    .auth-error.show { display: flex; }
-
-    .auth-success {
-      display: none;
-      background: rgba(34,197,94,0.08);
-      border: 1px solid rgba(34,197,94,0.25);
-      color: #16a34a;
-      border-radius: 10px;
-      padding: 0.75rem 1rem;
-      font-size: 0.83rem;
-      margin-bottom: 1rem;
-      align-items: center;
-      gap: 0.5rem;
+    .auth-alert.show { display: flex; animation: alertIn .3s ease; }
+    @keyframes alertIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
-    .auth-success.show { display: flex; }
+    .auth-alert.error {
+      background: rgba(248,113,113,.08);
+      border: 1px solid rgba(248,113,113,.2);
+      color: var(--auth-error);
+    }
+    .auth-alert.success {
+      background: rgba(52,211,153,.08);
+      border: 1px solid rgba(52,211,153,.2);
+      color: var(--auth-success);
+    }
 
+    /* Terms note */
     .terms-note {
-      font-size: 0.74rem;
-      color: var(--text-300);
-      text-align: center;
-      margin-top: 1rem;
-      line-height: 1.6;
+      font-size: .72rem; color: var(--auth-muted);
+      text-align: center; margin-top: 1rem; line-height: 1.6;
     }
-    .terms-note a { color: var(--primary); text-decoration: none; }
+    .terms-note a { color: var(--auth-primary); text-decoration: none; }
 
-    .strength-bar {
-      height: 4px;
-      border-radius: 99px;
-      background: var(--border);
-      margin-top: 0.35rem;
-      overflow: hidden;
+    /* Reset back link */
+    .back-link {
+      display: block; text-align: center; margin-top: 1.1rem;
+      font-size: .8rem; color: var(--auth-primary);
+      text-decoration: none;
     }
-    .strength-fill {
-      height: 100%;
-      border-radius: 99px;
-      width: 0%;
-      transition: width 0.3s, background 0.3s;
+    .back-link:hover { text-decoration: underline; }
+
+    /* Theme toggle top-right */
+    .auth-topbar {
+      position: fixed; top: 1.25rem; right: 1.5rem; z-index: 100;
+      display: flex; gap: .75rem;
+    }
+    .auth-topbar-btn {
+      width: 38px; height: 38px; border-radius: 10px;
+      background: var(--auth-input-bg);
+      border: 1px solid var(--auth-border);
+      color: var(--auth-muted); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .85rem; transition: all .2s;
+    }
+    .auth-topbar-btn:hover { border-color: var(--auth-primary); color: var(--auth-primary); }
+
+    /* Subtle page particles */
+    .particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .particle {
+      position: absolute; border-radius: 50%;
+      background: rgba(99,102,241,.4);
+      animation: particleDrift linear infinite;
+      opacity: 0;
+    }
+    @keyframes particleDrift {
+      0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+      10%  { opacity: 1; }
+      90%  { opacity: .4; }
+      100% { transform: translateY(-10vh) scale(1); opacity: 0; }
     }
   </style>
 </head>
 <body>
 
-<nav class="navbar">
-  <div class="container nav-container">
-    <a href="/index.html" class="logo">
-      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;color:var(--primary)"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M9 13a4.5 4.5 0 0 0 3-4"/><path d="M12 13h4"/><path d="M12 18h6a2 2 0 0 1 2 2v1"/><path d="M12 8h8"/><path d="M16 8V5a2 2 0 0 1 2-2"/><circle cx="16" cy="13" r=".5"/><circle cx="18" cy="3" r=".5"/><circle cx="20" cy="21" r=".5"/><circle cx="20" cy="8" r=".5"/></svg>
-      BrainHub<span class="dot">.</span>
-    </a>
-    <ul class="nav-links">
-      <li><a href="/index.html">Home</a></li>
-      <li><button id="theme-toggle" class="btn-primary theme-toggle"><i class="fas fa-moon" id="theme-icon"></i></button></li>
-    </ul>
+<!-- Floating particles (right side) -->
+<div class="particles" id="particles"></div>
+
+<!-- Top bar -->
+<div class="auth-topbar">
+  <button class="auth-topbar-btn" id="theme-toggle" title="Toggle theme">
+    <i class="fas fa-moon" id="theme-icon"></i>
+  </button>
+</div>
+
+<div class="auth-shell">
+
+  <!-- ── LEFT PANEL ──────────────────────────────────────────── -->
+  <div class="auth-left">
+    <div class="mesh"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="auth-grid"></div>
+
+    <div class="auth-left-content">
+      <a href="/index.html" class="auth-brand">
+        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#818cf8"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M9 13a4.5 4.5 0 0 0 3-4"/><path d="M12 13h4"/><path d="M12 18h6a2 2 0 0 1 2 2v1"/><path d="M12 8h8"/><path d="M16 8V5a2 2 0 0 1 2-2"/><circle cx="16" cy="13" r=".5"/><circle cx="18" cy="3" r=".5"/><circle cx="20" cy="21" r=".5"/><circle cx="20" cy="8" r=".5"/></svg>
+        BrainHub<span class="auth-brand-dot">.</span>
+      </a>
+
+      <div class="auth-left-headline">
+        Your studies.<br>
+        <em>Supercharged.</em>
+      </div>
+      <p class="auth-left-sub">
+        Join thousands of Zambian students using BrainHub to study smarter — free notes, AI tutoring, quizzes and more. All in one place.
+      </p>
+
+      <div class="auth-features">
+        <div class="auth-feature">
+          <div class="af-icon indigo"><i class="fas fa-sync-alt"></i></div>
+          <div class="af-text">
+            <strong>Progress synced everywhere</strong>
+            <span>Your XP, badges and bookmarks follow you across devices</span>
+          </div>
+        </div>
+        <div class="auth-feature">
+          <div class="af-icon violet"><i class="fas fa-robot"></i></div>
+          <div class="af-text">
+            <strong>AI Tutor always ready</strong>
+            <span>Ask anything about your course — get instant, clear answers</span>
+          </div>
+        </div>
+        <div class="auth-feature">
+          <div class="af-icon emerald"><i class="fas fa-trophy"></i></div>
+          <div class="af-text">
+            <strong>Earn XP &amp; unlock badges</strong>
+            <span>Gamified learning that keeps you motivated to study daily</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="auth-left-footer">
+      <strong>"Education is the most powerful weapon you can use to change the world."</strong>
+      — Nelson Mandela
+    </div>
   </div>
-</nav>
 
-<div class="auth-wrapper">
-  <div class="auth-card">
+  <!-- ── RIGHT PANEL ─────────────────────────────────────────── -->
+  <div class="auth-right">
+    <div class="auth-card">
 
-    <div class="auth-logo">
-      <a href="/index.html">BrainHub<span>.</span></a>
-      <p style="font-size:0.85rem;color:var(--text-500);margin-top:0.3rem" id="authSubtitle">Sign in to sync your progress across all devices</p>
+      <div class="auth-card-logo">
+        <a href="/index.html">BrainHub<span class="dot">.</span></a>
+        <p id="authSubtitle">Sign in to sync your progress across all devices</p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="auth-tabs" id="authTabs">
+        <button class="auth-tab active" onclick="switchTab('signin')">Sign In</button>
+        <button class="auth-tab" onclick="switchTab('signup')">Create Account</button>
+      </div>
+
+      <!-- Alerts -->
+      <div class="auth-alert error" id="authError">
+        <i class="fas fa-exclamation-circle" style="flex-shrink:0;margin-top:1px"></i>
+        <span id="authErrorMsg"></span>
+      </div>
+      <div class="auth-alert success" id="authSuccess">
+        <i class="fas fa-check-circle" style="flex-shrink:0;margin-top:1px"></i>
+        <span id="authSuccessMsg"></span>
+      </div>
+
+      <!-- ═══ SIGN IN ═══ -->
+      <div class="auth-panel active" id="panel-signin">
+        <div class="form-group">
+          <div class="form-label">Email Address</div>
+          <div class="input-wrap">
+            <i class="fas fa-envelope input-icon"></i>
+            <input class="auth-input" type="email" id="siEmail" placeholder="your@email.com" autocomplete="email" />
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="form-label">
+            Password
+            <a href="#" onclick="switchTab('reset');return false">Forgot password?</a>
+          </div>
+          <div class="input-wrap">
+            <i class="fas fa-lock input-icon"></i>
+            <input class="auth-input" type="password" id="siPassword" placeholder="Your password" autocomplete="current-password" />
+            <button class="toggle-pw" onclick="togglePw('siPassword',this)" type="button"><i class="fas fa-eye"></i></button>
+          </div>
+        </div>
+        <button class="auth-btn" id="signinBtn" onclick="doSignIn()">
+          <div class="btn-spinner"></div>
+          <span class="btn-label"><i class="fas fa-sign-in-alt"></i> Sign In</span>
+        </button>
+        <div class="divider">or continue with</div>
+        <button class="google-btn" onclick="doGoogle()">
+          <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Google
+        </button>
+        <p class="terms-note">By signing in you agree to our <a href="/pages/terms.html">Terms</a> and <a href="/pages/privacy-policy.html">Privacy Policy</a></p>
+      </div>
+
+      <!-- ═══ SIGN UP ═══ -->
+      <div class="auth-panel" id="panel-signup">
+        <div class="form-group">
+          <div class="form-label">Full Name</div>
+          <div class="input-wrap">
+            <i class="fas fa-user input-icon"></i>
+            <input class="auth-input" type="text" id="suName" placeholder="e.g. Chanda Mwale" autocomplete="name" />
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="form-label">Email Address</div>
+          <div class="input-wrap">
+            <i class="fas fa-envelope input-icon"></i>
+            <input class="auth-input" type="email" id="suEmail" placeholder="your@email.com" autocomplete="email" />
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="form-label">University <span style="font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></div>
+          <div class="input-wrap">
+            <i class="fas fa-university input-icon"></i>
+            <input class="auth-input" type="text" id="suUni" placeholder="CBU, UNZA, ZUT…" list="uniList" />
+            <datalist id="uniList">
+              <option value="CBU"><option value="UNZA"><option value="ZUT">
+              <option value="Mulungushi University"><option value="Other">
+            </datalist>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="form-label">Password</div>
+          <div class="input-wrap">
+            <i class="fas fa-lock input-icon"></i>
+            <input class="auth-input" type="password" id="suPassword" placeholder="At least 8 characters" autocomplete="new-password" oninput="checkStrength(this.value)" />
+            <button class="toggle-pw" onclick="togglePw('suPassword',this)" type="button"><i class="fas fa-eye"></i></button>
+          </div>
+          <div class="strength-wrap" id="strengthSegs">
+            <div class="strength-seg"></div>
+            <div class="strength-seg"></div>
+            <div class="strength-seg"></div>
+            <div class="strength-seg"></div>
+            <div class="strength-seg"></div>
+          </div>
+          <div class="strength-label" id="strengthLabel"></div>
+        </div>
+        <button class="auth-btn" id="signupBtn" onclick="doSignUp()">
+          <div class="btn-spinner"></div>
+          <span class="btn-label"><i class="fas fa-user-plus"></i> Create Account</span>
+        </button>
+        <div class="divider">or continue with</div>
+        <button class="google-btn" onclick="doGoogle()">
+          <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Google
+        </button>
+      </div>
+
+      <!-- ═══ RESET PASSWORD ═══ -->
+      <div class="auth-panel" id="panel-reset">
+        <p style="font-size:.86rem;color:var(--auth-muted);margin-bottom:1.25rem;line-height:1.65">Enter your email and we'll send you a reset link within seconds.</p>
+        <div class="form-group">
+          <div class="form-label">Email Address</div>
+          <div class="input-wrap">
+            <i class="fas fa-envelope input-icon"></i>
+            <input class="auth-input" type="email" id="resetEmail" placeholder="your@email.com" />
+          </div>
+        </div>
+        <button class="auth-btn" id="resetBtn" onclick="doReset()">
+          <div class="btn-spinner"></div>
+          <span class="btn-label"><i class="fas fa-paper-plane"></i> Send Reset Link</span>
+        </button>
+        <a href="#" class="back-link" onclick="switchTab('signin');return false">← Back to Sign In</a>
+      </div>
+
+      <!-- ═══ UPDATE PASSWORD ═══ -->
+      <div class="auth-panel" id="panel-update">
+        <p style="font-size:.86rem;color:var(--auth-muted);margin-bottom:1.25rem">Choose a strong new password for your BrainHub account.</p>
+        <div class="form-group">
+          <div class="form-label">New Password</div>
+          <div class="input-wrap">
+            <i class="fas fa-lock input-icon"></i>
+            <input class="auth-input" type="password" id="newPassword" placeholder="At least 8 characters" oninput="checkStrength(this.value)" />
+            <button class="toggle-pw" onclick="togglePw('newPassword',this)" type="button"><i class="fas fa-eye"></i></button>
+          </div>
+          <div class="strength-wrap" id="strengthSegs2">
+            <div class="strength-seg"></div><div class="strength-seg"></div>
+            <div class="strength-seg"></div><div class="strength-seg"></div>
+            <div class="strength-seg"></div>
+          </div>
+        </div>
+        <button class="auth-btn" id="updateBtn" onclick="doUpdatePassword()">
+          <div class="btn-spinner"></div>
+          <span class="btn-label"><i class="fas fa-shield-alt"></i> Update Password</span>
+        </button>
+      </div>
+
     </div>
-
-    <!-- Tabs (hidden in reset/update mode) -->
-    <div class="auth-tabs" id="authTabs">
-      <button class="auth-tab active" onclick="switchTab('signin')">Sign In</button>
-      <button class="auth-tab" onclick="switchTab('signup')">Create Account</button>
-    </div>
-
-    <!-- Error / Success messages -->
-    <div class="auth-error" id="authError"><i class="fas fa-exclamation-circle"></i><span id="authErrorMsg"></span></div>
-    <div class="auth-success" id="authSuccess"><i class="fas fa-check-circle"></i><span id="authSuccessMsg"></span></div>
-
-    <!-- ═══════════ SIGN IN ═══════════ -->
-    <div class="auth-panel active" id="panel-signin">
-      <div class="form-group">
-        <label>Email Address</label>
-        <div class="input-wrap">
-          <i class="fas fa-envelope"></i>
-          <input type="email" id="siEmail" placeholder="your@email.com" autocomplete="email" />
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Password <a href="#" class="forgot-link" onclick="switchTab('reset');return false">Forgot password?</a></label>
-        <div class="input-wrap">
-          <i class="fas fa-lock"></i>
-          <input type="password" id="siPassword" placeholder="Your password" autocomplete="current-password" />
-          <button class="toggle-pw" onclick="togglePw('siPassword',this)" type="button"><i class="fas fa-eye"></i></button>
-        </div>
-      </div>
-      <button class="auth-btn" id="signinBtn" onclick="doSignIn()">
-        <i class="fas fa-sign-in-alt"></i> Sign In
-      </button>
-      <div class="divider">or</div>
-      <button class="google-btn" onclick="doGoogle()">
-        <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-        Continue with Google
-      </button>
-      <p class="terms-note">By signing in you agree to our <a href="/pages/terms.html">Terms</a> and <a href="/pages/privacy-policy.html">Privacy Policy</a></p>
-    </div>
-
-    <!-- ═══════════ SIGN UP ═══════════ -->
-    <div class="auth-panel" id="panel-signup">
-      <div class="form-group">
-        <label>Full Name</label>
-        <div class="input-wrap">
-          <i class="fas fa-user"></i>
-          <input type="text" id="suName" placeholder="e.g. Chanda Mwale" autocomplete="name" />
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Email Address</label>
-        <div class="input-wrap">
-          <i class="fas fa-envelope"></i>
-          <input type="email" id="suEmail" placeholder="your@email.com" autocomplete="email" />
-        </div>
-      </div>
-      <div class="form-group">
-        <label>University</label>
-        <div class="input-wrap">
-          <i class="fas fa-university"></i>
-          <input type="text" id="suUni" placeholder="CBU, UNZA, ZUT…" list="uniList" />
-          <datalist id="uniList">
-            <option value="CBU"><option value="UNZA"><option value="ZUT">
-            <option value="Mulungushi University"><option value="Other">
-          </datalist>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Password</label>
-        <div class="input-wrap">
-          <i class="fas fa-lock"></i>
-          <input type="password" id="suPassword" placeholder="At least 8 characters" autocomplete="new-password" oninput="checkStrength(this.value)" />
-          <button class="toggle-pw" onclick="togglePw('suPassword',this)" type="button"><i class="fas fa-eye"></i></button>
-        </div>
-        <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
-      </div>
-      <button class="auth-btn" id="signupBtn" onclick="doSignUp()">
-        <i class="fas fa-user-plus"></i> Create Account
-      </button>
-      <div class="divider">or</div>
-      <button class="google-btn" onclick="doGoogle()">
-        <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-        Continue with Google
-      </button>
-    </div>
-
-    <!-- ═══════════ RESET PASSWORD ═══════════ -->
-    <div class="auth-panel" id="panel-reset">
-      <p style="font-size:0.88rem;color:var(--text-500);margin-bottom:1.25rem;line-height:1.6">Enter your email and we'll send you a link to reset your password.</p>
-      <div class="form-group">
-        <label>Email Address</label>
-        <div class="input-wrap">
-          <i class="fas fa-envelope"></i>
-          <input type="email" id="resetEmail" placeholder="your@email.com" />
-        </div>
-      </div>
-      <button class="auth-btn" onclick="doReset()"><i class="fas fa-paper-plane"></i> Send Reset Link</button>
-      <div style="text-align:center;margin-top:1rem">
-        <a href="#" onclick="switchTab('signin');return false" style="font-size:0.82rem;color:var(--primary);text-decoration:none">← Back to Sign In</a>
-      </div>
-    </div>
-
-    <!-- ═══════════ UPDATE PASSWORD ═══════════ -->
-    <div class="auth-panel" id="panel-update">
-      <p style="font-size:0.88rem;color:var(--text-500);margin-bottom:1.25rem">Choose a new password for your account.</p>
-      <div class="form-group">
-        <label>New Password</label>
-        <div class="input-wrap">
-          <i class="fas fa-lock"></i>
-          <input type="password" id="newPassword" placeholder="At least 8 characters" oninput="checkStrength(this.value)" />
-          <button class="toggle-pw" onclick="togglePw('newPassword',this)" type="button"><i class="fas fa-eye"></i></button>
-        </div>
-        <div class="strength-bar"><div class="strength-fill" id="strengthFill2"></div></div>
-      </div>
-      <button class="auth-btn" onclick="doUpdatePassword()"><i class="fas fa-save"></i> Update Password</button>
-    </div>
-
   </div>
 </div>
 
@@ -382,201 +666,209 @@
 <script src="/src/supabase.js"></script>
 
 <script>
+// ── Particles ─────────────────────────────────────────────
 (function() {
+  const container = document.getElementById('particles');
+  for (let i = 0; i < 18; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random() * 4 + 2;
+    p.style.cssText = `
+      width:${size}px;height:${size}px;
+      left:${50 + Math.random() * 50}%;
+      animation-duration:${8 + Math.random() * 12}s;
+      animation-delay:${Math.random() * 12}s;
+    `;
+    container.appendChild(p);
+  }
+})();
 
-  // ── Mode from URL ────────────────────────────────────────
-  const mode = new URLSearchParams(window.location.search).get('mode') || 'signin';
+// ── Mode from URL ─────────────────────────────────────────
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const mode   = params.get('mode') || params.get('action') || 'signin';
   if (mode === 'signup') switchTab('signup');
   if (mode === 'reset')  switchTab('reset');
   if (mode === 'update') switchTab('update');
 
   // Redirect if already logged in
   window.addEventListener('brainhub:signin', () => {
-    const next = new URLSearchParams(window.location.search).get('next') || '/pages/profile.html';
+    const next = params.get('next') || '/pages/profile.html';
     window.location.href = next;
   });
-
-  // ── Tab switcher ─────────────────────────────────────────
-  window.switchTab = function(tab) {
-    document.querySelectorAll('.auth-panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-    document.getElementById('panel-' + tab)?.classList.add('active');
-
-    const tabMap = { signin: 0, signup: 1 };
-    const tabs   = document.querySelectorAll('.auth-tab');
-    if (tabMap[tab] !== undefined) tabs[tabMap[tab]]?.classList.add('active');
-
-    const subtitles = {
-      signin: 'Sign in to sync your progress across all devices',
-      signup: 'Create a free account to save your progress',
-      reset:  'Reset your password',
-      update: 'Set a new password',
-    };
-    document.getElementById('authSubtitle').textContent = subtitles[tab] || '';
-    document.getElementById('authTabs').style.display = (tab === 'reset' || tab === 'update') ? 'none' : '';
-    clearMessages();
-  };
-
-  // ── Helpers ──────────────────────────────────────────────
-  function showError(msg) {
-    const el = document.getElementById('authError');
-    document.getElementById('authErrorMsg').textContent = msg;
-    el.classList.add('show');
-    document.getElementById('authSuccess').classList.remove('show');
-  }
-  function showSuccess(msg) {
-    const el = document.getElementById('authSuccess');
-    document.getElementById('authSuccessMsg').textContent = msg;
-    el.classList.add('show');
-    document.getElementById('authError').classList.remove('show');
-  }
-  function clearMessages() {
-    document.getElementById('authError').classList.remove('show');
-    document.getElementById('authSuccess').classList.remove('show');
-  }
-  function setLoading(btnId, loading) {
-    const btn = document.getElementById(btnId);
-    if (!btn) return;
-    btn.disabled = loading;
-    if (loading) {
-      btn._orig = btn.innerHTML;
-      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Please wait…';
-    } else {
-      btn.innerHTML = btn._orig || btn.innerHTML;
-    }
-  }
-
-  window.togglePw = function(inputId, btn) {
-    const input = document.getElementById(inputId);
-    const icon  = btn.querySelector('i');
-    if (input.type === 'password') {
-      input.type = 'text';
-      icon.className = 'fas fa-eye-slash';
-    } else {
-      input.type = 'password';
-      icon.className = 'fas fa-eye';
-    }
-  };
-
-  window.checkStrength = function(pw) {
-    let score = 0;
-    if (pw.length >= 8)  score++;
-    if (pw.length >= 12) score++;
-    if (/[A-Z]/.test(pw)) score++;
-    if (/[0-9]/.test(pw)) score++;
-    if (/[^A-Za-z0-9]/.test(pw)) score++;
-    const pct    = (score / 5) * 100;
-    const colors = ['#ef4444','#f97316','#eab308','#22c55e','#16a34a'];
-    const fills  = ['strengthFill','strengthFill2'];
-    fills.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) { el.style.width = pct + '%'; el.style.background = colors[score-1] || '#ef4444'; }
-    });
-  };
-
-  // ── Auth actions ─────────────────────────────────────────
-  window.doSignIn = async function() {
-    const email    = document.getElementById('siEmail').value.trim();
-    const password = document.getElementById('siPassword').value;
-    if (!email || !password) return showError('Please enter your email and password.');
-    setLoading('signinBtn', true);
-    clearMessages();
-
-    // Wait for auth to be ready
-    await waitForAuth();
-    const { error } = await window.BrainHubAuth.signIn(email, password);
-    setLoading('signinBtn', false);
-    if (error) return showError(friendlyError(error.message));
-    // Redirect handled by onAuthStateChange
-  };
-
-  window.doSignUp = async function() {
-    const name     = document.getElementById('suName').value.trim();
-    const email    = document.getElementById('suEmail').value.trim();
-    const password = document.getElementById('suPassword').value;
-    const uni      = document.getElementById('suUni').value.trim();
-    if (!name || !email || !password) return showError('Please fill in all required fields.');
-    if (password.length < 8) return showError('Password must be at least 8 characters.');
-    setLoading('signupBtn', true);
-    clearMessages();
-
-    await waitForAuth();
-    const { data, error } = await window.BrainHubAuth.signUp(email, password, name);
-    setLoading('signupBtn', false);
-    if (error) return showError(friendlyError(error.message));
-
-    // Save university to profile after signup
-    if (data?.user && uni) {
-      setTimeout(() => {
-        window.BrainHubAuth.upsertProfile(data.user.id, { university: uni });
-      }, 1000);
-    }
-    showSuccess('Account created! Check your email to confirm your address, then sign in.');
-  };
-
-  window.doGoogle = async function() {
-    await waitForAuth();
-    const { error } = await window.BrainHubAuth.signInWithGoogle();
-    if (error) showError(friendlyError(error.message));
-  };
-
-  window.doReset = async function() {
-    const email = document.getElementById('resetEmail').value.trim();
-    if (!email) return showError('Please enter your email address.');
-    await waitForAuth();
-    const { error } = await window.BrainHubAuth.resetPassword(email);
-    if (error) return showError(friendlyError(error.message));
-    showSuccess('Reset link sent! Check your inbox (and spam folder).');
-  };
-
-  window.doUpdatePassword = async function() {
-    const pw = document.getElementById('newPassword').value;
-    if (pw.length < 8) return showError('Password must be at least 8 characters.');
-    await waitForAuth();
-    const { error } = await window.BrainHubAuth.updatePassword(pw);
-    if (error) return showError(friendlyError(error.message));
-    showSuccess('Password updated! Redirecting…');
-    setTimeout(() => window.location.href = '/pages/profile.html', 1500);
-  };
-
-  // ── Enter key support ────────────────────────────────────
-  document.addEventListener('keydown', (e) => {
-    if (e.key !== 'Enter') return;
-    const active = document.querySelector('.auth-panel.active');
-    if (!active) return;
-    const id = active.id;
-    if (id === 'panel-signin')  doSignIn();
-    if (id === 'panel-signup')  doSignUp();
-    if (id === 'panel-reset')   doReset();
-    if (id === 'panel-update')  doUpdatePassword();
-  });
-
-  // ── Wait for auth SDK to load ────────────────────────────
-  function waitForAuth(timeout = 5000) {
-    return new Promise((resolve) => {
-      if (window.BrainHubAuth) return resolve();
-      const start = Date.now();
-      const t = setInterval(() => {
-        if (window.BrainHubAuth || Date.now() - start > timeout) {
-          clearInterval(t); resolve();
-        }
-      }, 100);
-    });
-  }
-
-  // ── Friendly error messages ──────────────────────────────
-  function friendlyError(msg) {
-    if (!msg) return 'Something went wrong. Please try again.';
-    if (msg.includes('Invalid login'))      return 'Incorrect email or password.';
-    if (msg.includes('Email not confirmed')) return 'Please confirm your email first. Check your inbox.';
-    if (msg.includes('User already registered')) return 'An account with this email already exists. Sign in instead.';
-    if (msg.includes('Password should be'))  return 'Password must be at least 8 characters.';
-    if (msg.includes('Unable to validate')) return 'Invalid email address.';
-    if (msg.includes('rate limit'))          return 'Too many attempts. Please wait a minute and try again.';
-    return msg;
-  }
-
 })();
+
+// ── Tab switcher ──────────────────────────────────────────
+function switchTab(tab) {
+  document.querySelectorAll('.auth-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + tab)?.classList.add('active');
+  const tabMap = { signin: 0, signup: 1 };
+  if (tabMap[tab] !== undefined) document.querySelectorAll('.auth-tab')[tabMap[tab]]?.classList.add('active');
+  const subtitles = {
+    signin: 'Sign in to sync your progress across all devices',
+    signup: 'Create a free account to save your progress',
+    reset:  'Reset your password',
+    update: 'Set a new password for your account',
+  };
+  document.getElementById('authSubtitle').textContent = subtitles[tab] || '';
+  document.getElementById('authTabs').style.display = (tab === 'reset' || tab === 'update') ? 'none' : '';
+  clearMessages();
+}
+
+// ── Messages ──────────────────────────────────────────────
+function showError(msg) {
+  document.getElementById('authErrorMsg').textContent = msg;
+  document.getElementById('authError').classList.add('show');
+  document.getElementById('authSuccess').classList.remove('show');
+}
+function showSuccess(msg) {
+  document.getElementById('authSuccessMsg').textContent = msg;
+  document.getElementById('authSuccess').classList.add('show');
+  document.getElementById('authError').classList.remove('show');
+}
+function clearMessages() {
+  document.getElementById('authError').classList.remove('show');
+  document.getElementById('authSuccess').classList.remove('show');
+}
+
+// ── Loading state ─────────────────────────────────────────
+function setLoading(btnId, on) {
+  const btn = document.getElementById(btnId);
+  if (!btn) return;
+  btn.disabled = on;
+  btn.classList.toggle('loading', on);
+}
+
+// ── Toggle password ───────────────────────────────────────
+function togglePw(id, btn) {
+  const input = document.getElementById(id);
+  const icon  = btn.querySelector('i');
+  const show  = input.type === 'password';
+  input.type  = show ? 'text' : 'password';
+  icon.className = show ? 'fas fa-eye-slash' : 'fas fa-eye';
+}
+
+// ── Password strength ─────────────────────────────────────
+function checkStrength(pw) {
+  let score = 0;
+  if (pw.length >= 8)           score++;
+  if (pw.length >= 12)          score++;
+  if (/[A-Z]/.test(pw))        score++;
+  if (/[0-9]/.test(pw))        score++;
+  if (/[^A-Za-z0-9]/.test(pw)) score++;
+  const colors = ['#ef4444','#f97316','#eab308','#22c55e','#16a34a'];
+  const labels = ['','Weak','Fair','Good','Strong','Very strong'];
+  ['strengthSegs','strengthSegs2'].forEach(id => {
+    const wrap = document.getElementById(id);
+    if (!wrap) return;
+    wrap.querySelectorAll('.strength-seg').forEach((seg, i) => {
+      seg.style.background = i < score ? (colors[score-1] || '#ef4444') : '';
+    });
+  });
+  const lbl = document.getElementById('strengthLabel');
+  if (lbl) { lbl.textContent = pw ? labels[score] || 'Very strong' : ''; lbl.style.color = colors[score-1] || ''; }
+}
+
+// ── Wait for auth SDK ─────────────────────────────────────
+function waitForAuth(timeout = 8000) {
+  return new Promise(resolve => {
+    if (window.BrainHubAuth) return resolve(true);
+    const start = Date.now();
+    const t = setInterval(() => {
+      if (window.BrainHubAuth) { clearInterval(t); resolve(true); return; }
+      if (Date.now() - start > timeout) { clearInterval(t); resolve(false); }
+    }, 80);
+  });
+}
+
+// ── Friendly errors ───────────────────────────────────────
+function friendlyError(msg) {
+  if (!msg) return 'Something went wrong. Please try again.';
+  if (msg.includes('Invalid login'))           return 'Incorrect email or password. Please try again.';
+  if (msg.includes('Email not confirmed'))     return 'Please confirm your email first. Check your inbox.';
+  if (msg.includes('User already registered')) return 'An account with this email already exists. Sign in instead.';
+  if (msg.includes('Password should be'))      return 'Password must be at least 8 characters.';
+  if (msg.includes('Unable to validate'))      return 'Invalid email address.';
+  if (msg.includes('rate limit'))              return 'Too many attempts. Please wait a minute and try again.';
+  if (msg.includes('fetch'))                   return 'Network error. Check your connection and try again.';
+  return msg;
+}
+
+// ── Auth actions ──────────────────────────────────────────
+async function doSignIn() {
+  const email = document.getElementById('siEmail').value.trim();
+  const pw    = document.getElementById('siPassword').value;
+  if (!email || !pw) return showError('Please enter your email and password.');
+  clearMessages(); setLoading('signinBtn', true);
+  const ready = await waitForAuth();
+  if (!ready) { setLoading('signinBtn', false); return showError('Auth system not loaded. Please refresh the page.'); }
+  const { error } = await window.BrainHubAuth.signIn(email, pw);
+  setLoading('signinBtn', false);
+  if (error) return showError(friendlyError(error.message));
+  showSuccess('Signed in! Redirecting…');
+}
+
+async function doSignUp() {
+  const name = document.getElementById('suName').value.trim();
+  const email= document.getElementById('suEmail').value.trim();
+  const pw   = document.getElementById('suPassword').value;
+  const uni  = document.getElementById('suUni').value.trim();
+  if (!name || !email || !pw) return showError('Please fill in your name, email and password.');
+  if (pw.length < 8) return showError('Password must be at least 8 characters.');
+  clearMessages(); setLoading('signupBtn', true);
+  const ready = await waitForAuth();
+  if (!ready) { setLoading('signupBtn', false); return showError('Auth system not loaded. Please refresh the page.'); }
+  const { data, error } = await window.BrainHubAuth.signUp(email, pw, name);
+  setLoading('signupBtn', false);
+  if (error) return showError(friendlyError(error.message));
+  if (data?.user && uni) {
+    setTimeout(() => window.BrainHubAuth.upsertProfile?.(data.user.id, { university: uni }), 1000);
+  }
+  showSuccess('Account created! Check your email to confirm your address, then sign in.');
+}
+
+async function doGoogle() {
+  const ready = await waitForAuth();
+  if (!ready) return showError('Auth system not loaded. Please refresh and try again.');
+  const { error } = await window.BrainHubAuth.signInWithGoogle();
+  if (error) showError(friendlyError(error.message));
+}
+
+async function doReset() {
+  const email = document.getElementById('resetEmail').value.trim();
+  if (!email) return showError('Please enter your email address.');
+  clearMessages(); setLoading('resetBtn', true);
+  const ready = await waitForAuth();
+  if (!ready) { setLoading('resetBtn', false); return showError('Auth system not loaded.'); }
+  const { error } = await window.BrainHubAuth.resetPassword(email);
+  setLoading('resetBtn', false);
+  if (error) return showError(friendlyError(error.message));
+  showSuccess('Reset link sent! Check your inbox and spam folder.');
+}
+
+async function doUpdatePassword() {
+  const pw = document.getElementById('newPassword').value;
+  if (pw.length < 8) return showError('Password must be at least 8 characters.');
+  clearMessages(); setLoading('updateBtn', true);
+  const ready = await waitForAuth();
+  if (!ready) { setLoading('updateBtn', false); return showError('Auth system not loaded.'); }
+  const { error } = await window.BrainHubAuth.updatePassword(pw);
+  setLoading('updateBtn', false);
+  if (error) return showError(friendlyError(error.message));
+  showSuccess('Password updated! Redirecting to your dashboard…');
+  setTimeout(() => window.location.href = '/pages/profile.html', 1800);
+}
+
+// ── Enter key ─────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  const id = document.querySelector('.auth-panel.active')?.id;
+  if (id === 'panel-signin')  doSignIn();
+  if (id === 'panel-signup')  doSignUp();
+  if (id === 'panel-reset')   doReset();
+  if (id === 'panel-update')  doUpdatePassword();
+});
 </script>
 </body>
 </html>

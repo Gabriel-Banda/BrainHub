@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog | BrainHub</title>
+  <meta name="description" content="Study tips, university guides, and education insights for Zambian students." />
+  <link rel="stylesheet" href="/src/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="/public/assets/images/favicon.png" />
+  <style>
+    :root { --ba:#6366f1; --ba2:#a78bfa; --ba3:#34d399; }
+
+    /* ── HERO ── */
+    .blog-hero { position:relative; padding:7rem 0 4rem; overflow:hidden; }
+    .blog-hero::before { content:''; position:absolute; inset:0; background-image:radial-gradient(circle, var(--border) 1.5px, transparent 1.5px); background-size:28px 28px; opacity:.5; }
+    .bh-blob { position:absolute; border-radius:50%; filter:blur(80px); pointer-events:none; animation:blobDrift 10s ease-in-out infinite alternate; }
+    .bh-blob-1 { width:500px; height:500px; top:-150px; left:-100px; background:radial-gradient(circle,rgba(99,102,241,.18),transparent 70%); }
+    .bh-blob-2 { width:400px; height:400px; top:-80px; right:-50px; background:radial-gradient(circle,rgba(167,139,250,.14),transparent 70%); animation-duration:13s; animation-direction:reverse; }
+    @keyframes blobDrift { 0%{transform:scale(1) translate(0,0)} 100%{transform:scale(1.12) translate(25px,-18px)} }
+    .blog-hero-inner { position:relative; z-index:1; text-align:center; }
+    .bh-tag { display:inline-flex; align-items:center; gap:.5rem; background:rgba(99,102,241,.1); border:1px solid rgba(99,102,241,.25); color:var(--ba); padding:.35rem 1rem; border-radius:60px; font-size:.72rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; margin-bottom:1.5rem; animation:fadeUp .6s ease both; }
+    .blog-hero h1 { font-family:'Syne',sans-serif; font-size:clamp(2.8rem,7vw,5rem); font-weight:900; line-height:1.0; letter-spacing:-.04em; color:var(--text-900); margin-bottom:1.25rem; animation:fadeUp .7s ease .1s both; }
+    .blog-hero h1 .grad { background:linear-gradient(135deg,var(--ba),var(--ba2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .blog-hero p { font-family:'Lora',serif; font-size:1.05rem; color:var(--text-500); max-width:500px; margin:0 auto 2.5rem; line-height:1.8; animation:fadeUp .7s ease .2s both; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
+
+    /* search */
+    .bh-search-row { display:flex; justify-content:center; gap:.75rem; flex-wrap:wrap; animation:fadeUp .7s ease .3s both; }
+    .bh-search { display:flex; align-items:center; gap:.6rem; background:var(--card); border:1.5px solid var(--border); border-radius:60px; padding:.65rem 1.25rem; min-width:280px; box-shadow:var(--shadow); transition:border-color .2s,box-shadow .2s; }
+    .bh-search:focus-within { border-color:var(--ba); box-shadow:0 0 0 3px rgba(99,102,241,.12); }
+    .bh-search i { color:var(--text-400); font-size:.85rem; }
+    .bh-search input { flex:1; border:none; background:transparent; color:var(--text-900); font-size:.9rem; font-family:inherit; outline:none; }
+    .bh-search input::placeholder { color:var(--text-400); }
+
+    /* filters */
+    .bh-filters { display:flex; justify-content:center; gap:.5rem; flex-wrap:wrap; margin-top:2rem; animation:fadeUp .7s ease .4s both; }
+    .fp { padding:.38rem .95rem; border-radius:60px; border:1.5px solid var(--border); background:transparent; color:var(--text-500); font-size:.75rem; font-weight:700; cursor:pointer; font-family:inherit; transition:all .2s; }
+    .fp:hover,.fp.active { background:var(--ba); border-color:var(--ba); color:white; box-shadow:0 4px 14px rgba(99,102,241,.3); }
+
+    /* ── FEATURED ── */
+    .feat-wrap { padding:3.5rem 0 1.5rem; }
+    .feat-card { display:grid; grid-template-columns:1fr 1fr; background:var(--card); border:1px solid var(--border); border-radius:24px; overflow:hidden; box-shadow:var(--shadow-lg); transition:transform .3s,box-shadow .3s; }
+    .feat-card:hover { transform:translateY(-6px); box-shadow:0 24px 60px rgba(0,0,0,.12); }
+    @media(max-width:720px){.feat-card{grid-template-columns:1fr}}
+    .feat-img { position:relative; min-height:300px; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .feat-img-icon { position:relative; z-index:1; font-size:5rem; animation:iconFloat 4s ease-in-out infinite; }
+    @keyframes iconFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+    .feat-badge { position:absolute; top:1.25rem; left:1.25rem; background:var(--ba); color:white; font-size:.66rem; font-weight:800; padding:.28rem .7rem; border-radius:60px; text-transform:uppercase; letter-spacing:.08em; z-index:2; }
+    .feat-body { padding:2.5rem; display:flex; flex-direction:column; justify-content:center; }
+    .post-cat-lbl { font-size:.67rem; font-weight:800; color:var(--ba); text-transform:uppercase; letter-spacing:.1em; margin-bottom:.6rem; }
+    .feat-body h2 { font-family:'Syne',sans-serif; font-size:clamp(1.3rem,2.5vw,1.8rem); font-weight:800; color:var(--text-900); line-height:1.2; letter-spacing:-.02em; margin-bottom:.85rem; }
+    .feat-body p { font-family:'Lora',serif; font-size:.9rem; color:var(--text-500); line-height:1.8; margin-bottom:1.25rem; }
+    .post-meta-row { display:flex; align-items:center; gap:.85rem; font-size:.73rem; color:var(--text-400); flex-wrap:wrap; }
+    .post-meta-row span { display:flex; align-items:center; gap:.3rem; }
+    .auth-av { width:26px; height:26px; border-radius:50%; background:linear-gradient(135deg,var(--ba),var(--ba2)); display:flex; align-items:center; justify-content:center; font-size:.6rem; font-weight:800; color:white; flex-shrink:0; }
+    .read-more { display:inline-flex; align-items:center; gap:.5rem; color:var(--ba); font-weight:700; font-size:.85rem; cursor:pointer; background:none; border:none; font-family:inherit; margin-top:1rem; transition:gap .2s; padding:0; }
+    .read-more:hover { gap:.8rem; }
+
+    /* ── LAYOUT ── */
+    .blog-layout { display:grid; grid-template-columns:1fr 280px; gap:2.5rem; padding:3rem 0 5rem; }
+    @media(max-width:900px){.blog-layout{grid-template-columns:1fr} .blog-sidebar{order:-1}}
+
+    /* section title */
+    .sec-title { font-family:'Syne',sans-serif; font-size:1.3rem; font-weight:800; color:var(--text-900); letter-spacing:-.02em; margin-bottom:1.75rem; display:flex; align-items:center; gap:1rem; }
+    .sec-title::after { content:''; flex:1; height:1px; background:var(--border); }
+
+    /* posts grid */
+    .posts-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:1.5rem; }
+    .post-card { background:var(--card); border:1px solid var(--border); border-radius:18px; overflow:hidden; transition:transform .3s,box-shadow .3s,border-color .3s; cursor:pointer; display:flex; flex-direction:column; text-decoration:none; }
+    .post-card:hover { transform:translateY(-5px); box-shadow:var(--shadow-lg); border-color:rgba(99,102,241,.25); }
+    .pc-img { height:155px; display:flex; align-items:center; justify-content:center; font-size:2.8rem; position:relative; overflow:hidden; }
+    .pc-body { padding:1.3rem; flex:1; display:flex; flex-direction:column; }
+    .pc-body h3 { font-family:'Syne',sans-serif; font-size:.95rem; font-weight:800; color:var(--text-900); line-height:1.3; letter-spacing:-.01em; margin-bottom:.55rem; }
+    .pc-body p { font-size:.8rem; color:var(--text-500); line-height:1.65; flex:1; margin-bottom:.9rem; }
+    .pc-foot { display:flex; align-items:center; justify-content:space-between; padding-top:.75rem; border-top:1px solid var(--border); margin-top:auto; }
+    .pc-read { font-size:.68rem; font-weight:700; color:var(--text-400); }
+    .empty-blog { grid-column:1/-1; text-align:center; padding:3rem; color:var(--text-400); }
+    .empty-blog i { font-size:2rem; margin-bottom:.75rem; display:block; opacity:.3; }
+
+    /* ── ARTICLE VIEW (full article inside page) ── */
+    .article-wrap { display:none; padding:3rem 0 5rem; }
+    .article-wrap.open { display:block; animation:fadeUp .5s ease both; }
+    .article-back { display:inline-flex; align-items:center; gap:.5rem; color:var(--ba); font-weight:700; font-size:.85rem; cursor:pointer; background:none; border:none; font-family:inherit; margin-bottom:2rem; padding:0; transition:gap .2s; }
+    .article-back:hover { gap:.8rem; }
+    .article-header { max-width:720px; margin:0 auto 3rem; text-align:center; }
+    .article-header .post-cat-lbl { margin-bottom:1rem; }
+    .article-header h1 { font-family:'Syne',sans-serif; font-size:clamp(1.8rem,4vw,2.8rem); font-weight:900; line-height:1.1; letter-spacing:-.03em; color:var(--text-900); margin-bottom:1.25rem; }
+    .article-header .lead { font-family:'Lora',serif; font-size:1.1rem; color:var(--text-500); line-height:1.8; margin-bottom:1.5rem; }
+    .article-meta { display:flex; align-items:center; justify-content:center; gap:1.25rem; font-size:.78rem; color:var(--text-400); flex-wrap:wrap; }
+    .article-hero-img { width:100%; max-width:800px; margin:0 auto 3.5rem; aspect-ratio:16/7; border-radius:20px; display:flex; align-items:center; justify-content:center; font-size:6rem; overflow:hidden; }
+    .article-body { max-width:680px; margin:0 auto; font-family:'Lora',serif; font-size:1rem; color:var(--text-700); line-height:1.9; }
+    .article-body h2 { font-family:'Syne',sans-serif; font-size:1.35rem; font-weight:800; color:var(--text-900); margin:2.5rem 0 .9rem; letter-spacing:-.02em; }
+    .article-body h3 { font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:700; color:var(--text-900); margin:2rem 0 .7rem; }
+    .article-body p { margin-bottom:1.25rem; }
+    .article-body ul, .article-body ol { padding-left:1.5rem; margin-bottom:1.25rem; }
+    .article-body li { margin-bottom:.5rem; }
+    .article-body blockquote { border-left:4px solid var(--ba); padding:.85rem 1.25rem; margin:1.5rem 0; background:rgba(99,102,241,.05); border-radius:0 12px 12px 0; font-style:italic; color:var(--text-600); }
+    .article-body strong { font-weight:700; color:var(--text-900); }
+    .article-body .tip-box { background:var(--primary-light); border:1px solid rgba(99,102,241,.2); border-radius:12px; padding:1rem 1.25rem; margin:1.5rem 0; }
+    .article-body .tip-box strong { color:var(--ba); display:block; margin-bottom:.4rem; font-size:.85rem; text-transform:uppercase; letter-spacing:.06em; }
+    .article-tag { display:inline-flex; align-items:center; gap:.35rem; background:var(--bg-muted); color:var(--text-500); padding:.25rem .65rem; border-radius:60px; font-size:.7rem; font-weight:700; margin:.2rem; }
+
+    /* ── SIDEBAR ── */
+    .sw { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:1.4rem; margin-bottom:1.25rem; }
+    .sw h4 { font-family:'Syne',sans-serif; font-size:.85rem; font-weight:800; color:var(--text-900); margin-bottom:1rem; display:flex; align-items:center; gap:.5rem; }
+    .topic-lnk { display:flex; align-items:center; justify-content:space-between; padding:.5rem 0; border-bottom:1px solid var(--border); text-decoration:none; color:var(--text-700); font-size:.82rem; transition:color .2s; cursor:pointer; background:none; border-top:none; border-left:none; border-right:none; font-family:inherit; width:100%; text-align:left; }
+    .topic-lnk:last-child { border-bottom:none; }
+    .topic-lnk:hover { color:var(--ba); }
+    .tc { background:var(--bg-muted); color:var(--text-400); font-size:.65rem; font-weight:800; padding:.1rem .45rem; border-radius:60px; }
+    .pop-item { display:flex; gap:.65rem; padding:.6rem 0; border-bottom:1px solid var(--border); }
+    .pop-item:last-child { border-bottom:none; }
+    .pop-num { font-family:'Syne',sans-serif; font-size:1rem; font-weight:900; color:var(--ba); opacity:.3; flex-shrink:0; width:20px; }
+    .pop-item button { font-size:.78rem; font-weight:600; color:var(--text-700); background:none; border:none; cursor:pointer; font-family:inherit; text-align:left; line-height:1.4; padding:0; transition:color .2s; }
+    .pop-item button:hover { color:var(--ba); }
+
+    /* ── NEWSLETTER ── */
+    .blog-nl { margin-top:3rem; background:linear-gradient(135deg,var(--ba) 0%,#7c3aed 100%); border-radius:22px; padding:3rem 2rem; text-align:center; color:white; position:relative; overflow:hidden; }
+    .blog-nl::before { content:''; position:absolute; inset:0; background:radial-gradient(circle at 20% 50%, rgba(255,255,255,.07) 0%, transparent 60%); }
+    .blog-nl > * { position:relative; }
+    .blog-nl h3 { font-family:'Syne',sans-serif; font-size:1.5rem; font-weight:900; margin-bottom:.5rem; }
+    .blog-nl p { font-size:.88rem; opacity:.8; margin-bottom:1.5rem; }
+    .nl-form { display:flex; gap:.6rem; max-width:380px; margin:0 auto; flex-wrap:wrap; justify-content:center; }
+    .nl-form input { flex:1; min-width:200px; padding:.75rem 1.1rem; border:none; border-radius:11px; background:rgba(255,255,255,.15); color:white; font-family:inherit; font-size:.85rem; outline:none; }
+    .nl-form input::placeholder { color:rgba(255,255,255,.55); }
+    .nl-form button { padding:.75rem 1.4rem; background:white; color:var(--ba); border:none; border-radius:11px; font-weight:800; font-size:.85rem; cursor:pointer; font-family:inherit; transition:transform .2s; }
+    .nl-form button:hover { transform:translateY(-2px); }
+
+    /* scroll progress */
+    .scroll-prog { position:fixed; top:0; left:0; right:0; height:3px; z-index:9999; background:linear-gradient(90deg,var(--ba),var(--ba2)); transform-origin:left; transform:scaleX(0); transition:transform .1s linear; }
+    .fu { opacity:0; transform:translateY(22px); transition:opacity .6s ease, transform .6s ease; }
+    .fu.vis { opacity:1; transform:none; }
+  </style>
+</head>
+<body>
+
+<div class="scroll-prog" id="scrollProg"></div>
+<div id="progress-bar"></div>
+<button class="back-to-top"><i class="fas fa-arrow-up"></i></button>
+
+<nav class="navbar">
+  <div class="container nav-container">
+    <a href="/index.html" class="logo">
+      <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;color:var(--primary)"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M9 13a4.5 4.5 0 0 0 3-4"/><path d="M12 13h4"/><path d="M12 18h6a2 2 0 0 1 2 2v1"/><path d="M12 8h8"/><path d="M16 8V5a2 2 0 0 1 2-2"/><circle cx="16" cy="13" r=".5"/><circle cx="18" cy="3" r=".5"/><circle cx="20" cy="21" r=".5"/><circle cx="20" cy="8" r=".5"/></svg>
+      BrainHub<span class="dot">.</span>
+    </a>
+    <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+    <ul class="nav-links">
+      <li><a href="/index.html">Home</a></li>
+      <li><a href="/pages/universities.html">Universities</a></li>
+      <li><a href="/pages/blog.html" class="active">Blog</a></li>
+      <li><a href="/pages/about.html">About</a></li>
+      <li data-auth-show="guest"><a href="/pages/auth.html" class="btn-primary" style="padding:.4rem .9rem;border-radius:8px">Sign In</a></li>
+      <li data-auth-show="authed" style="display:none">
+        <a href="/pages/profile.html" style="display:flex;align-items:center;gap:.4rem">
+          <img data-auth-avatar src="" width="28" height="28" style="border-radius:50%;object-fit:cover;display:none;border:2px solid var(--primary)">
+          <span data-auth-name style="font-weight:700;font-size:.85rem"></span>
+        </a>
+      </li>
+      <li><button id="theme-toggle" class="btn-primary theme-toggle"><i class="fas fa-moon" id="theme-icon"></i></button></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="blog-hero">
+  <div class="bh-blob bh-blob-1"></div>
+  <div class="bh-blob bh-blob-2"></div>
+  <div class="container blog-hero-inner" id="heroSection">
+    <div class="bh-tag"><i class="fas fa-pen-nib"></i> BrainHub Blog</div>
+    <h1>Study smarter.<br><span class="grad">Think deeper.</span></h1>
+    <p>Tips, guides and insights to help Zambian students get the most out of their university years — and beyond.</p>
+    <div class="bh-search-row">
+      <div class="bh-search">
+        <i class="fas fa-search"></i>
+        <input type="text" id="blogSearch" placeholder="Search articles…" oninput="filterPosts()" />
+      </div>
+    </div>
+    <div class="bh-filters" id="filterRow">
+      <button class="fp active" data-cat="all">All</button>
+      <button class="fp" data-cat="study-tips">Study Tips</button>
+      <button class="fp" data-cat="university">University Life</button>
+      <button class="fp" data-cat="tech">Tech & AI</button>
+      <button class="fp" data-cat="careers">Careers</button>
+      <button class="fp" data-cat="health">Health & Wellbeing</button>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED -->
+<section class="feat-wrap container fu" id="featuredSection">
+  <div class="sec-title">Featured</div>
+  <div class="feat-card" id="featCard"></div>
+</section>
+
+<!-- ARTICLE VIEW (replaces grid when open) -->
+<div class="container">
+  <div class="article-wrap" id="articleWrap">
+    <button class="article-back" onclick="closeArticle()"><i class="fas fa-arrow-left"></i> Back to Blog</button>
+    <div id="articleContent"></div>
+  </div>
+
+  <!-- BLOG LAYOUT -->
+  <div class="blog-layout" id="blogLayout">
+    <div>
+      <div class="sec-title">Latest Articles</div>
+      <div class="posts-grid" id="postsGrid"></div>
+      <div class="blog-nl fu" style="margin-top:0">
+        <h3>Stay in the loop 📬</h3>
+        <p>Study guides, tips and BrainHub updates straight to your inbox. No spam, ever.</p>
+        <div class="nl-form">
+          <input type="email" id="nlEmail" placeholder="your@email.com" />
+          <button onclick="subscribeNL()"><i class="fas fa-paper-plane"></i> Subscribe</button>
+        </div>
+        <p id="nlMsg" style="margin-top:.65rem;font-size:.78rem;opacity:.85;display:none"></p>
+      </div>
+    </div>
+    <aside class="blog-sidebar">
+      <div class="sw fu">
+        <h4><i class="fas fa-tags" style="color:var(--ba)"></i> Topics</h4>
+        <button class="topic-lnk" onclick="setFilter('study-tips')">📚 Study Tips <span class="tc">4</span></button>
+        <button class="topic-lnk" onclick="setFilter('university')">🎓 University Life <span class="tc">3</span></button>
+        <button class="topic-lnk" onclick="setFilter('tech')">🤖 Tech & AI <span class="tc">2</span></button>
+        <button class="topic-lnk" onclick="setFilter('careers')">💼 Careers <span class="tc">1</span></button>
+        <button class="topic-lnk" onclick="setFilter('health')">🧘 Health <span class="tc">2</span></button>
+      </div>
+      <div class="sw fu">
+        <h4><i class="fas fa-fire" style="color:#f59e0b"></i> Most Popular</h4>
+        <div id="popularList"></div>
+      </div>
+      <div class="sw fu" style="background:linear-gradient(135deg,rgba(99,102,241,.07),rgba(167,139,250,.04));border-color:rgba(99,102,241,.2)">
+        <h4 style="color:var(--ba)"><i class="fas fa-robot"></i> AI Tutor</h4>
+        <p style="font-size:.78rem;color:var(--text-500);line-height:1.6;margin-bottom:.85rem">Stuck on a concept? Ask BrainHub's AI tutor anything about your course.</p>
+        <a href="/index.html" class="btn-primary" style="display:flex;align-items:center;justify-content:center;gap:.4rem;padding:.6rem 1rem;font-size:.78rem;text-decoration:none;border-radius:10px"><i class="fas fa-robot"></i> Open AI Tutor</a>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<nav class="mobile-bottom-nav">
+  <ul>
+    <li><a href="/index.html"><i class="fas fa-home"></i>Home</a></li>
+    <li><a href="/pages/universities.html"><i class="fas fa-university"></i>Study</a></li>
+    <li><a href="/pages/flashcards.html"><i class="fas fa-layer-group"></i>Cards</a></li>
+    <li><a href="/pages/quizzes.html"><i class="fas fa-stopwatch"></i>Quizzes</a></li>
+    <li><a href="/pages/profile.html"><i class="fas fa-user"></i>Profile</a></li>
+  </ul>
+</nav>
+
+<footer>
+  <div class="container footer-content">
+    <div class="footer-col"><h3>BrainHub<span class="dot">.</span></h3><p>Making quality education accessible and free for everyone.</p></div>
+    <div class="footer-col"><h4>Platform</h4><a href="/index.html">Home</a><a href="/pages/universities.html">Universities</a><a href="/pages/flashcards.html">Flashcards</a><a href="/pages/quizzes.html">Quizzes</a></div>
+    <div class="footer-col"><h4>More</h4><a href="/pages/blog.html">Blog</a><a href="/pages/about.html">About</a><a href="/pages/contributors.html">Contributors</a><a href="/pages/changelog.html">Changelog</a></div>
+  </div>
+  <div class="footer-bottom"><p>&copy; 2026 BrainHub. All rights reserved.</p><p id="realtime-clock" class="clock-text"></p></div>
+</footer>
+
+<script src="/src/i18n.js"></script>
+<script src="/src/main.js"></script>
+<script src="/src/gamification.js"></script>
+<script src="/src/supabase.js"></script>
+<script>
+// ═══════════════════════════════════════════════════════════
+//  BLOG DATA — add new posts here, full article included
+// ═══════════════════════════════════════════════════════════
+const POSTS = [
+  {
+    id: 1,
+    featured: true,
+    cat: 'study-tips',
+    emoji: '⏱️',
+    bg: 'linear-gradient(135deg,#1e1b4b,#312e81,#1e3a5f)',
+    title: 'The Pomodoro Technique: How 25 Minutes Can Transform Your Study Sessions',
+    excerpt: 'Struggling to focus for hours on end? Discover how breaking your study time into focused 25-minute sprints can dramatically improve concentration, reduce burnout, and help you retain more information.',
+    author: 'Gabriel J. Banda',
+    date: 'March 15, 2026',
+    read: '6 min',
+    tags: ['Focus', 'Productivity', 'Time Management'],
+    content: `
+      <p>If you've ever sat down to study for three hours and somehow retained almost nothing, you're not alone. The human brain simply isn't designed for marathon focus sessions. That's where the <strong>Pomodoro Technique</strong> comes in — and it might be the single most impactful change you can make to your study routine.</p>
+
+      <h2>What Is the Pomodoro Technique?</h2>
+      <p>Developed in the late 1980s by Francesco Cirillo, the Pomodoro Technique is a time management method that breaks work into short, focused intervals — traditionally 25 minutes — separated by brief breaks. Each interval is called a "pomodoro" (Italian for tomato, after the tomato-shaped kitchen timer Cirillo used as a student).</p>
+      <p>The method is brilliantly simple:</p>
+      <ol>
+        <li>Choose a single task to work on</li>
+        <li>Set a timer for 25 minutes</li>
+        <li>Work on that task with complete focus until the timer rings</li>
+        <li>Take a 5-minute break</li>
+        <li>After 4 pomodoros, take a longer break of 15–30 minutes</li>
+      </ol>
+
+      <h2>Why Does It Work?</h2>
+      <p>The technique works because it aligns with how your brain actually functions. Research in cognitive psychology shows that sustained attention naturally degrades after 20–30 minutes. By working in short bursts, you're riding the wave of peak attention rather than fighting against its natural rhythm.</p>
+      <blockquote>"The timer creates a sense of urgency that makes you less likely to procrastinate and more likely to enter a state of flow."</blockquote>
+      <p>The built-in breaks also serve a crucial purpose: they prevent <strong>mental fatigue</strong> and give your brain time to consolidate what it's learned — a process that happens during rest, not during study.</p>
+
+      <h2>How to Apply It as a Zambian University Student</h2>
+      <p>Here's a practical schedule you can follow when preparing for exams at CBU, UNZA, or ZUT:</p>
+      <ul>
+        <li><strong>Morning session (8am–10am):</strong> 4 pomodoros on your hardest subject (e.g. Calculus or Organic Chemistry)</li>
+        <li><strong>Long break (10am–10:30am):</strong> Walk, eat, don't look at your notes</li>
+        <li><strong>Afternoon session (11am–1pm):</strong> 4 pomodoros on a second subject</li>
+        <li><strong>Afternoon break (1pm–2pm):</strong> Lunch and rest</li>
+        <li><strong>Evening session (3pm–5pm):</strong> Review and flashcards using BrainHub</li>
+      </ul>
+
+      <div class="tip-box">
+        <strong>💡 Pro Tip</strong>
+        BrainHub has a built-in Pomodoro timer accessible from every page — click the "Study Timer" button in the footer. It tracks your sessions automatically and awards bonus XP for completed sessions.
+      </div>
+
+      <h2>Common Mistakes to Avoid</h2>
+      <p>Many students start using the technique but abandon it because they're making one of these mistakes:</p>
+      <ul>
+        <li><strong>Ignoring the timer when it rings.</strong> The whole point is respecting the boundaries. When the timer goes off, stop — even if you're mid-sentence.</li>
+        <li><strong>Using breaks to check social media.</strong> Social media hijacks your brain in ways that make it hard to refocus. Use breaks to stretch, breathe, get water, or just stare out the window.</li>
+        <li><strong>Switching tasks within a pomodoro.</strong> One task per pomodoro. If a new thought comes up, write it down and deal with it later.</li>
+        <li><strong>Not adjusting for your subject.</strong> Some subjects (like essay writing or coding) may work better with 45-minute blocks. Experiment until you find what works for you.</li>
+      </ul>
+
+      <h2>The Science Behind the Breaks</h2>
+      <p>During rest, your brain switches to what neuroscientists call the <strong>default mode network</strong> — a state of diffuse thinking that's actually critical for creative problem-solving and memory consolidation. This is why you often have breakthroughs in the shower or on a walk. The breaks aren't wasted time; they're when a lot of the real learning happens.</p>
+
+      <h2>Getting Started Today</h2>
+      <p>You don't need any special app or tool. All you need is a timer and the discipline to respect it. Open BrainHub's Study Timer, pick your hardest subject, and do one pomodoro right now. Just one. See how it feels.</p>
+      <p>After a week of consistent practice, most students report feeling less overwhelmed, more focused, and — crucially — more confident going into exams because they actually know the material they studied.</p>
+    `
+  },
+  {
+    id: 2,
+    cat: 'study-tips',
+    emoji: '📝',
+    bg: 'linear-gradient(135deg,#1a0533,#2d1b69,#1e1b4b)',
+    title: 'Active Recall: The Study Technique That Actually Works',
+    excerpt: 'Passive re-reading feels productive but scientific research shows it\'s one of the least effective study methods. Here\'s why active recall through flashcards and self-testing is far more powerful.',
+    author: 'Gabriel J. Banda',
+    date: 'March 10, 2026',
+    read: '5 min',
+    tags: ['Memory', 'Techniques', 'Exam Prep'],
+    content: `
+      <p>Most students study the same way: they read their notes, highlight key phrases, and re-read them before an exam. It feels productive. It's comfortable. And according to decades of cognitive science research, it barely works.</p>
+      <p>The technique that actually works — that the research consistently backs — is <strong>active recall</strong>. And once you understand why, you'll never go back to passive reading.</p>
+
+      <h2>What Is Active Recall?</h2>
+      <p>Active recall means testing yourself on material rather than passively reviewing it. Instead of reading your Biology notes, you close them and try to write down everything you remember. Instead of re-reading a chapter, you answer questions about it from memory.</p>
+      <p>The key insight is this: <strong>the act of retrieving information from memory strengthens that memory</strong>. Every time you successfully pull a fact from your brain, you make it easier to retrieve next time. Cognitive psychologists call this the "testing effect" or "retrieval practice effect."</p>
+
+      <h2>The Science</h2>
+      <p>A landmark 2011 study in Science journal compared four groups of students learning the same material using different methods: re-reading, concept mapping, elaborative studying, and retrieval practice (active recall). Students who used retrieval practice <strong>outperformed all other groups</strong> on tests given one week later — including students who had spent more time studying.</p>
+
+      <h2>How to Use Active Recall</h2>
+      <h3>1. Flashcards</h3>
+      <p>The classic method. Write a question on one side, the answer on the other. BrainHub's flashcard system is built exactly for this — use it to drill yourself on Biology, Chemistry, Mathematics and more. Don't just flip the card; force yourself to answer before you look.</p>
+
+      <h3>2. The Blank Page Method</h3>
+      <p>After a lecture or study session, take a blank sheet of paper and write down everything you remember about the topic. No notes. No book. Just your memory. Then compare what you wrote to your notes and focus your next session on what you missed.</p>
+
+      <h3>3. Practice Questions</h3>
+      <p>Past papers are the ultimate active recall tool. Every past paper you attempt is training your brain to retrieve and apply knowledge under conditions close to an exam. BrainHub has past papers for CBU, UNZA and ZUT — use them early, not just the night before.</p>
+
+      <h3>4. Teach It</h3>
+      <p>Find a study partner and take turns explaining topics to each other as if teaching a class. If you can explain it clearly, you know it. If you stumble, you've just identified exactly what to study next.</p>
+
+      <div class="tip-box">
+        <strong>💡 The BrainHub Quizzes Are Built for This</strong>
+        BrainHub's quiz system — with 100 questions across Biology, Chemistry, Mathematics, Physics and General Knowledge — is pure active recall. Use it regularly to test yourself rather than just reviewing notes.
+      </div>
+
+      <h2>Combine With Spaced Repetition</h2>
+      <p>Active recall is even more powerful when combined with <strong>spaced repetition</strong> — reviewing material at increasing intervals over time. The idea is that you study something, wait a few days, review it again, wait a week, review again. Each review happens just before you'd forget it, which maximises retention.</p>
+      <p>If you're using flashcards, simply move cards you answered correctly to a "review in 3 days" pile, and cards you got wrong to a "review tomorrow" pile. Over time, you'll build genuine long-term memory rather than cramming knowledge that evaporates after the exam.</p>
+
+      <h2>Start Now</h2>
+      <p>Put down your highlighter. Close your notes. Open BrainHub's quiz section and test yourself on one topic right now. That single act of retrieval is worth more than another hour of reading.</p>
+    `
+  },
+  {
+    id: 3,
+    cat: 'university',
+    emoji: '🎓',
+    bg: 'linear-gradient(135deg,#0f2027,#203a43,#2c5364)',
+    title: 'How to Survive (and Thrive) in Your First Year at University in Zambia',
+    excerpt: 'First year can be overwhelming — new city, new people, heavy coursework, and total independence for the first time. Here\'s an honest guide to navigating it all.',
+    author: 'Gabriel J. Banda',
+    date: 'March 5, 2026',
+    read: '8 min',
+    tags: ['First Year', 'University Life', 'CBU', 'UNZA'],
+    content: `
+      <p>Nobody fully prepares you for first year. School tells you about deadlines and lecture halls. Nobody tells you about the loneliness that can hit at 11pm when you're three assignments behind and you haven't called home in a week. Or how exhausting it is to have complete freedom for the first time and no idea how to use it well.</p>
+      <p>This guide is honest about that. And it gives you practical strategies for not just surviving first year at CBU, UNZA, ZUT or any other Zambian university — but genuinely thriving.</p>
+
+      <h2>Academically: Get Ahead Early</h2>
+      <p>The biggest mistake first-year students make is treating the first month like an extension of the holiday. Lecturers are introducing foundational concepts in that first month that everything else builds on. Miss those foundations and you'll spend the rest of the year confused.</p>
+      <ul>
+        <li><strong>Attend every lecture for the first six weeks.</strong> After that, you'll know which ones are worth missing and which aren't. But in the beginning, go to all of them.</li>
+        <li><strong>Do the readings before the lecture.</strong> Even skimming the chapter beforehand means the lecture makes more sense and you retain far more.</li>
+        <li><strong>Start assignments the day they're given.</strong> Not to finish them — just to read the question and think about it. Your subconscious will work on it in the background.</li>
+        <li><strong>Use past papers from week one.</strong> They tell you exactly what level of understanding your lecturers expect. BrainHub has past papers for CBU Natural Sciences — start looking at them early.</li>
+      </ul>
+
+      <h2>Socially: Build Real Connections</h2>
+      <p>The people you meet in first year can become lifelong friends, study partners, and professional contacts. But meaningful connections don't happen automatically — you have to create conditions for them.</p>
+      <ul>
+        <li><strong>Join one or two clubs or associations.</strong> Not ten. One or two where you actually show up consistently. Regularity builds relationships.</li>
+        <li><strong>Form a study group of 3–4 people</strong> in your programme. Keep it small enough to be productive. Meet weekly. Quiz each other.</li>
+        <li><strong>Talk to people outside your home province.</strong> University is one of the few times you'll meet people from Livingstone, Solwezi, Kasama and everywhere else. Embrace that diversity.</li>
+      </ul>
+
+      <h2>Financially: Make Your Money Last</h2>
+      <p>Managing money independently for the first time is hard. Here's what works:</p>
+      <ul>
+        <li>Write down every kwacha you spend for the first month. Just tracking it — without even budgeting — changes your behaviour.</li>
+        <li>Eat before you go to the tuck shop. Hunger is the enemy of financial discipline.</li>
+        <li>Textbooks: check if library copies are available before buying. Or split the cost with a coursemate. Many lecturers also have PDFs.</li>
+        <li>Avoid lending money to acquaintances. It's almost always gone.</li>
+      </ul>
+
+      <h2>Mentally: Look After Yourself</h2>
+      <p>This is the part nobody talks about enough. First year depression and anxiety are extremely common among university students worldwide, and Zambian students are not immune. The pressure of performing, being away from family, financial stress, and academic competition all pile up.</p>
+
+      <div class="tip-box">
+        <strong>🧘 Signs You Need to Slow Down</strong>
+        If you're sleeping more than 10 hours a day or less than 5, unable to concentrate even on things you enjoy, cancelling plans consistently, or feeling like nothing matters — talk to someone. Your university counselling service exists for exactly this.
+      </div>
+
+      <p>Sleep is not optional. Studying until 3am every night doesn't make you a harder worker — it makes you worse at studying. Seven to eight hours of sleep improves memory consolidation, problem-solving and emotional regulation more than any study technique.</p>
+      <p>Exercise, even 30 minutes of walking three times a week, has clinically proven effects on focus and mental health. Use it.</p>
+
+      <h2>The Big Picture</h2>
+      <p>First year doesn't determine your entire career. Students who fail their first semester go on to graduate with distinction. Students who get top marks in first year sometimes flame out later. What matters is building the habits, relationships and self-knowledge that will carry you through four or more years of study — and the decades of career that follow.</p>
+      <p>Be patient with yourself. Ask for help when you need it. And remember: every single person in your cohort is figuring it out as they go, even the ones who look like they have it all together.</p>
+    `
+  },
+  {
+    id: 4,
+    cat: 'tech',
+    emoji: '🤖',
+    bg: 'linear-gradient(135deg,#0d1117,#1a1f2e,#0d1b2e)',
+    title: 'How to Use AI Tools to Study Smarter in 2026',
+    excerpt: 'AI has changed what\'s possible for students with limited resources. Here\'s how to use free AI tools — including BrainHub\'s own AI tutor — to understand complex concepts faster than ever.',
+    author: 'Gabriel J. Banda',
+    date: 'February 28, 2026',
+    read: '7 min',
+    tags: ['AI', 'Tools', 'Technology'],
+    content: `
+      <p>In 2024, the top students at elite universities were using AI tutors, concept explainers, and writing assistants to accelerate their learning. In 2026, those same tools are free and accessible to any student with internet access — including you.</p>
+      <p>But using AI effectively for studying is a skill in itself. Used badly, it'll do your work for you and leave you knowing nothing. Used well, it's the most powerful study partner you've ever had.</p>
+
+      <h2>BrainHub's AI Tutor</h2>
+      <p>Let's start with what's right here on this platform. BrainHub's AI Tutor is built on Claude — one of the most capable AI models available — and it's specifically prompted to help Zambian university students understand their coursework. It's available on every page via the chat button.</p>
+      <p>Here's how to get the most out of it:</p>
+      <ul>
+        <li><strong>Ask it to explain, not just answer.</strong> Instead of "What is osmosis?" try "Explain osmosis to me like I'm a secondary school student, then give me a university-level explanation."</li>
+        <li><strong>Use it to check your understanding.</strong> Tell it "I think [concept] works like [your explanation] — is that right? What am I missing?"</li>
+        <li><strong>Ask for examples relevant to Zambia.</strong> The AI is instructed to use local examples wherever possible, making abstract concepts more concrete.</li>
+        <li><strong>Ask it to quiz you.</strong> "Give me 5 questions on Cell Biology at CBU BIO110 level."</li>
+      </ul>
+
+      <h2>ChatGPT and DeepSeek</h2>
+      <p>Both are free and excellent for different things:</p>
+      <ul>
+        <li><strong>ChatGPT (free tier):</strong> Great for explaining complex topics, summarising long texts, helping structure essays, and generating practice questions. Go to chat.openai.com.</li>
+        <li><strong>DeepSeek:</strong> Particularly strong for mathematics and sciences. If you're struggling with a calculus problem, paste it into DeepSeek and ask for a step-by-step solution with explanations. Go to chat.deepseek.com.</li>
+      </ul>
+
+      <h2>Khan Academy</h2>
+      <p>Khan Academy is still one of the best free learning resources on the internet. Their video library covers virtually every topic in the CBU and UNZA Natural Sciences curriculum — Biology, Chemistry, Physics, Mathematics — with clear, well-paced explanations. Use it alongside your lecture notes when a concept isn't clicking.</p>
+
+      <h2>Wolfram Alpha for Maths</h2>
+      <p>For mathematics, Wolfram Alpha (wolframalpha.com) can solve virtually any equation and — crucially — show you the steps. Don't just copy the answer. Use it to understand the method, then close it and try a similar problem yourself.</p>
+
+      <h2>The Critical Rule: AI as a Teacher, Not a Ghostwriter</h2>
+      <p>This is where many students go wrong. Using AI to write your assignments for you doesn't help you learn, and most universities are developing tools to detect AI-generated text. More importantly, the exam is written by you, not by AI — and if you've outsourced your thinking to a machine all semester, you'll walk into that exam having learned nothing.</p>
+
+      <div class="tip-box">
+        <strong>✅ Use AI to LEARN, not to SUBMIT</strong>
+        Good: Ask AI to explain a concept until you understand it, then write about it in your own words.
+        Bad: Ask AI to write your assignment, copy it, and submit it.
+      </div>
+
+      <p>The students who will succeed in an AI-powered world aren't the ones who use AI to avoid thinking — they're the ones who use AI to think better, understand faster, and go deeper into subjects than they could alone.</p>
+
+      <h2>Getting Started</h2>
+      <p>Open BrainHub's AI Tutor right now (the robot icon at the bottom of the page). Ask it to explain the topic you found hardest in your last lecture. Engage with the explanation. Ask follow-up questions. Then close the chat and write down what you learned in your own words.</p>
+      <p>That one habit — AI explanation followed by your own synthesis — will put you ahead of the majority of your coursemates.</p>
+    `
+  },
+  {
+    id: 5,
+    cat: 'study-tips',
+    emoji: '📚',
+    bg: 'linear-gradient(135deg,#1c1917,#292524,#1c1917)',
+    title: 'The Cornell Note-Taking System: A Complete Guide',
+    excerpt: 'One of the most effective note-taking systems ever devised. Learn how to set it up and use it to dramatically improve both comprehension during lectures and revision efficiency afterwards.',
+    author: 'Gabriel J. Banda',
+    date: 'February 20, 2026',
+    read: '5 min',
+    tags: ['Notes', 'Lectures', 'Organisation'],
+    content: `
+      <p>Most students take notes the same way: they try to write down as much as the lecturer says, end up with pages of barely-legible sentences, and then face the impossible task of revising from them weeks later. The Cornell Note-Taking System solves all of this with a single structural change to how you lay out your page.</p>
+
+      <h2>The Setup</h2>
+      <p>Divide each page into three sections:</p>
+      <ul>
+        <li><strong>The main notes area</strong> (right column, ~70% of the page): Where you write during the lecture</li>
+        <li><strong>The cue column</strong> (left column, ~30% of the page): Where you write questions and keywords after the lecture</li>
+        <li><strong>The summary section</strong> (bottom ~5-6 lines): Where you write a 2-3 sentence summary in your own words</li>
+      </ul>
+      <p>Draw a vertical line about 6cm from the left, and a horizontal line about 6cm from the bottom. That's your Cornell page.</p>
+
+      <h2>During the Lecture</h2>
+      <p>Write only in the main notes area. Use abbreviations, diagrams, bullet points — whatever captures the key ideas. Don't try to write every word. Focus on:</p>
+      <ul>
+        <li>Main concepts and definitions</li>
+        <li>Anything the lecturer writes on the board</li>
+        <li>Anything they repeat or emphasise</li>
+        <li>Examples and how they connect to the theory</li>
+      </ul>
+
+      <h2>After the Lecture (Within 24 Hours)</h2>
+      <p>This is where Cornell becomes powerful. While the lecture is fresh, go through your notes and fill in the cue column:</p>
+      <ul>
+        <li>Write questions that your notes answer (e.g. "What are the 4 stages of mitosis?")</li>
+        <li>Write key terms and vocabulary</li>
+        <li>Write headings that organise the content</li>
+      </ul>
+      <p>Then write your summary at the bottom — 2–3 sentences in your own words describing what the whole page was about. This forces you to synthesise rather than just copy.</p>
+
+      <h2>During Revision</h2>
+      <p>Cover the main notes area with a piece of paper. Look only at the cue column questions. Answer them from memory. Uncover the notes to check. This is active recall built directly into your note system.</p>
+
+      <div class="tip-box">
+        <strong>💡 Digital Cornell Notes</strong>
+        You can apply the Cornell format in any notes app — just create a two-column table. Some students use Notion or even Word. What matters is the habit, not the medium.
+      </div>
+
+      <h2>Why It Works</h2>
+      <p>The Cornell system forces you to engage with your notes three times: once during the lecture, once when adding cues, and once during revision. Each engagement deepens understanding and strengthens memory. It also naturally produces review questions, which means your notes become a self-testing tool — combining note-taking with active recall in one system.</p>
+      <p>Try it for one week with one subject. By the end of the week, you'll have notes that are genuinely useful revision material — not just a record of what was said in a room.</p>
+    `
+  },
+  {
+    id: 6,
+    cat: 'health',
+    emoji: '🧘',
+    bg: 'linear-gradient(135deg,#450a0a,#7f1d1d,#450a0a)',
+    title: 'Managing Exam Anxiety: Evidence-Based Strategies That Actually Work',
+    excerpt: 'Exam stress is universal. But the way you respond to it — before, during, and after — determines whether it helps or hurts your performance. Here\'s what the research says works.',
+    author: 'Gabriel J. Banda',
+    date: 'February 14, 2026',
+    read: '6 min',
+    tags: ['Mental Health', 'Exams', 'Wellbeing'],
+    content: `
+      <p>A certain amount of exam anxiety is normal and even useful — it sharpens focus and motivates preparation. The problem is when anxiety becomes so intense it impairs thinking, causes blanking during exams, or prevents sleep in the days before. This guide covers strategies that are backed by psychological research and practical for university students.</p>
+
+      <h2>Before the Exam: Preparation Is the Best Anxiety Treatment</h2>
+      <p>The single biggest driver of exam anxiety is feeling underprepared. The best "anxiety medication" is genuinely knowing the material. But there are specific preparation habits that reduce anxiety beyond just studying more:</p>
+      <ul>
+        <li><strong>Do timed practice tests.</strong> Simulate exam conditions weeks before the real thing. When the actual exam arrives, your nervous system recognises it as familiar rather than threatening.</li>
+        <li><strong>Identify your weakest topics early.</strong> Anxiety often comes from vague dread about "everything." Identify specific gaps and fix them. Uncertainty is more anxiety-inducing than a known difficulty.</li>
+        <li><strong>Avoid all-nighters before exams.</strong> Sleep deprivation impairs working memory, problem-solving, and emotional regulation — all of which you need in an exam. One good night of sleep is worth more than four hours of last-minute cramming.</li>
+      </ul>
+
+      <h2>The Night Before</h2>
+      <ul>
+        <li>Stop studying by 9pm. After that, you're adding anxiety, not knowledge.</li>
+        <li>Prepare everything you need for the exam (pens, ID, water bottle) so there's nothing to worry about in the morning.</li>
+        <li>Do something you enjoy for an hour — watch something, talk to a friend, read for pleasure.</li>
+        <li>Get to bed at a reasonable time. If you can't sleep, rest quietly — lying down with your eyes closed is still restorative even without deep sleep.</li>
+      </ul>
+
+      <h2>The Morning of the Exam</h2>
+      <p>Eat a proper breakfast. Your brain runs on glucose and a blood sugar crash mid-exam is a disaster. Avoid heavy revision in the final hour — it mainly adds confusion and stress. A light review of key formulas or definitions is fine.</p>
+      <p>Arrive early so you're not rushing. Take three slow, deep breaths before entering the exam hall. This activates the parasympathetic nervous system and physically reduces the fight-or-flight response.</p>
+
+      <h2>During the Exam: When Your Mind Goes Blank</h2>
+      <p>Blanking during an exam is a real phenomenon — anxiety floods your working memory with threat-related thoughts, leaving little room for the knowledge you need. When it happens:</p>
+      <ol>
+        <li>Stop writing. Put your pen down.</li>
+        <li>Take four slow, deep breaths (4 counts in, hold for 4, 4 out).</li>
+        <li>Focus on the physical sensation of your feet on the floor for 10 seconds.</li>
+        <li>Read the question again slowly.</li>
+        <li>Write down anything you know about the topic — even tangentially related. This primes recall.</li>
+      </ol>
+
+      <div class="tip-box">
+        <strong>🧠 Reframe Your Anxiety</strong>
+        Research by Alison Wood Brooks at Harvard shows that telling yourself "I am excited" before a high-pressure performance improves performance more than "I am calm." Anxiety and excitement have almost identical physiological signatures — the difference is interpretation. Try it.
+      </div>
+
+      <h2>After the Exam: Processing Without Rumination</h2>
+      <p>Don't do post-mortems with friends immediately after the exam. Comparing answers triggers anxiety and there's nothing you can do about it. Give yourself a few hours to decompress before thinking about how it went.</p>
+      <p>If you feel like you did badly, remember: students consistently underestimate their performance after exams. The questions you remember struggling with are not the whole picture.</p>
+
+      <h2>When to Get Help</h2>
+      <p>If exam anxiety is so severe that it's causing panic attacks, significantly impairing your daily functioning, or making it impossible to study — talk to a mental health professional or your university's student support services. These symptoms are treatable and you don't have to manage them alone.</p>
+    `
+  },
+  {
+    id: 7,
+    cat: 'careers',
+    emoji: '💼',
+    bg: 'linear-gradient(135deg,#052e16,#14532d,#052e16)',
+    title: 'Building Your CV as a Zambian Graduate: What Employers Actually Want',
+    excerpt: 'Your degree is necessary but not sufficient. Discover what skills, experiences and projects Zambian employers are actually looking for — and how to build them while you\'re still studying.',
+    author: 'Gabriel J. Banda',
+    date: 'February 7, 2026',
+    read: '9 min',
+    tags: ['Careers', 'CV', 'Graduate', 'Employment'],
+    content: `
+      <p>Every year, thousands of graduates in Zambia enter the job market with their degrees — and discover that a degree alone is rarely enough to stand out. Employers receive hundreds of applications for every advertised role. Understanding what actually makes a CV competitive is not something most universities teach you. This article does.</p>
+
+      <h2>What Employers in Zambia Are Looking For</h2>
+      <p>Based on job adverts across the mining, banking, NGO, technology, and government sectors, Zambian employers consistently prioritise these qualities:</p>
+      <ul>
+        <li><strong>Relevant experience</strong> — even if it's voluntary or informal</li>
+        <li><strong>Demonstrable skills</strong> — specific, not generic ("proficient in Excel" not "computer literate")</li>
+        <li><strong>Communication ability</strong> — evidenced by how your CV is written</li>
+        <li><strong>Initiative and problem-solving</strong> — shown through projects, clubs, or independent work</li>
+        <li><strong>Professional references</strong> — people who can specifically speak to your character and work</li>
+      </ul>
+
+      <h2>Building Experience While Studying</h2>
+      <p>You don't need to wait until graduation to build experience. Here's what counts:</p>
+
+      <h3>Internships and Attachments</h3>
+      <p>Many Zambian university programmes require an industrial attachment. Treat it as your most important semester. Ask to work on real projects. Ask your supervisor for feedback. Keep a log of what you worked on and what you achieved. This becomes the most valuable section of your CV.</p>
+
+      <h3>Voluntary Work</h3>
+      <p>NGOs, community projects, school programmes, and civic organisations all need help and all count as experience. Look for roles where you'll develop transferable skills — project coordination, financial management, communication, or technical work.</p>
+
+      <h3>Personal Projects</h3>
+      <p>Built an app? Designed a website? Ran a small business? These are legitimate portfolio items. Employers in technology and entrepreneurship increasingly care more about what you've built than where you studied.</p>
+
+      <h3>Student Leadership</h3>
+      <p>Executive positions in student associations, clubs, or halls of residence demonstrate leadership, organisational skills, and the ability to work with people — all highly valued by employers.</p>
+
+      <h2>Writing Your CV</h2>
+      <p>Keep your CV to two pages maximum. Use clear headings, consistent formatting, and plain language. Every bullet point should describe an achievement or contribution, not just a responsibility:</p>
+      <ul>
+        <li><strong>Weak:</strong> "Responsible for managing social media."</li>
+        <li><strong>Strong:</strong> "Grew the organisation's Facebook following from 200 to 1,800 in six months by creating weekly student content."</li>
+      </ul>
+      <p>The difference is specificity. Numbers, time frames, and outcomes make everything more credible.</p>
+
+      <div class="tip-box">
+        <strong>📧 Your Email Address Matters</strong>
+        firstname.lastname@gmail.com is professional. coolboy2005@yahoo.com is not. Create a professional email address before you start applying for jobs or internships.
+      </div>
+
+      <h2>Networking</h2>
+      <p>Most jobs — especially in Zambia's relatively small professional networks — are filled through connections before they're ever advertised. Start building your professional network now:</p>
+      <ul>
+        <li>Connect with lecturers who know people in your field</li>
+        <li>Attend industry events and graduate fairs</li>
+        <li>Create a LinkedIn profile and keep it updated</li>
+        <li>Stay in touch with people you meet during attachments</li>
+      </ul>
+      <p>Networking isn't about asking for favours. It's about building genuine relationships over time so that when an opportunity arises, you're someone people think of.</p>
+
+      <h2>The Long Game</h2>
+      <p>Your career is built over decades. The grades you get in second year are far less important than the person you're becoming — your curiosity, your work ethic, your ability to learn, and your relationships. Focus on those things and the CV will take care of itself.</p>
+    `
+  },
+  {
+    id: 8,
+    cat: 'university',
+    emoji: '🏫',
+    bg: 'linear-gradient(135deg,#1a0533,#3b0764,#1a0533)',
+    title: 'CBU, UNZA, and ZUT: An Honest Guide to Zambia\'s Top Universities',
+    excerpt: 'Thinking of studying at one of Zambia\'s leading universities? Here\'s a candid overview of what makes each institution unique — their academic strengths, campus culture, and what students say about life there.',
+    author: 'Gabriel J. Banda',
+    date: 'January 30, 2026',
+    read: '10 min',
+    tags: ['CBU', 'UNZA', 'ZUT', 'Choosing University'],
+    content: `
+      <p>Choosing which university to attend is one of the most significant decisions you'll make. Official brochures give you the marketing version. This guide gives you a more complete picture — the academic strengths, the practical realities, and what current students tend to say about each institution.</p>
+
+      <h2>Copperbelt University (CBU)</h2>
+      <p>Founded in 1987 and located in Kitwe, CBU is Zambia's second-largest university and one of its most technically focused. It's the go-to institution for engineering, natural sciences, technology, and business.</p>
+
+      <h3>Academic Strengths</h3>
+      <ul>
+        <li><strong>Engineering:</strong> Mechanical, Civil, Electrical, Chemical — all well-regarded</li>
+        <li><strong>Natural Sciences:</strong> Biology, Chemistry, Physics, Mathematics — strong foundation courses with past paper archives available on BrainHub</li>
+        <li><strong>Business:</strong> Accounting, Finance, and Economics are popular and well-taught</li>
+        <li><strong>Built Environment:</strong> Architecture and Quantity Surveying attract students from across southern Africa</li>
+      </ul>
+
+      <h3>Campus Life</h3>
+      <p>CBU's campus in Riverside, Kitwe is spacious with green areas, multiple lecture halls, student hostels, and sports facilities. Kitwe itself offers city amenities — restaurants, shopping, entertainment — at lower prices than Lusaka. The student body is diverse, drawing students from across Zambia and neighbouring countries.</p>
+
+      <h3>Practical Realities</h3>
+      <p>Like all Zambian universities, CBU faces resource constraints. Library resources can be limited, and some facilities are dated. Lecturers vary significantly in quality and engagement. Students who succeed are typically self-directed — they seek resources independently (like BrainHub), form study groups, and don't wait to be spoon-fed.</p>
+
+      <h2>University of Zambia (UNZA)</h2>
+      <p>Established in 1966, UNZA is Zambia's oldest and largest university. Located in Lusaka on a large, well-established campus, it has the most diverse academic offering in the country.</p>
+
+      <h3>Academic Strengths</h3>
+      <ul>
+        <li><strong>Medicine and Health Sciences:</strong> UNZA's medical school is the most prestigious in the country</li>
+        <li><strong>Law:</strong> The School of Law produces most of Zambia's legal professionals</li>
+        <li><strong>Humanities and Social Sciences:</strong> Strong programmes in Economics, Education, and Social Work</li>
+        <li><strong>Natural Sciences:</strong> Competitive programmes with strong research output</li>
+        <li><strong>Agriculture:</strong> One of the leading agricultural faculties in the region</li>
+      </ul>
+
+      <h3>Campus Life</h3>
+      <p>UNZA's Great East Road campus is large and well-established, with extensive facilities. Being in Lusaka means access to the country's economic centre, internship opportunities, and a wider professional network. The student community is enormous, which creates both opportunity and anonymity — you have to be proactive about building your own community within it.</p>
+
+      <h2>Zambia University of Technology (ZUT)</h2>
+      <p>The newest of the three, ZUT was established in 2012 and has a specific focus on technical and vocational education. Located in Kitwe, it occupies the site of the former Zambia Institute of Technology.</p>
+
+      <h3>Academic Strengths</h3>
+      <ul>
+        <li><strong>ICT and Computing:</strong> Software Engineering, Information Systems, and Computer Science</li>
+        <li><strong>Engineering Technology:</strong> Practical, applied engineering programmes</li>
+        <li><strong>Communication Skills:</strong> Strong professional communication and language programmes</li>
+        <li><strong>Business Technology:</strong> Bridging business and technical skills</li>
+      </ul>
+
+      <h3>The ZUT Advantage</h3>
+      <p>ZUT's relatively recent establishment means it has modern facilities and a curriculum designed for the current economy. Its focus on applied skills means graduates often hit the ground running in industry. Class sizes tend to be smaller, which means more contact with lecturers and a tighter community.</p>
+
+      <h2>How to Choose</h2>
+      <p>The right university for you depends on your field. For engineering and sciences, CBU and UNZA are your strongest options. For medicine or law, UNZA. For ICT and applied technology, ZUT has real strengths. Consider also where you want to build your professional network — Lusaka-based UNZA gives you access to Zambia's economic centre, while Copperbelt-based CBU and ZUT give you access to the mining and manufacturing industries.</p>
+      <p>And remember: what you put in matters more than which institution you attend. BrainHub exists precisely because the resources you have access to shouldn't determine how far you go.</p>
+    `
+  },
+  {
+    id: 9,
+    cat: 'health',
+    emoji: '😴',
+    bg: 'linear-gradient(135deg,#0c1445,#1e2d6b,#0c1445)',
+    title: 'Why Sleep Is Your Most Powerful Study Tool',
+    excerpt: 'You\'ve been told sleep is important. Here\'s the neuroscience behind why it\'s literally when your brain consolidates everything you studied — and why cramming through the night backfires every time.',
+    author: 'Gabriel J. Banda',
+    date: 'January 20, 2026',
+    read: '5 min',
+    tags: ['Sleep', 'Neuroscience', 'Memory', 'Health'],
+    content: `
+      <p>Ask most students what they sacrifice when exams approach and the answer is almost always sleep. It feels logical — less time sleeping means more time studying. But this trade-off is one of the most counterproductive decisions a student can make, and the neuroscience explains exactly why.</p>
+
+      <h2>What Your Brain Does While You Sleep</h2>
+      <p>Sleep is not passive rest for the brain. During sleep, particularly during slow-wave sleep and REM sleep, your brain is actively engaged in one of its most critical functions: <strong>memory consolidation</strong>.</p>
+      <p>During the day, as you learn, your brain creates temporary memories in the hippocampus. Think of this like RAM in a computer — fast, temporary storage. During sleep, the brain transfers these memories to long-term storage in the cortex — like saving files to a hard drive. This process is called memory consolidation, and it happens almost exclusively during sleep.</p>
+
+      <blockquote>"Sleep is not a luxury or a reward for studying hard. It is a biological requirement for learning to stick."</blockquote>
+
+      <h2>What Happens When You Don't Sleep Enough</h2>
+      <p>Studies consistently show that sleep deprivation:</p>
+      <ul>
+        <li>Reduces working memory capacity by up to 40%</li>
+        <li>Impairs the hippocampus's ability to encode new memories</li>
+        <li>Reduces problem-solving ability and creative thinking</li>
+        <li>Increases cortisol (the stress hormone), which actually destroys existing memories</li>
+        <li>Causes microsleeps — brief unconscious moments of sleep — which explain the experience of reading the same paragraph repeatedly without retaining it</li>
+      </ul>
+      <p>In short: studying while sleep-deprived is studying at significantly reduced capacity. You need to study more, for longer, to learn the same amount that you'd learn in less time after proper sleep.</p>
+
+      <h2>The All-Nighter Myth</h2>
+      <p>All-nighters are the worst possible strategy for exams. Here's why:</p>
+      <p>After a full night of study with no sleep, you enter the exam with compromised working memory, impaired recall, reduced ability to think flexibly under pressure, and elevated anxiety. The material you "crammed" hasn't been consolidated — it's still in that temporary hippocampal storage, fragile and easily disrupted by stress. Many students have had the experience of knowing everything the night before and being unable to recall it in the exam hall. This is largely why.</p>
+
+      <h2>The Optimal Sleep Strategy for Exam Season</h2>
+      <ul>
+        <li><strong>7–8 hours per night</strong> is the target for university-age students. Less than 6 hours consistently is cognitively equivalent to being legally drunk.</li>
+        <li><strong>Consistent sleep and wake times</strong> improve sleep quality even if total hours are the same.</li>
+        <li><strong>Study your hardest material before sleep,</strong> not right before an exam. The night before, do only light review. Sleep will do the rest.</li>
+        <li><strong>A 20-minute nap</strong> after a study session has been shown to improve retention of the material studied beforehand by up to 20%. Set an alarm.</li>
+      </ul>
+
+      <div class="tip-box">
+        <strong>🌙 The Night Before an Exam</strong>
+        Light review until 9pm, then stop. Prepare everything you need for the exam. Do something enjoyable for an hour. In bed by 10:30pm with phone in another room. Even if you can't sleep, rest quietly — the physical rest still helps.
+      </div>
+
+      <h2>The Bottom Line</h2>
+      <p>Protecting your sleep is not laziness. It is the most rational study decision you can make. The students who consistently perform best over an academic year are almost never the ones who sleep least — they're the ones who have found sustainable rhythms that include proper rest.</p>
+      <p>Use BrainHub's Pomodoro timer to study in focused bursts, take proper breaks, and protect your sleep. That combination will outperform any amount of exhausted cramming.</p>
+    `
+  }
+];
+
+// ═══════════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════════
+let activeFilter = 'all';
+let searchQuery  = '';
+let articleOpen  = false;
+
+// ═══════════════════════════════════════════════════════════
+//  RENDER FEATURED
+// ═══════════════════════════════════════════════════════════
+function renderFeatured() {
+  const f = POSTS.find(p => p.featured) || POSTS[0];
+  document.getElementById('featCard').innerHTML = `
+    <div class="feat-img" style="background:${f.bg}">
+      <div style="position:absolute;inset:0;background:radial-gradient(circle at 30% 50%,rgba(99,102,241,.25),transparent 60%)"></div>
+      <div class="feat-badge"><i class="fas fa-star"></i> Featured</div>
+      <div class="feat-img-icon">${f.emoji}</div>
+    </div>
+    <div class="feat-body">
+      <div class="post-cat-lbl">${f.cat.replace('-',' ').toUpperCase()}</div>
+      <h2>${f.title}</h2>
+      <p>${f.excerpt}</p>
+      <div class="post-meta-row">
+        <div style="display:flex;align-items:center;gap:.45rem">
+          <div class="auth-av">G</div>
+          <span>${f.author}</span>
+        </div>
+        <span><i class="fas fa-calendar"></i> ${f.date}</span>
+        <span><i class="fas fa-clock"></i> ${f.read}</span>
+      </div>
+      <button class="read-more" onclick="openArticle(${f.id})">
+        Read article <i class="fas fa-arrow-right"></i>
+      </button>
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+//  RENDER GRID
+// ═══════════════════════════════════════════════════════════
+function renderGrid() {
+  const grid = document.getElementById('postsGrid');
+  const list = POSTS.filter(p => {
+    const mc = activeFilter === 'all' || p.cat === activeFilter;
+    const ms = !searchQuery || p.title.toLowerCase().includes(searchQuery) || p.excerpt.toLowerCase().includes(searchQuery);
+    return mc && ms;
+  });
+
+  if (!list.length) {
+    grid.innerHTML = `<div class="empty-blog"><i class="fas fa-search"></i>No articles found. Try a different search or filter.</div>`;
+    return;
+  }
+
+  grid.innerHTML = list.map((p, i) => `
+    <div class="post-card fu" style="transition-delay:${i*50}ms" onclick="openArticle(${p.id})">
+      <div class="pc-img" style="background:${p.bg}">${p.emoji}</div>
+      <div class="pc-body">
+        <div class="post-cat-lbl">${p.cat.replace('-',' ').toUpperCase()}</div>
+        <h3>${p.title}</h3>
+        <p>${p.excerpt}</p>
+        <div class="pc-foot">
+          <div style="display:flex;align-items:center;gap:.45rem">
+            <div class="auth-av" style="width:22px;height:22px;font-size:.55rem">G</div>
+            <span class="pc-read">${p.date}</span>
+          </div>
+          <span class="pc-read"><i class="fas fa-clock"></i> ${p.read}</span>
+        </div>
+      </div>
+    </div>`).join('');
+
+  setTimeout(() => document.querySelectorAll('.posts-grid .fu').forEach(el => el.classList.add('vis')), 60);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  RENDER POPULAR SIDEBAR
+// ═══════════════════════════════════════════════════════════
+function renderPopular() {
+  const top = [...POSTS].slice(0,4);
+  document.getElementById('popularList').innerHTML = top.map((p, i) => `
+    <div class="pop-item">
+      <div class="pop-num">0${i+1}</div>
+      <div><button onclick="openArticle(${p.id})">${p.title}</button></div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════════
+//  OPEN ARTICLE
+// ═══════════════════════════════════════════════════════════
+function openArticle(id) {
+  const p = POSTS.find(x => x.id === id);
+  if (!p) return;
+
+  // Build tags HTML
+  const tagsHtml = p.tags.map(t => `<span class="article-tag"><i class="fas fa-tag"></i> ${t}</span>`).join('');
+
+  document.getElementById('articleContent').innerHTML = `
+    <div class="article-header">
+      <div class="post-cat-lbl">${p.cat.replace('-',' ').toUpperCase()}</div>
+      <h1>${p.title}</h1>
+      <p class="lead">${p.excerpt}</p>
+      <div class="article-meta">
+        <div style="display:flex;align-items:center;gap:.5rem">
+          <div class="auth-av">G</div>
+          <span>${p.author}</span>
+        </div>
+        <span><i class="fas fa-calendar"></i> ${p.date}</span>
+        <span><i class="fas fa-clock"></i> ${p.read} read</span>
+      </div>
+    </div>
+    <div class="article-hero-img" style="background:${p.bg}">${p.emoji}</div>
+    <div class="article-body">${p.content}</div>
+    <div style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border)">${tagsHtml}</div>
+    <div style="margin-top:2.5rem;padding:1.5rem;background:var(--card);border:1px solid var(--border);border-radius:16px;display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+      <div class="auth-av" style="width:48px;height:48px;font-size:1.1rem;flex-shrink:0">G</div>
+      <div>
+        <div style="font-family:'Syne',sans-serif;font-weight:800;color:var(--text-900);margin-bottom:.2rem">${p.author}</div>
+        <div style="font-size:.8rem;color:var(--text-500)">Founder of BrainHub · CBU Student · Building free education for Zambian students.</div>
+      </div>
+    </div>`;
+
+  // Show article, hide grid
+  document.getElementById('articleWrap').classList.add('open');
+  document.getElementById('blogLayout').style.display = 'none';
+  document.getElementById('featuredSection').style.display = 'none';
+  document.getElementById('heroSection').style.display = 'none';
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  articleOpen = true;
+
+  // Award XP for reading
+  if (window.BrainHubXP) window.BrainHubXP.trackDocOpen?.();
+}
+
+// ═══════════════════════════════════════════════════════════
+//  CLOSE ARTICLE
+// ═══════════════════════════════════════════════════════════
+function closeArticle() {
+  document.getElementById('articleWrap').classList.remove('open');
+  document.getElementById('blogLayout').style.display = '';
+  document.getElementById('featuredSection').style.display = '';
+  document.getElementById('heroSection').style.display = '';
+  articleOpen = false;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ═══════════════════════════════════════════════════════════
+//  FILTER & SEARCH
+// ═══════════════════════════════════════════════════════════
+function filterPosts() {
+  searchQuery = document.getElementById('blogSearch').value.toLowerCase().trim();
+  renderGrid();
+}
+
+function setFilter(cat) {
+  activeFilter = cat;
+  document.querySelectorAll('.fp').forEach(p => p.classList.toggle('active', p.dataset.cat === cat));
+  renderGrid();
+}
+
+document.querySelectorAll('.fp').forEach(pill => {
+  pill.addEventListener('click', () => setFilter(pill.dataset.cat));
+});
+
+// ═══════════════════════════════════════════════════════════
+//  NEWSLETTER
+// ═══════════════════════════════════════════════════════════
+function subscribeNL() {
+  const email = document.getElementById('nlEmail').value.trim();
+  const msg   = document.getElementById('nlMsg');
+  if (!email || !email.includes('@')) { msg.textContent = 'Please enter a valid email address.'; msg.style.display = 'block'; return; }
+  msg.textContent = "🎉 You're subscribed! Welcome to the BrainHub community.";
+  msg.style.display = 'block';
+  document.getElementById('nlEmail').value = '';
+}
+
+// ═══════════════════════════════════════════════════════════
+//  SCROLL PROGRESS
+// ═══════════════════════════════════════════════════════════
+window.addEventListener('scroll', () => {
+  const d = document.documentElement;
+  document.getElementById('scrollProg').style.transform = `scaleX(${d.scrollTop / (d.scrollHeight - d.clientHeight)})`;
+});
+
+// ═══════════════════════════════════════════════════════════
+//  FADE-UP OBSERVER
+// ═══════════════════════════════════════════════════════════
+const fuObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); fuObs.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fu').forEach(el => fuObs.observe(el));
+
+// ═══════════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════════
+renderFeatured();
+renderGrid();
+renderPopular();
+</script>
+</body>
+</html>
