@@ -3,16 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BIO1400 Lecture Notes — UNZA | BrainHub</title>
+  <title>BIO1400 Lecture Notes | UNZA | BrainHub</title>
+  <meta name="description" content="Free BIO1400 Biology lecture notes for UNZA Natural Sciences students. Download PDFs and study resources." />
+  <meta name="course-context" content="BIO1400 Biology at UNZA - Cell structure, genetics, cellular biology for Zambian university students" />
   <link rel="stylesheet" href="/src/style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <link rel="icon" type="image/x-icon" href="/public/assets/images/favicon.png" />
 </head>
 <body>
+
 <div id="progress-bar"></div>
 <button class="back-to-top" aria-label="Back to top"><i class="fas fa-arrow-up"></i></button>
+
 <div class="pomodoro-widget" id="pomodoroWidget">
-  <div class="timer-header"><h4><i class="fas fa-clock"></i> Study Timer</h4><button class="timer-close" id="timerClose"><i class="fas fa-times"></i></button></div>
+  <div class="timer-header">
+    <h4><i class="fas fa-clock"></i> Study Timer</h4>
+    <button class="timer-close" id="timerClose"><i class="fas fa-times"></i></button>
+  </div>
   <div class="timer-display" id="timerDisplay">25:00</div>
   <div class="timer-controls">
     <button class="timer-btn" id="timerStart"><i class="fas fa-play"></i> Start</button>
@@ -21,78 +28,506 @@
   </div>
   <div class="timer-session">Sessions: <span id="sessionCount">0</span></div>
 </div>
+
 <nav class="navbar">
   <div class="container nav-container">
-    <a href="/index.html" class="logo"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;color:var(--primary)"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M9 13a4.5 4.5 0 0 0 3-4"/><path d="M12 13h4"/><path d="M12 18h6a2 2 0 0 1 2 2v1"/><path d="M12 8h8"/><path d="M16 8V5a2 2 0 0 1 2-2"/><circle cx="16" cy="13" r=".5"/><circle cx="18" cy="3" r=".5"/><circle cx="20" cy="21" r=".5"/><circle cx="20" cy="8" r=".5"/></svg>BrainHub<span class="dot">.</span></a>
+        <a href="/index.html" class="logo">
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;color:var(--primary)"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M9 13a4.5 4.5 0 0 0 3-4"/><path d="M12 13h4"/><path d="M12 18h6a2 2 0 0 1 2 2v1"/><path d="M12 8h8"/><path d="M16 8V5a2 2 0 0 1 2-2"/><circle cx="16" cy="13" r=".5"/><circle cx="18" cy="3" r=".5"/><circle cx="20" cy="21" r=".5"/><circle cx="20" cy="8" r=".5"/></svg>
+      BrainHub<span class="dot">.</span>
+    </a>
     <button class="mobile-menu-btn" aria-label="Toggle navigation"><i class="fas fa-bars"></i></button>
     <ul class="nav-links">
       <li><a href="/index.html">Home</a></li>
       <li><a href="/pages/universities.html" class="active">Universities</a></li>
       <li><a href="/pages/quizzes.html">Quizzes</a></li>
+      <li><a href="/pages/flashcards.html">Flashcards</a></li>
       <li><a href="/pages/about.html">About</a></li>
       <li><a href="/pages/contact.html">Contact</a></li>
+      <!-- Show only when NOT logged in -->
+<li data-auth-show="guest">
+  <a href="/pages/auth.html" class="btn-primary" style="padding:0.4rem 0.9rem;border-radius:8px">
+    Sign In
+  </a>
+</li>
+
+<!-- Show only when logged in -->
+<li data-auth-show="authed" style="display:none">
+  <a href="/pages/profile.html" style="display:flex;align-items:center;gap:0.4rem">
+    <img data-auth-avatar src="" width="28" height="28"
+      style="border-radius:50%;object-fit:cover;display:none;border:2px solid var(--primary)">
+    <span data-auth-name style="font-weight:700;font-size:0.85rem"></span>
+  </a>
+</li>
       <li><button id="theme-toggle" class="btn-primary theme-toggle"><i class="fas fa-moon" id="theme-icon"></i></button></li>
     </ul>
   </div>
 </nav>
+
 <main class="container">
+  <!-- Breadcrumbs -->
   <div class="uni-page-header">
-    <div class="breadcrumbs"><a href="/index.html">Home</a><i class="fas fa-chevron-right"></i>
+    <div class="breadcrumbs">
+      <a href="/index.html">Home</a><i class="fas fa-chevron-right"></i>
       <a href="/pages/universities.html">Universities</a><i class="fas fa-chevron-right"></i>
       <a href="/pages/universities/unza.html">UNZA</a><i class="fas fa-chevron-right"></i>
       <a href="/pages/universities/unza/programs/natural-sciences.html">Natural Sciences</a><i class="fas fa-chevron-right"></i>
       <a href="/pages/universities/unza/programs/natural-sciences/BIO1400/index.html">BIO1400</a><i class="fas fa-chevron-right"></i>
-      <span>Lecture Notes</span></div>
-    <div class="title-group"><h1>BIO1400 Lecture Notes</h1><p class="subtitle">Select a document to preview or download.</p></div>
-  </div>
-  <div id="brickWall" class="brick-wall" style="display:none;">
-    <div class="brick-content">
-      <div class="brick-icon"><i class="fas fa-hourglass-half"></i></div>
-      <h2>No Documents Yet</h2>
-      <p>No documents available yet. Check back soon.</p>
-      <a href="/pages/universities/unza/programs/natural-sciences/BIO1400/index.html" class="brick-btn"><i class="fas fa-arrow-left"></i> Back to BIO1400 — Biology</a>
+      <span>Lecture Notes</span>
+    </div>
+
+    <div class="title-group">
+      <h1>BIO1400 Lecture Notes</h1>
+      <p class="subtitle">Select a document to read or download.</p>
+      <span class="last-updated"><i class="far fa-clock"></i> Last updated: March 2026</span>
     </div>
   </div>
-  <div class="doc-viewer" style="display:none;">
+
+  <!-- Progress tracker -->
+  <div class="course-progress-wrap reveal">
+    <h4>
+      <i class="fas fa-tasks" style="color:var(--primary)"></i>
+      Your Progress
+    </h4>
+    <div class="progress-track">
+      <div class="progress-fill" id="courseProgressBar"></div>
+    </div>
+    <span id="courseProgressLabel">0 / 0 completed</span>
+  </div>
+
+  <!-- Completion certificate trigger (auto-shows when all done) -->
+  <div class="cert-trigger-wrap" id="certTrigger" data-course="BIO1400 — Cell Biology, UNZA">
+    <div style="font-size:2rem;margin-bottom:0.5rem">🎓</div>
+    <h4>You've completed all resources!</h4>
+    <p>Download your personalised study completion certificate.</p>
+    <button class="cert-generate-btn" id="certGenerateBtn">
+      <i class="fas fa-award"></i> Generate Certificate
+    </button>
+  </div>
+
+  <!-- Document Viewer -->
+  <div class="doc-viewer">
     <div class="doc-list-panel">
-      <div class="doc-list-header"><span>Available Notes</span><span id="docCount">0 files</span></div>
+      <div class="doc-list-header">
+        <span>Available Notes</span>
+        <span id="docCount"></span>
+      </div>
       <div class="doc-list" id="docList"></div>
-      <button class="load-more-btn" id="loadMoreBtn"><i class="fas fa-plus-circle"></i> Load More</button>
+      <button class="load-more-btn" id="loadMoreBtn" style="display:none">
+        <i class="fas fa-plus-circle"></i> Load More
+      </button>
+      <!-- Suggest a resource -->
+      <button class="suggest-btn suggest-resource-btn" data-course="BIO 110" data-university="UNZA">
+        <i class="fas fa-plus-circle"></i> Suggest a resource for this course
+      </button>
     </div>
     <div class="doc-preview-panel">
       <div id="previewPlaceholder" class="preview-placeholder">
         <div class="preview-icon"><i class="fas fa-file-pdf"></i></div>
-        <h3>Select a document</h3><p>Choose a file from the list to preview and download.</p>
+        <h3>Select a document</h3>
+        <p>Choose a file from the list to preview and download.</p>
       </div>
       <div id="previewActive" class="preview-active" style="display:none;"></div>
     </div>
   </div>
+
+  <!-- Students also viewed -->
+  <div id="alsoViewedContainer" data-courses='[
+    {"code":"PH1010","name":"Physics PHY1010","desc":"Mechanics, waves & thermodynamics","url":"/pages/universities/unza/programs/natural-sciences/PHY1010/index.html","color":"#eff6ff","textColor":"#1d4ed8"},
+    {"code":"CH1000","name":"Chemistry CH1000","desc":"Atomic structure & bonding","url":"/pages/universities/unza/programs/natural-sciences/CH1000/index.html","color":"#f0fdf4","textColor":"#15803d"},
+    {"code":"MA1100","name":"Maths MA1100","desc":"Calculus & linear algebra","url":"/pages/universities/unza/programs/natural-sciences/MA1100/index.html","color":"#fff7ed","textColor":"#c2410c"}
+  ]'>
+</div>
 </main>
+
 <footer>
   <div class="container footer-content">
-    <div class="footer-col"><h3>BrainHub<span class="dot">.</span></h3><p>Free education for everyone.</p><button class="timer-toggle" id="timerToggle"><i class="fas fa-clock"></i> Study Timer</button></div>
-    <div class="footer-col"><h4>Platform</h4><a href="/index.html">Home</a><a href="/pages/universities.html">Universities</a><a href="/pages/quizzes.html">Quizzes</a><a href="/pages/flashcards.html">Flashcards</a></div>
-    <div class="footer-col"><h4>Support</h4><a href="/pages/contact.html">Contact Us</a><a href="/pages/privacy-policy.html">Privacy Policy</a><a href="/pages/terms.html">Terms &amp; Conditions</a></div>
+    <div class="footer-col">
+      <h3>BrainHub<span class="dot">.</span></h3>
+      <p>Free education for everyone.</p>
+      <button class="timer-toggle" id="timerToggle"><i class="fas fa-clock"></i> Study Timer</button>
+    </div>
+    <div class="footer-col">
+      <h4>Platform</h4>
+      <a href="/index.html">Home</a>
+      <a href="/pages/universities.html">Universities</a>
+      <a href="/pages/flashcards.html">Flashcards</a>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <a href="/pages/contact.html">Contact Us</a>
+      <a href="/pages/privacy-policy.html">Privacy Policy</a>
+      <a href="/pages/terms.html">Terms</a>
+    </div>
   </div>
-  <div class="footer-bottom"><p>&copy; 2026 BrainHub. All rights reserved.</p><p id="realtime-clock" class="clock-text"></p></div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 BrainHub. All rights reserved.</p>
+    <p id="realtime-clock" class="clock-text"></p>
+  </div>
 </footer>
-<audio id="timerBeep" preload="auto"><source src="https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3" type="audio/mpeg"></audio>
+
+<!-- AI Chatbot -->
+<button class="chat-toggle-btn" id="chatToggleBtn" aria-label="Open AI Tutor">
+  <i class="fas fa-robot"></i>
+  <span class="chat-badge">AI</span>
+</button>
+<div class="ai-chat-window" id="aiChatWindow">
+  <div class="chat-header">
+    <div class="chat-avatar"><i class="fas fa-robot"></i></div>
+    <div class="chat-header-info">
+      <h4>BrainHub AI Tutor</h4>
+      <span><span class="chat-status-dot"></span> Ask me about BIO1400</span>
+    </div>
+    <button class="chat-close-btn" id="chatCloseBtn"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="chat-messages" id="chatMessages"></div>
+  <div class="chat-input-area">
+    <input type="text" id="chatInput" placeholder="e.g. Explain cell structure…" autocomplete="off" />
+    <button id="chatSendBtn"><i class="fas fa-paper-plane"></i></button>
+  </div>
+  <div class="chat-footer-note">BrainHub AI Tutor</div>
+</div>
+
+<!-- Mobile Bottom Nav -->
+<nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+  <ul>
+    <li><a href="/index.html" data-page="home"><i class="fas fa-home"></i>Home</a></li>
+    <li><a href="/pages/universities.html" data-page="universities"><i class="fas fa-university"></i>Study</a></li>
+    <li><a href="/pages/flashcards.html" data-page="flashcards"><i class="fas fa-layer-group"></i>Cards</a></li>
+    <li><a href="/pages/quizzes.html" data-page="quizzes"><i class="fas fa-stopwatch"></i>Quizzes</a></li>
+    <li><button class="nav-ai-btn" onclick="document.getElementById('chatToggleBtn').click()"><i class="fas fa-robot"></i>AI Tutor</button></li>
+  </ul>
+</nav>
+
+<audio id="timerBeep" preload="auto">
+  <source src="https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3" type="audio/mpeg">
+</audio>
+
 <script src="/src/doc-security.js"></script>
 <script src="/src/i18n.js"></script>
 <script src="/src/main.js"></script>
 <script src="/src/gamification.js"></script>
 <script src="/src/supabase.js"></script>
 
-<script>(function(){const documents=[];if(typeof initDocumentViewer==='function')initDocumentViewer(documents,'notes');})();</script>
+<script>
+(function() {
+  const documents = [
+    {
+      id: 1,
+      title: 'Atomic Bonding and Water',
+      type: 'PDF',
+      size: '2.67 MB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['verified', 'popular'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/UNZA/BIO1400/BIO%201400%20Atomic%20Bonding%20and%20Water_260209_214825.pdf'
+    },
+    {
+      id: 2,
+      title: 'Enzymes - 2021',
+      type: 'PDF',
+      size: '560.4 kB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/UNZA/BIO1400/BIO%201400_Enzymes_2021.pdf'
+    },
+    {
+      id: 3,
+      title: 'Course Syllabus',
+      type: 'PDF',
+      size: '116.6 kB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/UNZA/BIO1400/BIO%201400%20Course%20Syllabus.pdf'
+    },
+    {
+      id: 4,
+      title: 'Amino Acids - 2021',
+      type: 'PDF',
+      size: '302.04 kB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['verified', 'popular'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/UNZA/BIO1400/BIO1400_Amino%20acids_2021.pdf'
+    },
+    {
+      id: 5,
+      title: 'Protein Structure - 2021',
+      type: 'PDF',
+      size: '528.81 kB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/UNZA/BIO1400/BIO1400_Protein%20structure_2021.pdf'
+    },
+    {
+      id: 6,
+      title: 'Proteins - 2021',
+      type: 'PDF',
+      size: '519.91 kB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/UNZA/BIO1400/BIO1400_Proteins_2021.pdf'
+    },
+    {
+      id: 7,
+      title: 'Daflody',
+      type: 'PDF',
+      size: '7.46 MB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/UNZA/BIO1400/BIOLOGY_1400_DAFLODY..pdf'
+    },
+    {
+      id: 8,
+      title: 'Carbohydrates, Lipids and Proteins',
+      type: 'PDF',
+      size: '2.92 MB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/UNZA/BIO1400/BIO_1400_Carbohydrates__Lipids_and_Proteins____1_250414_220314.pdf'
+    },
+    {
+      id: 9,
+      title: 'Eukaryotics Cells',
+      type: 'PDF',
+      size: '633.73 kB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/UNZA/BIO1400/EUKARYOTIC%20CELLS.pdf'
+    },
+    {
+      id: 10,
+      title: 'Cell Structure and Function',
+      type: 'PDF',
+      icon: 'fa-file-ppt',
+      iconClass: 'ppt',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/UNZA/BIO1400/LECTURE%201cell%20structure%20and%20function.pptx'
+    },
+    {
+      id: 11,
+      title: 'Prokatyotes',
+      type: 'PDF',
+      size: '1.79 MB',
+      icon: 'fa-file-ppt',
+      iconClass: 'ppt',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/UNZA/BIO1400/LECTURE%203%20%20prokaryotes.pptx'
+    },
+    {
+      id: 12,
+      title: 'Prokaryotic Cells',
+      type: 'PDF',
+      size: '383.99 kB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/UNZA/BIO1400/PROKARYOTIC%20CELLS.pdf'
+    },
+    {
+      id: 13,
+      title: 'Part 2 Topic - 11: Sex Determination and Sex Linkage - 2021',
+      type: 'PDF',
+      size: '192.21 kB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/UNZA/BIO1400/Part%202%20Topic%2011%20Sex%20Determination%20and%20Sex%20Linkage_2021.pdf'
+    },
+    {
+      id: 14,
+      title: 'Part 2 Topic - 12: Chromosome Mutations - 2021',
+      type: 'PDF',
+      size: '392.25 kB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/UNZA/BIO1400/Part%202%20Topic%2012%20Chromosome%20Mutations_2021.pdf'
+    },
+    {
+      id: 15,
+      title: 'Part 2 Topic - 6: Regulation of Gene Expression - 2021',
+      type: 'PDF',
+      size: '470.53 kB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/UNZA/BIO1400/Part%202%20Topic%206%20Regulation%20of%20gene%20expression_2021%20(2).pdf'
+    },
+    {
+      id: 16,
+      title: 'Part 2 Topic - 7: Chromosonal Theory of Inheritance - 2021',
+      type: 'PDF',
+      size: '135.06 kB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/UNZA/BIO1400/Part%202%20Topic%207%20Chromosomal%20Theory%20of%20Inheritance_2021.pdf'
+    },
+    {
+      id: 17,
+      title: 'Part 2 Topic - 8: Cell Cycle and Mitosis - 2021',
+      type: 'PDF',
+      size: '209.64 kB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/UNZA/BIO1400/Part%202%20Topic%208%20Cell%20Cylce%20and%20Mitosis_2021.pdf'
+    },
+    {
+      id: 18,
+      title: 'Part 2 Topic - 8b: Meiosis Revision Question and Summary - 2021',
+      type: 'PDF',
+      size: '89.62 kB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/UNZA/BIO1400/Part%202%20Topic%208b%20Meiosis%20Revison%20Questions%20and%20Summary_2021.pdf'
+    },
+    {
+      id: 19,
+      title: 'Topic 10 - Mendelian Genetics - 2021',
+      type: 'PDF',
+      size: '244.38 kB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/UNZA/BIO1400/Topic%2010%20Post-Mendelian%20Genetics_2021.pdf'
+    },
+    {
+      id: 20,
+      title: 'Water Structure and Properties',
+      type: 'PDF',
+      size: '378.42 kB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/UNZA/BIO1400/Topic%202%20Water%20Structure%20and%20Properties.pdf'
+    },
+    {
+      id: 21,
+      title: 'Topic 3 - DNA Replication - 2021',
+      type: 'PDF',
+      size: '242.09 kB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/UNZA/BIO1400/Topic%203%20DNA%20Replication_2021.pdf'
+    },
+    {
+      id: 22,
+      title: 'Topic 4 - Transcription - 2021',
+      type: 'PDF',
+      size: '560.4 kB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/UNZA/BIO1400/Topic%204%20Transcription_2021.pdf'
+    },
+    {
+      id: 23,
+      title: 'Topic 5 - Translation - 2021',
+      type: 'PDF',
+      size: '560.4 kB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/UNZA/BIO1400/Topic%205%20Translation_2021_b.pdf'
+    },
+    {
+      id: 24,
+      title: 'Topic 6 - Water - 2021',
+      type: 'PDF',
+      size: '560.4 kB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/UNZA/BIO1400/Topic%206%20Water_2021.pdf'
+    },
+    {
+      id: 25,
+      title: 'Topic 7 - Carbohydrates - 2021',
+      type: 'PDF',
+      size: '560.4 kB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/UNZA/BIO1400/Topic%207%20Carbohydrate_2021.pdf'
+    },
+    {
+      id: 26,
+      title: 'Topic 8 - Lipids - 2021',
+      type: 'PDF',
+      size: '560.4 kB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/UNZA/BIO1400/Topic%208%20Lipids_2021.pdf'
+    },
+    {
+      id: 27,
+      title: 'Topic 9 - Mendelian Genetics - 2021',
+      type: 'PDF',
+      size: '560.4 kB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/UNZA/BIO1400/Topic%209%20Classical%20Mendelian%20Genetics_2021.pdf'
+    },
+    {
+      id: 28,
+      title: 'Topic 9 - Proteins - 2021',
+      type: 'PDF',
+      size: '560.4 kB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/UNZA/BIO1400/Topic%209%20Proteins.pdf'
+    },
+    {
+      id: 29,
+      title: 'Test 1',
+      type: 'PDF',
+      size: '560.4 kB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/UNZA/BIO1400/bio%201400%20test%201.pdf'
+    },
+    {
+      id: 30,
+      title: 'Quiz 1',
+      type: 'PDF',
+      size: '560.4 kB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/UNZA/BIO1400/biology%20quiz1.pdf'
+    },
+  ];
+  if (typeof initDocumentViewer === 'function') initDocumentViewer(documents, 'notes');
+})();
+</script>
 
 <!-- AI Chatbot -->
 <button class="chat-toggle-btn" id="chatToggleBtn" aria-label="Open AI Tutor">
-  <i class="fas fa-robot"></i><span class="chat-badge">AI</span>
+  <i class="fas fa-robot"></i>
+  <span class="chat-badge">AI</span>
 </button>
 <div class="ai-chat-window" id="aiChatWindow">
   <div class="chat-header">
     <div class="chat-avatar"><i class="fas fa-robot"></i></div>
-    <div class="chat-header-info"><h4>BrainHub AI Tutor</h4><span><span class="chat-status-dot"></span> Online · Ready to help</span></div>
+    <div class="chat-header-info">
+      <h4>BrainHub AI Tutor</h4>
+      <span><span class="chat-status-dot"></span> Online · Ready to help</span>
+    </div>
     <button class="chat-close-btn" id="chatCloseBtn"><i class="fas fa-times"></i></button>
   </div>
   <div class="chat-messages" id="chatMessages"></div>
@@ -111,4 +546,5 @@
     <li><button class="nav-ai-btn" onclick="document.getElementById('chatToggleBtn').click()"><i class="fas fa-robot"></i>AI Tutor</button></li>
   </ul>
 </nav>
-</body></html>
+</body>
+</html>

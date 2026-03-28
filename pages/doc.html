@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Documents | BrainHub</title>
+  <meta name="description" content="Study resources on BrainHub — notes, past papers and exams." />
+  <link rel="stylesheet" href="/src/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link rel="icon" type="image/x-icon" href="/public/assets/images/favicon.png" />
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<button class="back-to-top" aria-label="Back to top"><i class="fas fa-arrow-up"></i></button>
+
+<div class="pomodoro-widget" id="pomodoroWidget">
+  <div class="timer-header"><h4><i class="fas fa-clock"></i> Study Timer</h4><button class="timer-close" id="timerClose"><i class="fas fa-times"></i></button></div>
+  <div class="timer-display" id="timerDisplay">25:00</div>
+  <div class="timer-controls">
+    <button class="timer-btn" id="timerStart"><i class="fas fa-play"></i> Start</button>
+    <button class="timer-btn" id="timerPause"><i class="fas fa-pause"></i> Pause</button>
+    <button class="timer-btn" id="timerReset"><i class="fas fa-redo"></i> Reset</button>
+  </div>
+  <div class="timer-session">Sessions: <span id="sessionCount">0</span></div>
+</div>
+
+<nav class="navbar">
+  <div class="container nav-container">
+    <a href="/index.html" class="logo">
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;color:var(--primary)"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M9 13a4.5 4.5 0 0 0 3-4"/><path d="M12 13h4"/><path d="M12 18h6a2 2 0 0 1 2 2v1"/><path d="M12 8h8"/><path d="M16 8V5a2 2 0 0 1 2-2"/><circle cx="16" cy="13" r=".5"/><circle cx="18" cy="3" r=".5"/><circle cx="20" cy="21" r=".5"/><circle cx="20" cy="8" r=".5"/></svg>
+      BrainHub<span class="dot">.</span>
+    </a>
+    <button class="mobile-menu-btn" aria-label="Toggle navigation"><i class="fas fa-bars"></i></button>
+    <ul class="nav-links">
+      <li><a href="/index.html">Home</a></li>
+      <li><a href="/pages/universities.html" class="active">Universities</a></li>
+      <li data-auth-show="guest"><a href="/pages/auth.html" class="btn-primary" style="padding:.4rem .9rem;border-radius:8px">Sign In</a></li>
+      <li data-auth-show="authed" style="display:none">
+        <a href="/pages/profile.html" style="display:flex;align-items:center;gap:.4rem">
+          <img data-auth-avatar src="" width="28" height="28" style="border-radius:50%;object-fit:cover;display:none;border:2px solid var(--primary)">
+          <span data-auth-name style="font-weight:700;font-size:.85rem"></span>
+        </a>
+      </li>
+      <li><button id="theme-toggle" class="btn-primary theme-toggle"><i class="fas fa-moon" id="theme-icon"></i></button></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="container" style="padding-bottom:4rem">
+  <div class="uni-page-header">
+    <div class="breadcrumbs" id="breadcrumbs"></div>
+    <div class="title-group">
+      <h1 id="pageTitle">Loading…</h1>
+      <p class="subtitle" id="pageSubtitle"></p>
+    </div>
+  </div>
+
+  <!-- Empty state (shown when no docs) -->
+  <div id="emptyState" class="brick-wall" style="display:none">
+    <div class="brick-content">
+      <div class="brick-icon"><i class="fas fa-hourglass-half"></i></div>
+      <h2 id="emptyTitle">No Documents Yet</h2>
+      <p id="emptyMsg">We're gathering resources for this section. Check back soon!</p>
+      <a href="/pages/universities.html" class="brick-btn"><i class="fas fa-arrow-left"></i> Back to Universities</a>
+    </div>
+  </div>
+
+  <!-- Doc viewer -->
+  <div class="doc-viewer" id="docViewer" style="display:none">
+    <div class="doc-list-panel">
+      <div class="doc-list-header">
+        <span id="docListLabel">Available Documents</span>
+        <span id="docCount"></span>
+      </div>
+      <div class="doc-list" id="docList"></div>
+      <button class="load-more-btn" id="loadMoreBtn"><i class="fas fa-plus-circle"></i> Load More</button>
+    </div>
+    <div class="doc-preview-panel">
+      <div id="previewPlaceholder" class="preview-placeholder">
+        <div class="preview-icon"><i class="fas fa-file-pdf"></i></div>
+        <h3>Select a document</h3>
+        <p>Choose a file from the list to preview and download.</p>
+      </div>
+      <div id="previewActive" class="preview-active" style="display:none"></div>
+    </div>
+  </div>
+
+  <!-- Discussion section -->
+  <div id="discussionSection" style="margin-top:2rem"></div>
+</main>
+
+<footer>
+  <div class="container footer-content">
+    <div class="footer-col"><h3>BrainHub<span class="dot">.</span></h3><p>Free education for everyone.</p><button class="timer-toggle" id="timerToggle"><i class="fas fa-clock"></i> Study Timer</button></div>
+    <div class="footer-col"><h4>Platform</h4><a href="/index.html">Home</a><a href="/pages/universities.html">Universities</a><a href="/pages/flashcards.html">Flashcards</a></div>
+    <div class="footer-col"><h4>Support</h4><a href="/pages/contact.html">Contact Us</a><a href="/pages/privacy-policy.html">Privacy Policy</a></div>
+  </div>
+  <div class="footer-bottom"><p>&copy; 2026 BrainHub. All rights reserved.</p><p id="realtime-clock" class="clock-text"></p></div>
+</footer>
+
+<audio id="timerBeep" preload="auto"><source src="https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3" type="audio/mpeg"></audio>
+
+<script src="/src/doc-security.js"></script>
+<script src="/src/i18n.js"></script>
+<script src="/src/main.js"></script>
+<script src="/src/gamification.js"></script>
+<script src="/src/supabase.js"></script>
+<script src="/src/discussions.js"></script>
+
+<button class="chat-toggle-btn" id="chatToggleBtn" aria-label="Open AI Tutor">
+  <i class="fas fa-robot"></i><span class="chat-badge">AI</span>
+</button>
+<div class="ai-chat-window" id="aiChatWindow">
+  <div class="chat-header">
+    <div class="chat-avatar"><i class="fas fa-robot"></i></div>
+    <div class="chat-header-info">
+      <h4>BrainHub AI Tutor</h4>
+      <span><span class="chat-status-dot"></span> Online · Ready to help</span>
+    </div>
+    <button class="chat-close-btn" id="chatCloseBtn"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="chat-messages" id="chatMessages"></div>
+  <div class="chat-input-area">
+    <input type="text" id="chatInput" placeholder="Ask anything about your course…" autocomplete="off" />
+    <button id="chatSendBtn"><i class="fas fa-paper-plane"></i></button>
+  </div>
+  <div class="chat-footer-note">BrainHub AI Tutor</div>
+</div>
+
+<nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+  <ul>
+    <li><a href="/index.html"><i class="fas fa-home"></i>Home</a></li>
+    <li><a href="/pages/universities.html"><i class="fas fa-university"></i>Study</a></li>
+    <li><a href="/pages/flashcards.html"><i class="fas fa-layer-group"></i>Cards</a></li>
+    <li><a href="/pages/quizzes.html"><i class="fas fa-stopwatch"></i>Quizzes</a></li>
+    <li><button class="nav-ai-btn" onclick="document.getElementById('chatToggleBtn').click()"><i class="fas fa-robot"></i>AI Tutor</button></li>
+  </ul>
+</nav>
+
+<script>
+// ================================================================
+//  DOCUMENT REGISTRY
+//  To add a new course: add one entry to REGISTRY below.
+//  URL format: /pages/doc.html?uni=cbu&course=bio110&type=notes
+// ================================================================
+const R2 = 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev';
+
+const REGISTRY = {
+
+  // ── CBU ───────────────────────────────────────────────────
+  'cbu|bio110|notes': {
+    uni: 'CBU', uniUrl: '/pages/universities/cbu.html',
+    program: 'Natural Sciences', programUrl: '/pages/universities/cbu/programs/natural-sciences.html',
+    course: 'BIO 110', courseUrl: '/pages/universities/cbu/programs/natural-sciences.html',
+    title: 'BIO 110 — Biology Lecture Notes',
+    subtitle: 'Select a document to preview or download.',
+    type: 'notes',
+    docs: [
+      { id:1, title:'BIO110 LN 01 – Introduction to Cell Biology',          type:'PDF', size:'1.2 MB',  icon:'fa-file-pdf',  iconClass:'pdf', url:`${R2}/CBU-DOCS/BIO110/BIO110_LN01_Cell_Biology.pdf` },
+      { id:2, title:'BIO110 LN 02 – Cell Structure and Function',           type:'PDF', size:'980 KB', icon:'fa-file-pdf',  iconClass:'pdf', url:`${R2}/CBU-DOCS/BIO110/BIO110_LN02_Cell_Structure.pdf` },
+      { id:3, title:'BIO110 LN 03 – Biological Molecules',                  type:'PDF', size:'1.5 MB', icon:'fa-file-pdf',  iconClass:'pdf', url:`${R2}/CBU-DOCS/BIO110/BIO110_LN03_Biological_Molecules.pdf` },
+      { id:4, title:'BIO110 LN 04 – Enzymes and Metabolism',                type:'PDF', size:'870 KB', icon:'fa-file-pdf',  iconClass:'pdf', url:`${R2}/CBU-DOCS/BIO110/BIO110_LN04_Enzymes.pdf` },
+    ]
+  },
+
+  'cbu|bio110|exams': {
+    uni: 'CBU', uniUrl: '/pages/universities/cbu.html',
+    program: 'Natural Sciences', programUrl: '/pages/universities/cbu/programs/natural-sciences.html',
+    course: 'BIO 110', courseUrl: '/pages/universities/cbu/programs/natural-sciences.html',
+    title: 'BIO 110 — Past Examination Papers',
+    subtitle: 'Select a paper to preview and download.',
+    type: 'exams',
+    docs: []
+  },
+
+  'cbu|bio110|tests': {
+    uni: 'CBU', uniUrl: '/pages/universities/cbu.html',
+    program: 'Natural Sciences', programUrl: '/pages/universities/cbu/programs/natural-sciences.html',
+    course: 'BIO 110', courseUrl: '/pages/universities/cbu/programs/natural-sciences.html',
+    title: 'BIO 110 — Past Test Papers',
+    subtitle: 'Select a paper to preview and download.',
+    type: 'tests',
+    docs: []
+  },
+
+  'cbu|ch110|notes': {
+    uni: 'CBU', uniUrl: '/pages/universities/cbu.html',
+    program: 'Natural Sciences', programUrl: '/pages/universities/cbu/programs/natural-sciences.html',
+    course: 'CH 110', courseUrl: '/pages/universities/cbu/programs/natural-sciences.html',
+    title: 'CH 110 — Chemistry Lecture Notes',
+    subtitle: 'Select a document to preview or download.',
+    type: 'notes',
+    docs: []
+  },
+
+  'cbu|ch110|exams': {
+    uni: 'CBU', uniUrl: '/pages/universities/cbu.html',
+    program: 'Natural Sciences', programUrl: '/pages/universities/cbu/programs/natural-sciences.html',
+    course: 'CH 110', courseUrl: '/pages/universities/cbu/programs/natural-sciences.html',
+    title: 'CH 110 — Past Examination Papers',
+    subtitle: 'Select a paper to preview and download.',
+    type: 'exams',
+    docs: []
+  },
+
+  'cbu|ma110|notes': {
+    uni: 'CBU', uniUrl: '/pages/universities/cbu.html',
+    program: 'Natural Sciences', programUrl: '/pages/universities/cbu/programs/natural-sciences.html',
+    course: 'MA 110', courseUrl: '/pages/universities/cbu/programs/natural-sciences.html',
+    title: 'MA 110 — Mathematics Lecture Notes',
+    subtitle: 'Select a document to preview or download.',
+    type: 'notes',
+    docs: []
+  },
+
+  'cbu|ma110|exams': {
+    uni: 'CBU', uniUrl: '/pages/universities/cbu.html',
+    program: 'Natural Sciences', programUrl: '/pages/universities/cbu/programs/natural-sciences.html',
+    course: 'MA 110', courseUrl: '/pages/universities/cbu/programs/natural-sciences.html',
+    title: 'MA 110 — Past Examination Papers',
+    subtitle: 'Select a paper to preview and download.',
+    type: 'exams',
+    docs: []
+  },
+
+  'cbu|ph110|notes': {
+    uni: 'CBU', uniUrl: '/pages/universities/cbu.html',
+    program: 'Natural Sciences', programUrl: '/pages/universities/cbu/programs/natural-sciences.html',
+    course: 'PH 110', courseUrl: '/pages/universities/cbu/programs/natural-sciences.html',
+    title: 'PH 110 — Physics Lecture Notes',
+    subtitle: 'Select a document to preview or download.',
+    type: 'notes',
+    docs: []
+  },
+
+  'cbu|ph110|exams': {
+    uni: 'CBU', uniUrl: '/pages/universities/cbu.html',
+    program: 'Natural Sciences', programUrl: '/pages/universities/cbu/programs/natural-sciences.html',
+    course: 'PH 110', courseUrl: '/pages/universities/cbu/programs/natural-sciences.html',
+    title: 'PH 110 — Past Examination Papers',
+    subtitle: 'Select a paper to preview and download.',
+    type: 'exams',
+    docs: []
+  },
+
+  'cbu|la111|notes': {
+    uni: 'CBU', uniUrl: '/pages/universities/cbu.html',
+    program: 'Natural Sciences', programUrl: '/pages/universities/cbu/programs/natural-sciences.html',
+    course: 'LA 111', courseUrl: '/pages/universities/cbu/programs/natural-sciences.html',
+    title: 'LA 111 — Language Skills Notes',
+    subtitle: 'Select a document to preview or download.',
+    type: 'notes',
+    docs: []
+  },
+
+  'cbu|cs110|notes': {
+    uni: 'CBU', uniUrl: '/pages/universities/cbu.html',
+    program: 'Natural Sciences', programUrl: '/pages/universities/cbu/programs/natural-sciences.html',
+    course: 'CS 110', courseUrl: '/pages/universities/cbu/programs/natural-sciences.html',
+    title: 'CS 110 — Computer Science Notes',
+    subtitle: 'Select a document to preview or download.',
+    type: 'notes',
+    docs: []
+  },
+
+  // ── ZUT ───────────────────────────────────────────────────
+  'zut|com|notes': {
+    uni: 'ZUT', uniUrl: '/pages/universities/zut.html',
+    program: 'Communication Skills', programUrl: '/pages/universities/zut/programs/communication-skills.html',
+    course: 'COM', courseUrl: '/pages/universities/zut/programs/communication-skills.html',
+    title: 'COM — Communication Skills Lecture Notes',
+    subtitle: 'Select a document to preview or download.',
+    type: 'notes',
+    docs: [
+      { id:1,  title:'COM LN 02 – Communication Models',                                                     type:'PDF',  size:'583 KB',  icon:'fa-file-pdf',  iconClass:'pdf', url:`${R2}/ZUT-DOCS/COMMUNICATION%20SKILLS/COM%20LN%2002_075519.pdf` },
+      { id:2,  title:'COM LN 03 – Barriers to Communication',                                                type:'PDF',  size:'242 KB',  icon:'fa-file-pdf',  iconClass:'pdf', url:`${R2}/ZUT-DOCS/COMMUNICATION%20SKILLS/COM%20LN%2003_075525.pdf` },
+      { id:3,  title:'COM LN 04 – Active Listening',                                                         type:'PDF',  size:'2.08 MB', icon:'fa-file-pdf',  iconClass:'pdf', url:`${R2}/ZUT-DOCS/COMMUNICATION%20SKILLS/COM%20LN%2004_075528.pdf` },
+      { id:4,  title:'COM LN 05 – Reading Materials & Techniques',                                           type:'PDF',  size:'315 KB',  icon:'fa-file-pdf',  iconClass:'pdf', url:`${R2}/ZUT-DOCS/COMMUNICATION%20SKILLS/COM%20LN%2005_075530.pdf` },
+      { id:5,  title:'COM LN 09 – Quality Technical Information',                                            type:'DOCX', size:'19.9 KB', icon:'fa-file-word', iconClass:'doc', url:`${R2}/ZUT-DOCS/COMMUNICATION%20SKILLS/COM%20LN%2009%20Quality%20technical%20information_075544.docx` },
+      { id:6,  title:'COM LN 10 – Technical Writing 1',                                                      type:'PDF',  size:'245 KB',  icon:'fa-file-pdf',  iconClass:'pdf', url:`${R2}/ZUT-DOCS/COMMUNICATION%20SKILLS/COM%20LN%2010_075547.pdf` },
+      { id:7,  title:'COM LN 11 – Technical Writing 2',                                                      type:'PDF',  size:'270 KB',  icon:'fa-file-pdf',  iconClass:'pdf', url:`${R2}/ZUT-DOCS/COMMUNICATION%20SKILLS/COM%20LN%2011_075550.pdf` },
+      { id:8,  title:'COM LN 12 – Technical Writing 3',                                                      type:'PDF',  size:'417 KB',  icon:'fa-file-pdf',  iconClass:'pdf', url:`${R2}/ZUT-DOCS/COMMUNICATION%20SKILLS/COM%20LN%2012_075554.pdf` },
+      { id:9,  title:'COM LN 14 – Types of Formal Communication in Organisations',                           type:'PDF',  size:'296 KB',  icon:'fa-file-pdf',  iconClass:'pdf', url:`${R2}/ZUT-DOCS/COMMUNICATION%20SKILLS/COM%20LN%2014%20-%20Types%20of%20Communication%20in%20Organisations%20_075601.pdf` },
+      { id:10, title:'COM LN 15-18 – Business Letters, Technical Memoranda, Report Writing & Meetings',      type:'PDF',  size:'577 KB',  icon:'fa-file-pdf',  iconClass:'pdf', url:`${R2}/ZUT-DOCS/COMMUNICATION%20SKILLS/COM%20LNs%2015-17docx_075506.pdf` },
+    ]
+  },
+
+  'zut|com|exams': {
+    uni: 'ZUT', uniUrl: '/pages/universities/zut.html',
+    program: 'Communication Skills', programUrl: '/pages/universities/zut/programs/communication-skills.html',
+    course: 'COM', courseUrl: '/pages/universities/zut/programs/communication-skills.html',
+    title: 'COM — Past Examination Papers',
+    subtitle: 'Select a paper to preview and download.',
+    type: 'exams',
+    docs: []
+  },
+
+  'zut|com|tests': {
+    uni: 'ZUT', uniUrl: '/pages/universities/zut.html',
+    program: 'Communication Skills', programUrl: '/pages/universities/zut/programs/communication-skills.html',
+    course: 'COM', courseUrl: '/pages/universities/zut/programs/communication-skills.html',
+    title: 'COM — Past Test Papers',
+    subtitle: 'Select a paper to preview and download.',
+    type: 'tests',
+    docs: []
+  },
+
+  'zut|se|notes': {
+    uni: 'ZUT', uniUrl: '/pages/universities/zut.html',
+    program: 'Software Engineering', programUrl: '/pages/universities/zut/programs/software-engineering.html',
+    course: 'SE', courseUrl: '/pages/universities/zut/programs/software-engineering.html',
+    title: 'Software Engineering — Lecture Notes',
+    subtitle: 'Select a document to preview or download.',
+    type: 'notes',
+    docs: []
+  },
+
+  'zut|se|exams': {
+    uni: 'ZUT', uniUrl: '/pages/universities/zut.html',
+    program: 'Software Engineering', programUrl: '/pages/universities/zut/programs/software-engineering.html',
+    course: 'SE', courseUrl: '/pages/universities/zut/programs/software-engineering.html',
+    title: 'Software Engineering — Past Examination Papers',
+    subtitle: 'Select a paper to preview and download.',
+    type: 'exams',
+    docs: []
+  },
+
+  // ── UNZA ──────────────────────────────────────────────────
+  'unza|bio1400|notes': {
+    uni: 'UNZA', uniUrl: '/pages/universities/unza.html',
+    program: 'Natural Sciences', programUrl: '/pages/universities/unza/programs/natural-sciences.html',
+    course: 'BIO 1400', courseUrl: '/pages/universities/unza/programs/natural-sciences.html',
+    title: 'BIO 1400 — Biology Lecture Notes',
+    subtitle: 'Select a document to preview or download.',
+    type: 'notes',
+    docs: []
+  },
+
+  'unza|bio1400|exams': {
+    uni: 'UNZA', uniUrl: '/pages/universities/unza.html',
+    program: 'Natural Sciences', programUrl: '/pages/universities/unza/programs/natural-sciences.html',
+    course: 'BIO 1400', courseUrl: '/pages/universities/unza/programs/natural-sciences.html',
+    title: 'BIO 1400 — Past Examination Papers',
+    subtitle: 'Select a paper to preview and download.',
+    type: 'exams',
+    docs: []
+  },
+
+  'unza|che1000|notes': {
+    uni: 'UNZA', uniUrl: '/pages/universities/unza.html',
+    program: 'Natural Sciences', programUrl: '/pages/universities/unza/programs/natural-sciences.html',
+    course: 'CHE 1000', courseUrl: '/pages/universities/unza/programs/natural-sciences.html',
+    title: 'CHE 1000 — Chemistry Lecture Notes',
+    subtitle: 'Select a document to preview or download.',
+    type: 'notes',
+    docs: []
+  },
+
+  'unza|che1000|exams': {
+    uni: 'UNZA', uniUrl: '/pages/universities/unza.html',
+    program: 'Natural Sciences', programUrl: '/pages/universities/unza/programs/natural-sciences.html',
+    course: 'CHE 1000', courseUrl: '/pages/universities/unza/programs/natural-sciences.html',
+    title: 'CHE 1000 — Past Examination Papers',
+    subtitle: 'Select a paper to preview and download.',
+    type: 'exams',
+    docs: []
+  },
+
+  'unza|mat1100|notes': {
+    uni: 'UNZA', uniUrl: '/pages/universities/unza.html',
+    program: 'Natural Sciences', programUrl: '/pages/universities/unza/programs/natural-sciences.html',
+    course: 'MAT 1100', courseUrl: '/pages/universities/unza/programs/natural-sciences.html',
+    title: 'MAT 1100 — Mathematics Lecture Notes',
+    subtitle: 'Select a document to preview or download.',
+    type: 'notes',
+    docs: []
+  },
+
+  'unza|phy1010|notes': {
+    uni: 'UNZA', uniUrl: '/pages/universities/unza.html',
+    program: 'Natural Sciences', programUrl: '/pages/universities/unza/programs/natural-sciences.html',
+    course: 'PHY 1010', courseUrl: '/pages/universities/unza/programs/natural-sciences.html',
+    title: 'PHY 1010 — Physics Lecture Notes',
+    subtitle: 'Select a document to preview or download.',
+    type: 'notes',
+    docs: []
+  },
+
+};
+
+// ================================================================
+//  BOOT — reads URL params and renders everything
+// ================================================================
+(function boot() {
+  const p      = new URLSearchParams(window.location.search);
+  const uni    = (p.get('uni')    || '').toLowerCase();
+  const course = (p.get('course') || '').toLowerCase();
+  const type   = (p.get('type')   || 'notes').toLowerCase();
+  const key    = `${uni}|${course}|${type}`;
+  const entry  = REGISTRY[key];
+
+  const TYPE_LABELS = {
+    notes: { heading:'Lecture Notes',     listLabel:'Available Notes',         empty:'No Notes Yet',          emptyMsg:"We're gathering lecture notes for this course. Check back soon!" },
+    exams: { heading:'Past Exam Papers',  listLabel:'Available Exam Papers',   empty:'No Exam Papers Yet',    emptyMsg:"We're collecting past exam papers. Check back soon!" },
+    tests: { heading:'Past Test Papers',  listLabel:'Available Test Papers',   empty:'No Test Papers Yet',    emptyMsg:"We're collecting past test papers. Check back soon!" },
+    secondary: { heading:'Resources',    listLabel:'Available Resources',     empty:'No Resources Yet',      emptyMsg:"We're adding resources. Check back soon!" },
+  };
+  const tl = TYPE_LABELS[type] || TYPE_LABELS.notes;
+
+  // ── Not found ──
+  if (!entry) {
+    document.getElementById('pageTitle').textContent  = 'Page Not Found';
+    document.getElementById('pageSubtitle').textContent = 'This course page doesn\'t exist yet.';
+    document.getElementById('breadcrumbs').innerHTML   = '<a href="/pages/universities.html">Universities</a>';
+    document.getElementById('emptyState').style.display = '';
+    document.getElementById('emptyTitle').textContent   = 'Course Not Found';
+    document.getElementById('emptyMsg').textContent     = `We don't have a page for "${uni} · ${course} · ${type}" yet. It may be coming soon!`;
+    document.title = 'Not Found | BrainHub';
+    return;
+  }
+
+  // ── Set page meta ──
+  document.title = `${entry.course} ${tl.heading} | ${entry.uni} | BrainHub`;
+  document.getElementById('pageTitle').textContent    = entry.title;
+  document.getElementById('pageSubtitle').textContent = entry.subtitle;
+  document.getElementById('docListLabel').textContent  = tl.listLabel;
+
+  // ── Breadcrumbs ──
+  document.getElementById('breadcrumbs').innerHTML = `
+    <a href="/index.html">Home</a>
+    <i class="fas fa-chevron-right"></i>
+    <a href="/pages/universities.html">Universities</a>
+    <i class="fas fa-chevron-right"></i>
+    <a href="${entry.uniUrl}">${entry.uni}</a>
+    <i class="fas fa-chevron-right"></i>
+    <a href="${entry.programUrl}">${entry.program}</a>
+    <i class="fas fa-chevron-right"></i>
+    <span>${tl.heading}</span>`;
+
+  // ── Tab bar (Notes / Exams / Tests) ──
+  const tabTypes = ['notes','exams','tests'];
+  const tabLabels = { notes:'📄 Notes', exams:'📝 Exams', tests:'📋 Tests' };
+  const tabBar = document.createElement('div');
+  tabBar.style.cssText = 'display:flex;gap:.5rem;margin-bottom:1.5rem;flex-wrap:wrap';
+  tabBar.innerHTML = tabTypes.map(t => {
+    const tabKey = `${uni}|${course}|${t}`;
+    const exists = !!REGISTRY[tabKey];
+    const active = t === type;
+    if (!exists) return '';
+    return `<a href="/pages/doc.html?uni=${uni}&course=${course}&type=${t}"
+      style="padding:.45rem 1rem;border-radius:60px;font-size:.82rem;font-weight:700;text-decoration:none;
+      border:1.5px solid ${active ? 'var(--primary)' : 'var(--border)'};
+      background:${active ? 'var(--primary)' : 'transparent'};
+      color:${active ? 'white' : 'var(--text-600)'};
+      transition:all .2s">${tabLabels[t]}</a>`;
+  }).join('');
+  document.querySelector('.uni-page-header').after(tabBar);
+
+  // ── No docs ──
+  if (!entry.docs || !entry.docs.length) {
+    document.getElementById('emptyState').style.display   = '';
+    document.getElementById('emptyTitle').textContent     = tl.empty;
+    document.getElementById('emptyMsg').textContent       = tl.emptyMsg;
+    document.getElementById('docViewer').style.display    = 'none';
+    document.getElementById('docCount').textContent       = '0 files';
+    // Still show discussion even with no docs
+    return;
+  }
+
+  // ── Show viewer ──
+  document.getElementById('docViewer').style.display = '';
+  document.getElementById('docCount').textContent    = entry.docs.length + ' files';
+
+  if (typeof initDocumentViewer === 'function') {
+    initDocumentViewer(entry.docs, type);
+  } else {
+    console.error('[doc.html] initDocumentViewer not found. Check main.js is loaded.');
+  }
+})();
+</script>
+</body>
+</html>

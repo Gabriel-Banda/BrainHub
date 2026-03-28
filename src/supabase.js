@@ -2,8 +2,8 @@
    BrainHub — Supabase Client & Auth System
    ============================================================ */
 
-const SUPABASE_URL  = 'https://pdkslovwbbytfexguteo.supabase.co';
-const SUPABASE_ANON = 'sb_publishable_klXl7mVNAefz2aC-UfCQ2w_E0r7PP1h';
+const SUPABASE_URL  = window.BrainHubConfig?.supabase?.url || 'https://pdkslovwbbytfexguteo.supabase.co';
+const SUPABASE_ANON = window.BrainHubConfig?.supabase?.anonKey || 'sb_publishable_klXl7mVNAefz2aC-UfCQ2w_E0r7PP1h';
 
 // ── Load Supabase SDK from CDN ───────────────────────────
 (function loadSupabaseSDK() {

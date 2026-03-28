@@ -1,3 +1,40 @@
-node_modules/
-.env
+# OS
 .DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.suo
+*.user
+
+# Logs
+*.log
+npm-debug.log*
+
+# Dependencies (if ever using npm)
+node_modules/
+.npm
+
+# Environment / secrets
+.env
+.env.local
+.env.production
+
+# Build output (if ever added)
+dist/
+build/
+.cache/
+
+# Cloudflare
+.dev.vars
+wrangler.toml.bak
+
+# Temp files
+*.tmp
+*.bak
+*~
+
+# Don't commit sensitive uploads
+/uploads/

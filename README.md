@@ -1,39 +1,104 @@
-# BrainHub
-![License](https://img.shields.io/badge/License-MIT-green.svg)
-![Status](https://img.shields.io/badge/Status-Active-success)
-![Made With](https://img.shields.io/badge/Made%20with-HTML%2C%20CSS%2C%20JS-blue)
-![Open Source](https://img.shields.io/badge/Open%20Source-Yes-brightgreen)
-![Contributions](https://img.shields.io/badge/Contributions-Welcome-orange)
+<div align="center">
+  <h1>🧠 BrainHub</h1>
+  <p><strong>Free university study resources for Zambian students</strong></p>
+  <p>
+    <a href="https://brainhub.pages.dev">🌐 Live Site</a> ·
+    <a href="https://brainhub.pages.dev/pages/changelog.html">📋 Changelog</a> ·
+    <a href="https://brainhub.pages.dev/pages/contributors.html">👥 Contributors</a>
+  </p>
+  <img src="https://img.shields.io/badge/version-4.1.0-blue" alt="version">
+  <img src="https://img.shields.io/badge/license-MIT-green" alt="license">
+  <img src="https://img.shields.io/badge/deployed-Cloudflare%20Pages-orange" alt="deployment">
+  <img src="https://img.shields.io/badge/Status-Active-success" alt="status">
+  <img src="https://img.shields.io/badge/Contributions-Welcome-orange" alt="contributions">
+</div>
 
-**BrainHub** is an open-source platform built to help students easily access learning resources and study materials **for free**. The project includes a responsive web interface (HTML/CSS/JavaScript) that delivers educational content in a clean, accessible format.
+---
 
-## 🚀 Features
+## What is BrainHub?
 
-- 📚 **Open Learning** — Students can access quality study materials.  
-- 💻 **Web-Based Platform** — Built with standard web technologies (HTML, CSS, JavaScript).  
-- 📱 **Responsive Design** — Works well on both mobile and desktop devices.  
-- 🤖 **Artificial Intelligence** - Created a BrainHub AI chatbot that effortlessly respond to any question ASAP. 
-- 🧩 **Modular Structure** — Easy to extend and customize with new pages and resources.  
-- 📄 **Legal & User-Focused Content** — Includes privacy policy, terms, contact, and more.
+BrainHub is a free, open-source study platform built specifically for Zambian university students. It provides lecture notes, past papers, interactive quizzes, AI tutoring, and gamified learning — all without requiring a login or paying anything.
 
-## 🧰 Technologies Used
+**Currently supporting:** CBU · UNZA · ZUT
 
-This project uses standard web development technologies:
-| Technology     | Purpose               |
-| -------------- | --------------------- |
-| **HTML5**      | Structure & content   |
-| **CSS3**       | Presentation & layout |
-| **JavaScript** | Interactive behavior  |
+---
 
-## 📄 License
+## Features
 
-This project is licensed under the MIT License — see the LICENSE
- file for details.
+| Feature | Status |
+|---|---|
+| 📚 University notes & past papers | ✅ Live |
+| 🧠 100-question topic quizzes | ✅ Live |
+| 🃏 Interactive flashcard decks | ✅ Live |
+| 🤖 AI Tutor (Claude-powered) | ✅ Live |
+| 🔐 User accounts (Supabase Auth) | ✅ Live |
+| 🏆 XP & gamification system | ✅ Live |
+| 💬 Document discussion threads | ✅ Live |
+| 🌍 Multi-language (EN/FR/BEM/NYA/TOI) | 🔜 Coming soon |
+| 📲 PWA — works offline | ✅ Live |
+| 📝 Blog with 9 full articles | ✅ Live |
+| 👥 Study groups | 🔜 Coming soon |
+| 📤 Community resource uploads | 🔜 Coming soon |
 
-## 📬 Contact
+---
 
-For questions or support, open an issue or reach out via the repository’s issue tracker.
+## Adding Documents to a Course
 
-##
+Open `src/config.js` — wait, document data lives in `pages/doc.html` inside the `REGISTRY` object.
 
-<i>🎓 Thanks for exploring BrainHub! Helping students access what they need to learn isn't just development — it's impact. 🎯</i>
+Find the course entry and add to its `docs` array:
+
+```js
+'cbu|bio110|notes': {
+  // ...
+  docs: [
+    {
+      id: 1,
+      title: 'BIO110 LN 01 – Introduction to Cell Biology',
+      type: 'PDF',
+      size: '1.2 MB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/CBU-DOCS/BIO110/filename.pdf'
+    },
+  ]
+}
+```
+
+Link to any doc page using:
+```
+/pages/doc.html?uni=cbu&course=bio110&type=notes
+/pages/doc.html?uni=zut&course=com&type=exams
+```
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | Vanilla HTML/CSS/JS |
+| Hosting | Cloudflare Pages |
+| Push Notifications | Web Push API + VAPID |
+| PWA | Service Worker + Web App Manifest |
+
+---
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) and [contributors page](https://brainhub.pages.dev/pages/contributors.html).
+
+Content contributions (notes, past papers) are especially welcome — contact us via the [contact page](https://brainhub.pages.dev/pages/contact.html).
+
+---
+
+## License
+
+MIT — free to use, fork, and build on. See [LICENSE](LICENSE).
+
+---
+
+<div align="center">
+  <p>Built with ❤️ for Zambian students by <a href="https://github.com/Gabriel-Banda">Gabriel J. Banda</a></p>
+  <p><em>Making quality education accessible and free for everyone.</em></p>
+</div>

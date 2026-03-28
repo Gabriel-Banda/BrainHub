@@ -1,0 +1,18 @@
+# Cloudflare Pages Redirects
+
+# Old doc page URLs → new doc.html system
+/pages/universities/zut/programs/communication-skills/cs/notes.html   /pages/doc.html?uni=zut&course=com&type=notes    301
+/pages/universities/zut/programs/communication-skills/cs/exams.html   /pages/doc.html?uni=zut&course=com&type=exams    301
+/pages/universities/zut/programs/communication-skills/cs/tests.html   /pages/doc.html?uni=zut&course=com&type=tests    301
+/pages/universities/cbu/programs/natural-sciences/bio110/notes.html   /pages/doc.html?uni=cbu&course=bio110&type=notes  301
+/pages/universities/cbu/programs/natural-sciences/bio110/exams.html   /pages/doc.html?uni=cbu&course=bio110&type=exams  301
+/pages/universities/cbu/programs/natural-sciences/bio110/tests.html   /pages/doc.html?uni=cbu&course=bio110&type=tests  301
+/pages/universities/cbu/programs/natural-sciences/ch110/notes.html    /pages/doc.html?uni=cbu&course=ch110&type=notes   301
+/pages/universities/cbu/programs/natural-sciences/ch110/exams.html    /pages/doc.html?uni=cbu&course=ch110&type=exams   301
+/pages/universities/cbu/programs/natural-sciences/ma110/notes.html    /pages/doc.html?uni=cbu&course=ma110&type=notes   301
+/pages/universities/cbu/programs/natural-sciences/ma110/exams.html    /pages/doc.html?uni=cbu&course=ma110&type=exams   301
+/pages/universities/cbu/programs/natural-sciences/ph110/notes.html    /pages/doc.html?uni=cbu&course=ph110&type=notes   301
+/pages/universities/cbu/programs/natural-sciences/ph110/exams.html    /pages/doc.html?uni=cbu&course=ph110&type=exams   301
+/pages/universities/cbu/programs/natural-sciences/la111/notes.html    /pages/doc.html?uni=cbu&course=la111&type=notes   301
+
+# 404 fallback handled by 404.html
