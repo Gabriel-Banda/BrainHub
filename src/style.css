@@ -1660,9 +1660,11 @@ mark {
 @media (max-width: 768px) {
   .mobile-bottom-nav { display: flex; align-items: stretch; }
   body { padding-bottom: 64px; }
-  /* Hide hamburger nav on mobile since bottom nav replaces it */
+  /* Hide hamburger and nav-links on mobile — bottom nav handles navigation */
   .mobile-menu-btn { display: none !important; }
   .nav-links { display: none !important; }
+  /* But keep the Menu button visible in top navbar on mobile */
+  .nav-menu-btn { display: inline-flex !important; }
   /* Re-show theme toggle somewhere visible */
   .navbar .theme-toggle { display: flex !important; }
 }
@@ -2389,18 +2391,15 @@ kbd {
   .stats-bar-divider { display: none; }
 }
 
-/* Global transition for theme switching only - explicitly exclude transform elements */
-*:not(.flashcard-inner):not(.flashcard-front):not(.flashcard-back):not(.reveal):not(.back-to-top):not(.ai-chat-window):not(.pomodoro-widget)::before,
-*:not(.flashcard-inner):not(.flashcard-front):not(.flashcard-back):not(.reveal):not(.back-to-top):not(.ai-chat-window):not(.pomodoro-widget)::after {
+*, *::before, *::after {
   transition: background-color 0.3s ease, border-color 0.3s ease, color 0.2s ease;
 }
-/* Restore proper transitions for animation elements */
-.flashcard-inner { transition: transform 0.55s cubic-bezier(0.4,0,0.2,1) !important; }
-.flashcard-front, .flashcard-back { transition: none !important; }
-.reveal { transition: opacity 0.55s ease, transform 0.55s ease; }
-.back-to-top { transition: var(--transition); }
-.ai-chat-window { transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.4,0,0.2,1); }
-.pomodoro-widget { transition: var(--transition); }
+/* But NOT on transforms/opacity (breaks animations) */
+.reveal, .card, .uni-card, .flashcard, .flashcard-inner,
+.flashcard-front, .flashcard-back, .back-to-top,
+.pwa-banner, .ai-chat-window, .pomodoro-widget {
+  transition: var(--transition);
+}
 
 /* Richer dark mode backgrounds */
 [data-theme="dark"] body { background: #0a0f1e; }
@@ -2766,3 +2765,89 @@ mark {
 }
 .testimonial-name { font-weight: 700; font-size: 0.875rem; color: var(--text-900); }
 .testimonial-role { font-size: 0.78rem; color: var(--text-500); }
+/* ══════════════════════════════════════════════════════════
+   MEGA MENU — slide-in panel from right
+   ══════════════════════════════════════════════════════════ */
+.nav-menu-btn {
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .38rem .85rem;
+  border: 1.5px solid var(--border); border-radius: 10px;
+  background: var(--bg-muted); color: var(--text-700);
+  font-size: .82rem; font-weight: 700;
+  cursor: pointer; font-family: inherit; transition: all .2s;
+}
+.nav-menu-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+
+.mega-menu-overlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(0,0,0,0);
+  display: flex; align-items: flex-start; justify-content: flex-end;
+  pointer-events: none;
+  transition: background .3s ease;
+}
+.mega-menu-overlay.open {
+  background: rgba(0,0,0,.5);
+  pointer-events: all;
+  backdrop-filter: blur(4px);
+}
+.mega-menu {
+  width: 100%; max-width: 400px; height: 100vh;
+  background: var(--card);
+  border-left: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  transform: translateX(100%);
+  transition: transform .35s cubic-bezier(.4,0,.2,1);
+  overflow-y: auto;
+  box-shadow: -8px 0 40px rgba(0,0,0,.15);
+}
+.mega-menu-overlay.open .mega-menu { transform: translateX(0); }
+@media(max-width: 480px) { .mega-menu { max-width: 100%; border-left: none; } }
+
+.mega-menu-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; background: var(--card); z-index: 1;
+  flex-shrink: 0;
+}
+.mega-menu-logo {
+  font-family: var(--font-display); font-size: 1.3rem; font-weight: 900; color: var(--text-900);
+}
+.mega-menu-close {
+  width: 38px; height: 38px; border-radius: 10px;
+  border: 1.5px solid var(--border); background: transparent; color: var(--text-500);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: .95rem; transition: all .2s;
+}
+.mega-menu-close:hover { border-color: var(--primary); color: var(--primary); }
+
+.mega-menu-body {
+  padding: 1.25rem 1.25rem 5rem;
+  display: flex; flex-direction: column; gap: 1.75rem;
+  overflow-y: auto; flex: 1;
+}
+.mm-group { display: flex; flex-direction: column; gap: .25rem; }
+.mm-group-label {
+  font-size: .68rem; font-weight: 800; color: var(--text-400);
+  text-transform: uppercase; letter-spacing: .1em;
+  margin-bottom: .4rem; padding-left: .25rem;
+}
+.mm-item {
+  display: flex; align-items: center; gap: .9rem;
+  padding: .8rem .9rem; border-radius: 12px;
+  text-decoration: none; color: var(--text-700);
+  border: 1px solid transparent;
+  transition: background .15s, transform .15s, border-color .15s;
+}
+.mm-item:hover {
+  background: var(--bg-muted); border-color: var(--border);
+  transform: translateX(4px); color: var(--text-900);
+}
+.mm-icon {
+  width: 40px; height: 40px; border-radius: 11px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .95rem; flex-shrink: 0;
+}
+.mm-text { display: flex; flex-direction: column; gap: .08rem; }
+.mm-text span { font-size: .9rem; font-weight: 700; color: var(--text-900); line-height: 1.2; }
+.mm-text small { font-size: .72rem; color: var(--text-400); }

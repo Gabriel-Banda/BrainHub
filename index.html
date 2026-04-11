@@ -51,203 +51,7 @@
   <link rel="stylesheet" href="/src/style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <link rel="icon" type="image/x-icon" href="/public/assets/images/favicon.png" />
-
-<style id="onboarding-styles">
-/* ── Onboarding Modal ─────────────────────────────────── */
-.ob-overlay {
-  position: fixed; inset: 0; z-index: 10000;
-  background: rgba(0,0,0,0);
-  display: flex; align-items: center; justify-content: center;
-  padding: 1rem;
-  pointer-events: none;
-  transition: background .4s ease;
-}
-.ob-overlay.ob-open {
-  background: rgba(0,0,0,.55);
-  pointer-events: all;
-  backdrop-filter: blur(4px);
-}
-.ob-overlay.ob-closing {
-  background: rgba(0,0,0,0);
-  pointer-events: none;
-}
-
-.ob-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 24px;
-  width: 100%; max-width: 480px;
-  box-shadow: 0 32px 80px rgba(0,0,0,.2);
-  overflow: hidden;
-  transform: translateY(32px) scale(.96);
-  opacity: 0;
-  transition: transform .45s cubic-bezier(.4,0,.2,1), opacity .45s ease;
-}
-.ob-overlay.ob-open .ob-card {
-  transform: translateY(0) scale(1);
-  opacity: 1;
-}
-
-/* header strip */
-.ob-header {
-  background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
-  padding: 2rem 2rem 1.5rem;
-  position: relative; overflow: hidden;
-}
-.ob-header::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: radial-gradient(circle at 80% 20%, rgba(255,255,255,.1) 0%, transparent 60%);
-}
-.ob-header-inner { position: relative; }
-.ob-logo {
-  font-family: var(--font-display); font-size: 1.25rem; font-weight: 900;
-  color: white; margin-bottom: .25rem;
-}
-.ob-logo span { color: rgba(255,255,255,.7); }
-.ob-tagline { font-size: .82rem; color: rgba(255,255,255,.7); line-height: 1.5; }
-
-/* progress dots */
-.ob-dots {
-  display: flex; gap: .4rem; margin-top: 1.25rem;
-}
-.ob-dot {
-  height: 4px; border-radius: 2px;
-  background: rgba(255,255,255,.3);
-  transition: all .3s ease;
-  flex: 1;
-}
-.ob-dot.active { background: rgba(255,255,255,.9); }
-.ob-dot.done   { background: rgba(255,255,255,.6); }
-
-/* body */
-.ob-body { padding: 1.75rem 2rem 2rem; }
-
-/* steps */
-.ob-step { display: none; }
-.ob-step.active { display: block; animation: obStepIn .3s ease; }
-@keyframes obStepIn {
-  from { opacity: 0; transform: translateX(12px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-
-.ob-step-title {
-  font-family: var(--font-display); font-size: 1.15rem; font-weight: 800;
-  color: var(--text-900); margin-bottom: .35rem; letter-spacing: -.02em;
-}
-.ob-step-sub { font-size: .85rem; color: var(--text-500); margin-bottom: 1.5rem; line-height: 1.55; }
-
-/* university grid */
-.ob-uni-grid {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: .65rem; margin-bottom: 1.5rem;
-}
-.ob-uni-btn {
-  border: 1.5px solid var(--border);
-  background: var(--bg);
-  border-radius: 14px; padding: 1rem .9rem;
-  cursor: pointer; font-family: inherit;
-  text-align: left; transition: all .2s;
-  display: flex; flex-direction: column; gap: .3rem;
-}
-.ob-uni-btn:hover { border-color: var(--primary); background: var(--primary-light); }
-.ob-uni-btn.selected {
-  border-color: var(--primary); background: var(--primary-light);
-  box-shadow: 0 0 0 3px rgba(37,99,235,.12);
-}
-.ob-uni-btn.selected .ob-uni-name { color: var(--primary); }
-.ob-uni-emoji { font-size: 1.5rem; margin-bottom: .1rem; }
-.ob-uni-name {
-  font-family: var(--font-display); font-size: .82rem; font-weight: 800;
-  color: var(--text-900); line-height: 1.2;
-}
-.ob-uni-abbr { font-size: .72rem; color: var(--text-400); font-weight: 600; }
-
-/* year selection */
-.ob-year-grid {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: .65rem; margin-bottom: 1.5rem;
-}
-.ob-year-btn {
-  border: 1.5px solid var(--border);
-  background: var(--bg); border-radius: 14px;
-  padding: .9rem 1rem; cursor: pointer;
-  font-family: inherit; text-align: center;
-  transition: all .2s;
-  display: flex; align-items: center; justify-content: center; gap: .5rem;
-}
-.ob-year-btn:hover { border-color: var(--primary); background: var(--primary-light); }
-.ob-year-btn.selected {
-  border-color: var(--primary); background: var(--primary-light);
-  box-shadow: 0 0 0 3px rgba(37,99,235,.12);
-  color: var(--primary);
-}
-.ob-year-icon { font-size: 1.1rem; }
-.ob-year-label { font-family: var(--font-display); font-size: .85rem; font-weight: 700; color: var(--text-800); }
-.ob-year-btn.selected .ob-year-label { color: var(--primary); }
-
-/* buttons */
-.ob-btn-primary {
-  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
-  background: linear-gradient(135deg, var(--primary), #7c3aed);
-  color: white; border: none; border-radius: 12px;
-  padding: .85rem 1.75rem;
-  font-size: .9rem; font-weight: 700; cursor: pointer;
-  font-family: inherit; transition: opacity .2s, transform .2s;
-}
-.ob-btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(37,99,235,.3); }
-.ob-btn-primary:disabled { opacity: .4; cursor: not-allowed; transform: none; }
-.ob-btn-secondary {
-  background: none; border: none; color: var(--text-400);
-  font-size: .82rem; cursor: pointer; font-family: inherit;
-  padding: .4rem; transition: color .2s;
-}
-.ob-btn-secondary:hover { color: var(--text-700); }
-
-.ob-footer {
-  display: flex; align-items: center; justify-content: space-between;
-  gap: .75rem;
-}
-.ob-footer-left { display: flex; align-items: center; gap: .5rem; }
-
-/* results (step 3) */
-.ob-result-greeting {
-  display: flex; align-items: center; gap: 1rem;
-  margin-bottom: 1rem;
-}
-.ob-result-avatar {
-  width: 52px; height: 52px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary), #7c3aed);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.5rem; flex-shrink: 0;
-}
-.ob-result-name { font-family: var(--font-display); font-size: 1rem; font-weight: 800; color: var(--text-900); }
-.ob-result-sub { font-size: .78rem; color: var(--text-500); margin-top: .1rem; }
-.ob-result-msg { font-size: .85rem; color: var(--text-500); margin-bottom: 1rem; }
-
-.ob-result-links { display: flex; flex-direction: column; gap: .55rem; }
-.ob-result-link {
-  display: flex; align-items: center; gap: .85rem;
-  padding: .85rem 1rem;
-  background: var(--bg); border: 1.5px solid var(--border);
-  border-radius: 14px; text-decoration: none;
-  color: var(--text-700); transition: all .2s;
-}
-.ob-result-link:hover { border-color: var(--primary); color: var(--primary); transform: translateX(4px); }
-.ob-rl-icon { font-size: 1.4rem; flex-shrink: 0; }
-.ob-rl-text { flex: 1; }
-.ob-rl-title { display: block; font-weight: 700; font-size: .88rem; color: var(--text-900); }
-.ob-rl-sub   { display: block; font-size: .73rem; color: var(--text-500); margin-top: .1rem; }
-.ob-rl-arrow { color: var(--text-400); font-size: .75rem; transition: transform .2s; }
-.ob-result-link:hover .ob-rl-arrow { transform: translateX(4px); color: var(--primary); }
-
-@media(max-width:480px) {
-  .ob-uni-grid { grid-template-columns: 1fr 1fr; }
-  .ob-body { padding: 1.5rem 1.25rem 1.5rem; }
-  .ob-header { padding: 1.5rem 1.25rem 1.25rem; }
-}
-</style>
-
+  <style> @media(max-width: 768px) {.desktop-only { display: none !important; }} </style>
 </head>
 <body>
 
@@ -321,30 +125,23 @@
       BrainHub<span class="dot">.</span>
     </a>
     <button class="mobile-menu-btn" aria-label="Toggle navigation"><i class="fas fa-bars"></i></button>
-    <ul class="nav-links">
-      <li><a href="/pages/universities.html">Universities</a></li>
-      <li><a href="/pages/quizzes.html">Quizzes</a></li>
-      <li><a href="/pages/flashcards.html">Flashcards</a></li>
-      <li><a href="/pages/search.html"><i class="fas fa-search"></i> Search</a></li>
-      <li><a href="/pages/about.html">About</a></li>
-      <li><a href="/pages/contact.html">Contact</a></li>
-      <!-- Show only when NOT logged in -->
-<li data-auth-show="guest">
-  <a href="/pages/auth.html" class="btn-primary" style="padding:0.4rem 0.9rem;border-radius:8px">
-    Sign In
-  </a>
-</li>
-
-<!-- Show only when logged in -->
-<li data-auth-show="authed" style="display:none">
-  <a href="/pages/profile.html" style="display:flex;align-items:center;gap:0.4rem">
-    <img data-auth-avatar src="" width="28" height="28"
-      style="border-radius:50%;object-fit:cover;display:none;border:2px solid var(--primary)">
-    <span data-auth-name style="font-weight:700;font-size:0.85rem"></span>
-  </a>
-</li>
-      <li><button id="theme-toggle" class="btn-primary theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon" id="theme-icon"></i></button></li>
-    </ul>
+<ul class="nav-links">
+  <li class="desktop-only"><a href="/pages/universities.html">Universities</a></li>
+  <li class="desktop-only"><a href="/pages/quizzes.html">Quizzes</a></li>
+  <li class="desktop-only"><a href="/pages/flashcards.html">Flashcards</a></li>
+  <li class="desktop-only"><a href="/pages/about.html">About</a></li>
+  <li data-auth-show="guest">
+    <a href="/pages/auth.html" class="btn-primary" style="padding:.4rem .9rem;border-radius:8px">Sign In</a>
+  </li>
+  <li data-auth-show="authed" style="display:none">
+    <a href="/pages/profile.html" style="display:flex;align-items:center;gap:.4rem">
+      <img data-auth-avatar src="" width="28" height="28" style="border-radius:50%;object-fit:cover;display:none;border:2px solid var(--primary)">
+      <span data-auth-name style="font-weight:700;font-size:.85rem"></span>
+    </a>
+  </li>
+  <li><button id="theme-toggle" class="btn-primary theme-toggle"><i class="fas fa-moon" id="theme-icon"></i></button></li>
+  <li><button class="nav-menu-btn" id="navMenuBtn"><i class="fas fa-grid"></i> Menu</button></li>
+</ul>
   </div>
 </nav>
 
@@ -789,21 +586,17 @@
       <h4 style="margin-top:1rem">Version</h4>
       <p style="color:var(--text-500);font-size:0.9rem;margin-bottom:0.5rem">v4.0</p>
       <a href="/pages/changelog.html">Changelog</a>
+      
     </div>
 
     <div class="footer-col">
       <h4>Support</h4>
       <a href="/pages/about.html">About Us</a>
       <a href="/pages/contact.html">Contact Us</a>
-    </div>
-
-    <div class="footer-col">
       <h4>Legal</h4>
       <a href="/pages/privacy-policy.html">Privacy Policy</a>
       <a href="/pages/terms.html">Terms &amp; Conditions</a>
     </div>
-
-
   </div>
 
   <div class="footer-bottom">
@@ -822,11 +615,7 @@
 <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
   <ul>
     <li><a href="/index.html" data-page="home"><i class="fas fa-home"></i>Home</a></li>
-    <li><a href="/pages/universities.html" data-page="universities"><i class="fas fa-university"></i>Study</a></li>
-    <li><a href="/pages/search.html" data-page="search"><i class="fas fa-search"></i>Search</a></li>
-    <li><a href="/pages/flashcards.html" data-page="flashcards"><i class="fas fa-layer-group"></i>Cards</a></li>
-    <li><a href="/pages/auth.html" data-page="profile"><i class="fas fa-user"></i>Profile</a></li>
-    <li><a href="/pages/blog.html" data-page="blog"><i class="fas fa-blog"></i>Blog</a></li>
+    <li><button class="nav-ai-btn" onclick="document.getElementById('navMenuBtn').click()"><i class="fas fa-bars"></i> Menu</button></li>
   </ul>
 </nav>
 
@@ -875,102 +664,130 @@ window.addEventListener('appinstalled', () => {
 </script>
 
 
-<!-- ═══════════════ ONBOARDING MODAL ═══════════════ -->
-<div class="ob-overlay" id="onboardingModal">
-  <div class="ob-card" role="dialog" aria-modal="true" aria-label="Welcome to BrainHub">
+<!-- ═══════════ MEGA MENU ═══════════ -->
+<div class="mega-menu-overlay" id="megaMenuOverlay" role="dialog" aria-modal="true" aria-label="Site navigation">
+  <div class="mega-menu">
 
-    <!-- Header -->
-    <div class="ob-header">
-      <div class="ob-header-inner">
-        <div class="ob-logo">BrainHub<span>.</span></div>
-        <div class="ob-tagline">Free study resources for Zambian university students 🇿🇲</div>
-        <div class="ob-dots">
-          <div class="ob-dot active" id="obDot0"></div>
-          <div class="ob-dot" id="obDot1"></div>
-          <div class="ob-dot" id="obDot2"></div>
-        </div>
-      </div>
+    <div class="mega-menu-header">
+      <div class="mega-menu-logo">BrainHub<span class="dot">.</span></div>
+      <button class="mega-menu-close" id="megaMenuClose" aria-label="Close menu">
+        <i class="fas fa-times"></i>
+      </button>
     </div>
 
-    <!-- Body -->
-    <div class="ob-body">
+    <div class="mega-menu-body">
 
-      <!-- ── STEP 1: Pick university ── -->
-      <div class="ob-step active" id="ob-step-1">
-        <div class="ob-step-title">Which university are you at?</div>
-        <div class="ob-step-sub">We'll show you the most relevant notes, past papers and resources for your institution.</div>
-        <div class="ob-uni-grid">
-          <button class="ob-uni-btn" onclick="obSelectUni(this,'CBU')">
-            <span class="ob-uni-emoji">🏛️</span>
-            <span class="ob-uni-name">Copperbelt University</span>
-            <span class="ob-uni-abbr">CBU · Kitwe</span>
-          </button>
-          <button class="ob-uni-btn" onclick="obSelectUni(this,'UNZA')">
-            <span class="ob-uni-emoji">🎓</span>
-            <span class="ob-uni-name">University of Zambia</span>
-            <span class="ob-uni-abbr">UNZA · Lusaka</span>
-          </button>
-          <button class="ob-uni-btn" onclick="obSelectUni(this,'ZUT')">
-            <span class="ob-uni-emoji">💻</span>
-            <span class="ob-uni-name">Zambia Univ. of Technology</span>
-            <span class="ob-uni-abbr">ZUT · Kitwe</span>
-          </button>
-          <button class="ob-uni-btn" onclick="obSelectUni(this,'Other')">
-            <span class="ob-uni-emoji">🏫</span>
-            <span class="ob-uni-name">Other / Not listed</span>
-            <span class="ob-uni-abbr">MU, CBU, etc.</span>
-          </button>
-        </div>
-        <div class="ob-footer">
-          <div class="ob-footer-left">
-            <button class="ob-btn-secondary" onclick="closeOnboarding(true)">Skip for now</button>
-          </div>
-          <button class="ob-btn-primary" id="obNextStep1" disabled onclick="obGoStep(2)">
-            Continue <i class="fas fa-arrow-right"></i>
-          </button>
-        </div>
+      <div class="mm-group">
+        <div class="mm-group-label">📚 Study</div>
+        <a href="/pages/universities.html" class="mm-item">
+          <div class="mm-icon" style="background:#dbeafe;color:#1d4ed8"><i class="fas fa-university"></i></div>
+          <div class="mm-text"><span>Universities</span><small>Notes &amp; past papers</small></div>
+        </a>
+        <a href="/pages/quizzes.html" class="mm-item">
+          <div class="mm-icon" style="background:#ede9fe;color:#6d28d9"><i class="fas fa-brain"></i></div>
+          <div class="mm-text"><span>Quizzes</span><small>100 topic questions</small></div>
+        </a>
+        <a href="/pages/flashcards.html" class="mm-item">
+          <div class="mm-icon" style="background:#dcfce7;color:#15803d"><i class="fas fa-layer-group"></i></div>
+          <div class="mm-text"><span>Flashcards</span><small>Flip card study tool</small></div>
+        </a>
+        <a href="/pages/search.html" class="mm-item">
+          <div class="mm-icon" style="background:#fef9c3;color:#a16207"><i class="fas fa-search"></i></div>
+          <div class="mm-text"><span>Search</span><small>Find any resource</small></div>
+        </a>
       </div>
 
-      <!-- ── STEP 2: Pick year ── -->
-      <div class="ob-step" id="ob-step-2">
-        <div class="ob-step-title">What year are you in?</div>
-        <div class="ob-step-sub">We'll highlight the resources most useful for your stage of study.</div>
-        <div class="ob-year-grid">
-          <button class="ob-year-btn" onclick="obSelectYear(this,'1')">
-            <span class="ob-year-icon">🌱</span>
-            <span class="ob-year-label">1st Year</span>
-          </button>
-          <button class="ob-year-btn" onclick="obSelectYear(this,'2')">
-            <span class="ob-year-icon">📗</span>
-            <span class="ob-year-label">2nd Year</span>
-          </button>
-          <button class="ob-year-btn" onclick="obSelectYear(this,'3')">
-            <span class="ob-year-icon">📘</span>
-            <span class="ob-year-label">3rd Year</span>
-          </button>
-          <button class="ob-year-btn" onclick="obSelectYear(this,'4')">
-            <span class="ob-year-icon">🎓</span>
-            <span class="ob-year-label">4th Year +</span>
-          </button>
-        </div>
-        <div class="ob-footer">
-          <div class="ob-footer-left">
-            <button class="ob-btn-secondary" onclick="obGoStep(1)"><i class="fas fa-arrow-left"></i> Back</button>
-          </div>
-          <button class="ob-btn-primary" id="obNextStep2" disabled onclick="obFinish()">
-            Show my resources <i class="fas fa-arrow-right"></i>
-          </button>
-        </div>
+      <div class="mm-group">
+        <div class="mm-group-label">🤖 Tools</div>
+        <a href="/pages/quizzes.html" class="mm-item">
+          <div class="mm-icon" style="background:#fce7f3;color:#be185d"><i class="fas fa-stopwatch"></i></div>
+          <div class="mm-text"><span>Quizzes</span><small>Test your knowledge</small></div>
+        </a>
+        <a href="#" onclick="document.getElementById('chatToggleBtn')?.click();document.getElementById('megaMenuOverlay').classList.remove('open');document.body.style.overflow='';return false;" class="mm-item">
+          <div class="mm-icon" style="background:#e0f2fe;color:#0369a1"><i class="fas fa-robot"></i></div>
+          <div class="mm-text"><span>AI Tutor</span><small>Ask anything</small></div>
+        </a>
       </div>
 
-      <!-- ── STEP 3: Personalised results ── -->
-      <div class="ob-step" id="ob-step-3">
-        <div id="obResults"></div>
+      <div class="mm-group">
+        <div class="mm-group-label">🌟 Discover</div>
+        <a href="/pages/blog.html" class="mm-item">
+          <div class="mm-icon" style="background:#fce7f3;color:#be185d"><i class="fas fa-pen-nib"></i></div>
+          <div class="mm-text"><span>Blog</span><small>Study tips &amp; guides</small></div>
+        </a>
+        <a href="/pages/contributors.html" class="mm-item">
+          <div class="mm-icon" style="background:#fff7ed;color:#c2410c"><i class="fas fa-users"></i></div>
+          <div class="mm-text"><span>Contributors</span><small>The team</small></div>
+        </a>
+        <a href="/pages/changelog.html" class="mm-item">
+          <div class="mm-icon" style="background:#f0fdf4;color:#15803d"><i class="fas fa-code-branch"></i></div>
+          <div class="mm-text"><span>Changelog</span><small>What's new</small></div>
+        </a>
+      </div>
+
+      <div class="mm-group">
+        <div class="mm-group-label">👤 Account</div>
+        <a href="/pages/profile.html" class="mm-item">
+          <div class="mm-icon" style="background:#ede9fe;color:#7c3aed"><i class="fas fa-chart-bar"></i></div>
+          <div class="mm-text"><span>My Dashboard</span><small>XP, badges &amp; progress</small></div>
+        </a>
+        <a href="/pages/auth.html" class="mm-item" data-auth-show="guest">
+          <div class="mm-icon" style="background:#dbeafe;color:#1d4ed8"><i class="fas fa-sign-in-alt"></i></div>
+          <div class="mm-text"><span>Sign In</span><small>Sync your progress</small></div>
+        </a>
+      </div>
+
+      <div class="mm-group">
+        <div class="mm-group-label">ℹ️ Info</div>
+        <a href="/pages/about.html" class="mm-item">
+          <div class="mm-icon" style="background:#f0fdf4;color:#166534"><i class="fas fa-info-circle"></i></div>
+          <div class="mm-text"><span>About</span><small>Our mission</small></div>
+        </a>
+        <a href="/pages/contact.html" class="mm-item">
+          <div class="mm-icon" style="background:#fef2f2;color:#dc2626"><i class="fas fa-envelope"></i></div>
+          <div class="mm-text"><span>Contact</span><small>Get in touch</small></div>
+        </a>
+        <a href="/pages/privacy-policy.html" class="mm-item">
+          <div class="mm-icon" style="background:#f8fafc;color:#64748b"><i class="fas fa-shield-alt"></i></div>
+          <div class="mm-text"><span>Privacy Policy</span><small>How we protect your data</small></div>
+        </a>
+        <a href="https://github.com/Gabriel-Banda/BrainHub" target="_blank" rel="noopener" class="mm-item">
+          <div class="mm-icon" style="background:#f3f4f6;color:#111827"><i class="fab fa-github"></i></div>
+          <div class="mm-text"><span>GitHub</span><small>Open source</small></div>
+        </a>
       </div>
 
     </div>
   </div>
 </div>
+
+<script>
+(function() {
+  const btn     = document.getElementById('navMenuBtn');
+  const overlay = document.getElementById('megaMenuOverlay');
+  const close   = document.getElementById('megaMenuClose');
+
+  function openMenu() {
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMenu() {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  btn?.addEventListener('click', openMenu);
+  close?.addEventListener('click', closeMenu);
+  // Click outside the panel
+  overlay?.addEventListener('click', e => { if (e.target === overlay) closeMenu(); });
+  // Escape key
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+  // Any link inside closes the menu
+  overlay?.querySelectorAll('a[href]:not([href="#"])').forEach(a => {
+    a.addEventListener('click', closeMenu);
+  });
+})();
+</script>
 
 </body>
 </html>

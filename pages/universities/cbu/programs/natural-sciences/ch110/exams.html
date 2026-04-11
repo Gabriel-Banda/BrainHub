@@ -5,6 +5,8 @@
     <title>CH110 Past Exams | BrainHub</title>
     <link rel="stylesheet" href="/src/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="/public/assets/images/favicon.png" />
+    <style> @media(max-width: 768px) { .desktop-only { display: none !important; } } </style>
 </head>
 <body>
     <nav class="navbar">
@@ -13,26 +15,23 @@
       <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;color:var(--primary)"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M9 13a4.5 4.5 0 0 0 3-4"/><path d="M12 13h4"/><path d="M12 18h6a2 2 0 0 1 2 2v1"/><path d="M12 8h8"/><path d="M16 8V5a2 2 0 0 1 2-2"/><circle cx="16" cy="13" r=".5"/><circle cx="18" cy="3" r=".5"/><circle cx="20" cy="21" r=".5"/><circle cx="20" cy="8" r=".5"/></svg>
       BrainHub<span class="dot">.</span>
     </a>
-            <ul class="nav-links">
-                <li><a href="/index.html">Home</a></li>
-                <li><a href="/pages/universities.html" class="active">Universities</a></li>
-                <!-- Show only when NOT logged in -->
-<li data-auth-show="guest">
-  <a href="/pages/auth.html" class="btn-primary" style="padding:0.4rem 0.9rem;border-radius:8px">
-    Sign In
-  </a>
-</li>
-
-<!-- Show only when logged in -->
-<li data-auth-show="authed" style="display:none">
-  <a href="/pages/profile.html" style="display:flex;align-items:center;gap:0.4rem">
-    <img data-auth-avatar src="" width="28" height="28"
-      style="border-radius:50%;object-fit:cover;display:none;border:2px solid var(--primary)">
-    <span data-auth-name style="font-weight:700;font-size:0.85rem"></span>
-  </a>
-</li>
-                <button id="theme-toggle" class="btn-primary theme-toggle"><i class="fas fa-moon" id="theme-icon"></i></button>
-            </ul>
+     <ul class="nav-links">
+  <li class="desktop-only"><a href="/pages/universities.html">Universities</a></li>
+  <li class="desktop-only"><a href="/pages/quizzes.html">Quizzes</a></li>
+  <li class="desktop-only"><a href="/pages/flashcards.html">Flashcards</a></li>
+  <li class="desktop-only"><a href="/pages/about.html">About</a></li>
+  <li data-auth-show="guest">
+    <a href="/pages/auth.html" class="btn-primary" style="padding:.4rem .9rem;border-radius:8px">Sign In</a>
+  </li>
+  <li data-auth-show="authed" style="display:none">
+    <a href="/pages/profile.html" style="display:flex;align-items:center;gap:.4rem">
+      <img data-auth-avatar src="" width="28" height="28" style="border-radius:50%;object-fit:cover;display:none;border:2px solid var(--primary)">
+      <span data-auth-name style="font-weight:700;font-size:.85rem"></span>
+    </a>
+  </li>
+  <li><button id="theme-toggle" class="btn-primary theme-toggle"><i class="fas fa-moon" id="theme-icon"></i></button></li>
+  <li><button class="nav-menu-btn" id="navMenuBtn"><i class="fas fa-grid"></i> Menu</button></li>
+</ul>
         </div>
     </nav>
 
@@ -128,15 +127,115 @@
   </div>
   <div class="chat-footer-note">BrainHub AI Tutor</div>
 </div>
+<!-- Mobile Bottom Nav -->
 <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
   <ul>
     <li><a href="/index.html" data-page="home"><i class="fas fa-home"></i>Home</a></li>
-    <li><a href="/pages/universities.html" data-page="universities"><i class="fas fa-university"></i>Study</a></li>
-    <li><a href="/pages/flashcards.html" data-page="flashcards"><i class="fas fa-layer-group"></i>Cards</a></li>
-    <li><a href="/pages/quizzes.html" data-page="quizzes"><i class="fas fa-stopwatch"></i>Quizzes</a></li>
-    <li><button class="nav-ai-btn" onclick="document.getElementById('chatToggleBtn').click()"><i class="fas fa-robot"></i>AI Tutor</button></li>
+    <li><button class="nav-ai-btn" onclick="document.getElementById('navMenuBtn').click()"><i class="fas fa-bars"></i> Menu</button></li>
   </ul>
 </nav>
 
+<div class="mega-menu-overlay" id="megaMenuOverlay">
+  <div class="mega-menu">
+    <div class="mega-menu-header">
+      <div class="mega-menu-logo">BrainHub<span class="dot">.</span></div>
+      <button class="mega-menu-close" id="megaMenuClose"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="mega-menu-body">
+
+      <div class="mm-group">
+        <div class="mm-group-label">📚 Study</div>
+        <a href="/pages/universities.html" class="mm-item">
+          <div class="mm-icon" style="background:#dbeafe;color:#1d4ed8"><i class="fas fa-university"></i></div>
+          <div class="mm-text"><span>Universities</span><small>Notes &amp; past papers</small></div>
+        </a>
+        <a href="/pages/quizzes.html" class="mm-item">
+          <div class="mm-icon" style="background:#ede9fe;color:#6d28d9"><i class="fas fa-brain"></i></div>
+          <div class="mm-text"><span>Quizzes</span><small>100 topic questions</small></div>
+        </a>
+        <a href="/pages/flashcards.html" class="mm-item">
+          <div class="mm-icon" style="background:#dcfce7;color:#15803d"><i class="fas fa-layer-group"></i></div>
+          <div class="mm-text"><span>Flashcards</span><small>Flip card study tool</small></div>
+        </a>
+        <a href="/pages/search.html" class="mm-item">
+          <div class="mm-icon" style="background:#fef9c3;color:#a16207"><i class="fas fa-search"></i></div>
+          <div class="mm-text"><span>Search</span><small>Find any resource</small></div>
+        </a>
+      </div>
+
+      <div class="mm-group">
+        <div class="mm-group-label">🤖 Tools</div>
+        <a href="#" onclick="document.getElementById('chatToggleBtn')?.click();document.getElementById('megaMenuOverlay').classList.remove('open');document.body.style.overflow='';return false;" class="mm-item">
+          <div class="mm-icon" style="background:#e0f2fe;color:#0369a1"><i class="fas fa-robot"></i></div>
+          <div class="mm-text"><span>AI Tutor</span><small>Ask anything</small></div>
+        </a>
+      </div>
+
+      <div class="mm-group">
+        <div class="mm-group-label">🌟 Discover</div>
+        <a href="/pages/blog.html" class="mm-item">
+          <div class="mm-icon" style="background:#fce7f3;color:#be185d"><i class="fas fa-pen-nib"></i></div>
+          <div class="mm-text"><span>Blog</span><small>Study tips &amp; guides</small></div>
+        </a>
+        <a href="/pages/contributors.html" class="mm-item">
+          <div class="mm-icon" style="background:#fff7ed;color:#c2410c"><i class="fas fa-users"></i></div>
+          <div class="mm-text"><span>Contributors</span><small>The team</small></div>
+        </a>
+        <a href="/pages/changelog.html" class="mm-item">
+          <div class="mm-icon" style="background:#f0fdf4;color:#15803d"><i class="fas fa-code-branch"></i></div>
+          <div class="mm-text"><span>Changelog</span><small>What's new</small></div>
+        </a>
+      </div>
+
+      <div class="mm-group">
+        <div class="mm-group-label">👤 Account</div>
+        <a href="/pages/profile.html" class="mm-item">
+          <div class="mm-icon" style="background:#ede9fe;color:#7c3aed"><i class="fas fa-chart-bar"></i></div>
+          <div class="mm-text"><span>My Dashboard</span><small>XP, badges &amp; progress</small></div>
+        </a>
+        <a href="/pages/auth.html" class="mm-item" data-auth-show="guest">
+          <div class="mm-icon" style="background:#dbeafe;color:#1d4ed8"><i class="fas fa-sign-in-alt"></i></div>
+          <div class="mm-text"><span>Sign In</span><small>Sync your progress</small></div>
+        </a>
+      </div>
+
+      <div class="mm-group">
+        <div class="mm-group-label">ℹ️ Info</div>
+        <a href="/pages/about.html" class="mm-item">
+          <div class="mm-icon" style="background:#f0fdf4;color:#166534"><i class="fas fa-info-circle"></i></div>
+          <div class="mm-text"><span>About</span><small>Our mission</small></div>
+        </a>
+        <a href="/pages/contact.html" class="mm-item">
+          <div class="mm-icon" style="background:#fef2f2;color:#dc2626"><i class="fas fa-envelope"></i></div>
+          <div class="mm-text"><span>Contact</span><small>Get in touch</small></div>
+        </a>
+        <a href="/pages/privacy-policy.html" class="mm-item">
+          <div class="mm-icon" style="background:#f8fafc;color:#64748b"><i class="fas fa-shield-alt"></i></div>
+          <div class="mm-text"><span>Privacy Policy</span><small>Your data</small></div>
+        </a>
+        <a href="https://github.com/Gabriel-Banda/BrainHub" target="_blank" rel="noopener" class="mm-item">
+          <div class="mm-icon" style="background:#f3f4f6;color:#111827"><i class="fab fa-github"></i></div>
+          <div class="mm-text"><span>GitHub</span><small>Open source</small></div>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const btn     = document.getElementById('navMenuBtn');
+  const overlay = document.getElementById('megaMenuOverlay');
+  const close   = document.getElementById('megaMenuClose');
+  function openMenu()  { overlay.classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function closeMenu() { overlay.classList.remove('open'); document.body.style.overflow = ''; }
+  btn?.addEventListener('click', openMenu);
+  close?.addEventListener('click', closeMenu);
+  overlay?.addEventListener('click', e => { if (e.target === overlay) closeMenu(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+  overlay?.querySelectorAll('a[href]:not([href="#"])').forEach(a => a.addEventListener('click', closeMenu));
+})();
+</script>
 </body>
 </html>
