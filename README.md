@@ -59,7 +59,7 @@ Find the course entry and add to its `docs` array:
       size: '1.2 MB',
       icon: 'fa-file-pdf',
       iconClass: 'pdf',
-      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/CBU-DOCS/BIO110/filename.pdf'
+      url: 'https://pub-*********************859.r2.dev/CBU-DOCS/BIO110/filename.pdf'
     },
   ]
 }
