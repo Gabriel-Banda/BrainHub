@@ -156,6 +156,7 @@ function updateThemeIcon(theme) {
 function initFlashcards() {
   const flashcard = document.getElementById('flashcard');
   if (!flashcard) return;
+
   const questionEl = document.getElementById('flashcard-question');
   const answerEl = document.getElementById('flashcard-answer');
   const explanationEl = document.getElementById('flashcard-explanation');
@@ -165,61 +166,270 @@ function initFlashcards() {
   const prevBtn = document.getElementById('prevCard');
   const topicTags = document.querySelectorAll('.topic-tag');
 
-  const flashcards = {
-    geography: [
-      { question: "What is the capital of Zambia?", answer: "Lusaka", explanation: "Lusaka is the capital and largest city of Zambia, located in the southern part of the central plateau." },
-      { question: "Which river forms part of Zambia's border with Zimbabwe?", answer: "Zambezi River", explanation: "The Zambezi River forms the border between Zambia and Zimbabwe, famous for Victoria Falls." },
-      { question: "What is the highest point in Zambia?", answer: "Mafinga Central", explanation: "Mafinga Central is the highest peak in Zambia at 2,339 metres above sea level." },
-      { question: "Which country borders Zambia to the north?", answer: "Democratic Republic of Congo", explanation: "Zambia shares its longest border (1,930 km) with the DRC." },
-      { question: "What is Zambia's largest national park?", answer: "Kafue National Park", explanation: "Kafue covers about 22,400 km², making it Zambia's largest national park." }
-    ],
-    science: [
-      { question: "What is the chemical symbol for gold?", answer: "Au", explanation: "Au comes from the Latin word 'aurum', meaning gold." },
-      { question: "What planet is known as the Red Planet?", answer: "Mars", explanation: "Mars appears red due to iron oxide (rust) on its surface." },
-      { question: "What is the hardest natural substance on Earth?", answer: "Diamond", explanation: "Diamond scores 10 on the Mohs scale of mineral hardness." },
-      { question: "What is the speed of light?", answer: "299,792,458 m/s", explanation: "Light travels at approximately 3 × 10⁸ metres per second in a vacuum." }
-    ],
-    mathematics: [
-      { question: "What is the value of π to 4 decimal places?", answer: "3.1416", explanation: "π is the ratio of a circle's circumference to its diameter." },
-      { question: "What is 15 squared?", answer: "225", explanation: "15 × 15 = 225" },
-      { question: "What is the sum of angles in a triangle?", answer: "180°", explanation: "The interior angles of any triangle always add up to 180 degrees." }
-    ],
-    history: [
-      { question: "In what year did Zambia gain independence?", answer: "1964", explanation: "Zambia gained independence from British rule on 24 October 1964." },
-      { question: "Who was Zambia's first President?", answer: "Kenneth Kaunda", explanation: "Kenneth Kaunda led Zambia from independence in 1964 until 1991." }
-    ],
-    general: [
-      { question: "How many bytes are in a kilobyte?", answer: "1,024 bytes", explanation: "1 KB = 1,024 bytes in binary computing." },
-      { question: "What does HTML stand for?", answer: "HyperText Markup Language", explanation: "HTML is the standard markup language for creating web pages." }
-    ]
-  };
+const flashcards = {
+  geography: [
+    { 
+      question: "Define the 'Pedicle' in the context of Zambian geography.", 
+      answer: "The Congo Pedicle", 
+      explanation: "A salient of the DRC territory that cuts into Zambia, effectively dividing the Copperbelt and Luapula provinces." 
+    },
+    { 
+      question: "What are the three main drainage basins in Zambia?", 
+      answer: "Zambezi, Congo, and Lake Rukwa", 
+      explanation: "The Zambezi basin is the largest, covering about 75% of the country, followed by the Congo basin in the north." 
+    },
+    { 
+      question: "Which tectonic feature is responsible for the formation of Lake Tanganyika?", 
+      answer: "The East African Rift System", 
+      explanation: "Lake Tanganyika is a rift lake formed by the tectonic separation of the African Plate into the Somalian and Nubian plates." 
+    },
+    { 
+      question: "Identify the four major agro-ecological zones in Zambia.", 
+      answer: "Region I, IIa, IIb, and III", 
+      explanation: "These regions are classified based on annual rainfall, with Region III being the highest rainfall area (over 1000mm)." 
+    },
+    { 
+      question: "Explain the 'Rain Shadow Effect' in the context of the Muchinga Mountains.", 
+      answer: "Orographic Precipitation", 
+      explanation: "As moist air rises over the Muchinga Escarpment, it cools and releases rain on the windward side, leaving the leeward side (Luangwa Valley) significantly drier." 
+    },
+    { 
+      question: "What is the economic significance of the 'Line of Rail' in Zambia?", 
+      answer: "Industrial and Urban Backbone", 
+      explanation: "It is the primary corridor for trade and transport, connecting the Copperbelt to Lusaka and Livingstone, housing the majority of Zambia's urban population and industry." 
+    },
+    { 
+      question: "What characterizes 'Veld' vegetation found in parts of Southern Africa?", 
+      answer: "Open Grasslands", 
+      explanation: "Veld refers to wide, open rural spaces of Southern Africa, typically covered in grass or low shrubbery, used extensively for cattle grazing." 
+    }
+  ],
+  science: [
+    { 
+      question: "What is the 'Central Dogma' of molecular biology?", 
+      answer: "DNA → RNA → Protein", 
+      explanation: "It describes the two-step process, transcription and translation, by which the information in genes flows into proteins." 
+    },
+    { 
+      question: "Define the 'Heisenberg Uncertainty Principle'.", 
+      answer: "Δx Δp ≥ h/4π", 
+      explanation: "It states that it is impossible to simultaneously know the exact position (x) and momentum (p) of a particle." 
+    },
+    { 
+      question: "What is the difference between a galvanic and an electrolytic cell?", 
+      answer: "Spontaneity of reaction", 
+      explanation: "Galvanic cells convert chemical energy into electrical energy (spontaneous), while electrolytic cells use electricity to drive a non-spontaneous reaction." 
+    },
+    { 
+      question: "Define 'Homeostasis' in biological systems.", 
+      answer: "Dynamic Equilibrium", 
+      explanation: "The process by which biological systems maintain stability while adjusting to changing external conditions." 
+    },
+    { 
+      question: "What is the 'Photoelectric Effect' and who explained it?", 
+      answer: "Emission of electrons by light; Albert Einstein.", 
+      explanation: "It occurs when light shining on a metal surface causes the emission of electrons, proving that light behaves as discrete packets of energy called photons." 
+    },
+    { 
+      question: "Define 'Buffer Solution' in Chemistry.", 
+      answer: "pH Resistance", 
+      explanation: "A solution consisting of a weak acid and its conjugate base (or vice versa) that resists changes in pH when small amounts of acid or base are added." 
+    },
+    { 
+      question: "What is 'Allopatric Speciation'?", 
+      answer: "Geographic Isolation", 
+      explanation: "The formation of new species from a single ancestral species due to geographic barriers that prevent gene flow between populations." 
+    },
+    { 
+      question: "State the First Law of Thermodynamics.", 
+      answer: "Conservation of Energy", 
+      explanation: "Energy cannot be created or destroyed — it only changes form. For example, the heat energy added to a gas minus the work the gas does on its surroundings equals the change in its internal energy." 
+    }
+  ],
+  mathematics: [
+    { 
+      question: "State the 'Fundamental Theorem of Calculus'.", 
+      answer: "Integration and Differentiation are inverse processes.", 
+      explanation: "Specifically, it states that the definite integral of a function can be found using its antiderivative." 
+    },
+    { 
+      question: "What defines a 'Linear Transformation' in Linear Algebra?", 
+      answer: "Additivity and Homogeneity", 
+      explanation: "A transformation is linear if two rules hold: (1) transforming two vectors added together gives the same result as transforming each one separately and then adding, and (2) scaling a vector before or after the transformation makes no difference." 
+    },
+    { 
+      question: "What is the 'Normal Distribution' in Statistics?", 
+      answer: "A Bell Curve", 
+      explanation: "A probability distribution symmetric about the mean, showing that data near the mean are more frequent in occurrence." 
+    },
+    { 
+      question: "What is the 'Squeeze Theorem' (Sandwich Theorem)?", 
+      answer: "Limit Evaluation Technique", 
+      explanation: "Think of it like a sandwich: if a function is always trapped between two other functions, and those two outer functions both approach the same value at a point, then the trapped function is forced to approach that same value too." 
+    },
+    { 
+      question: "Define an 'Improper Integral'.", 
+      answer: "Infinite limits or discontinuities.", 
+      explanation: "An integral where either the interval of integration is infinite or the integrand has an infinite discontinuity within the interval." 
+    },
+    { 
+      question: "What is the 'Taylor Series' expansion?", 
+      answer: "Power Series Representation", 
+      explanation: "A representation of a function as an infinite sum of terms calculated from the values of its derivatives at a single point." 
+    }
+  ],
+  history: [
+    { 
+      question: "What was the significance of the 1948 Federation of Rhodesia and Nyasaland proposal?", 
+      answer: "A consolidation of white settler power.", 
+      explanation: "It aimed to unite Northern Rhodesia, Southern Rhodesia, and Nyasaland, sparking intense African nationalist resistance." 
+    },
+    { 
+      question: "Define 'Humanism' as applied to the First Republic of Zambia.", 
+      answer: "Zambian Humanism", 
+      explanation: "Kenneth Kaunda's socio-political philosophy that combined socialist ideals with traditional African values, emphasizing the importance of man." 
+    },
+    { 
+      question: "What occurred during the 'Choma Declaration' of 1972?", 
+      answer: "Transition to a One-Party State", 
+      explanation: "The signing of an agreement between UNIP and the ANC (Harry Nkumbula) effectively ending multi-party politics until 1990." 
+    },
+    { 
+      question: "What was the 'Mulungushi Reforms' of 1968?", 
+      answer: "Economic Nationalization", 
+      explanation: "A set of policies where the Zambian government took a 51% controlling interest in major foreign-owned companies, shifting toward a state-led economy." 
+    },
+    { 
+      question: "What was the role of the 'United National Independence Party' (UNIP)?", 
+      answer: "Liberation and Post-Independence Governance", 
+      explanation: "Founded by Kenneth Kaunda, it was the primary vehicle for the independence struggle and the sole legal party during Zambia's Second Republic." 
+    },
+    { 
+      question: "Identify the 'Barotse Agreement 1964'.", 
+      answer: "Regional Autonomy Treaty", 
+      explanation: "An agreement between the Litunga of Barotseland and Kenneth Kaunda regarding the status and semi-autonomy of Barotseland within the sovereign state of Zambia." 
+    }
+  ],
+  general: [
+    { 
+      question: "Define 'Macroeconomics' at a university level.", 
+      answer: "Study of aggregate economy", 
+      explanation: "Focuses on large-scale economic factors such as interest rates, national productivity, and global trade." 
+    },
+    { 
+      question: "What is the purpose of 'Peer Review' in academic publishing?", 
+      answer: "Quality Control and Validation", 
+      explanation: "The evaluation of work by experts in the same field to ensure scientific rigor and credibility before publication." 
+    },
+    { 
+      question: "Define 'Opportunity Cost' in Economics.", 
+      answer: "The cost of the next best alternative.", 
+      explanation: "In decision-making, it represents the value or benefit given up by choosing one option over another." 
+    },
+    { 
+      question: "What is the 'Social Contract' theory in Political Science?", 
+      answer: "Agreement between the ruled and their rulers.", 
+      explanation: "The idea that individuals consent, either explicitly or implicitly, to surrender some freedoms to an authority in exchange for protection of their remaining rights." 
+    },
+    { 
+      question: "Explain the difference between 'Reliability' and 'Validity' in research.", 
+      answer: "Consistency vs. Accuracy", 
+      explanation: "Reliability refers to how consistent a measure is; Validity refers to how accurately a tool measures what it is intended to measure." 
+    }
+  ]
+};
 
-  const saved = JSON.parse(localStorage.getItem('brainhub-flashcards') || '{}');
-  let currentDeck = saved.currentDeck || 'geography';
-  let currentIndex = saved.currentIndex || 0;
-  if (!flashcards[currentDeck]) { currentDeck = 'geography'; currentIndex = 0; }
-  if (currentIndex >= flashcards[currentDeck].length) currentIndex = 0;
+let currentDeck = 'geography';
+  let currentIndex = 0;
 
-  updateActiveTopic(); updateFlashcard();
-  flashcard.addEventListener('click', () => flashcard.classList.toggle('flipped'));
-  nextBtn?.addEventListener('click', (e) => { e.stopPropagation(); flashcard.classList.remove('flipped'); currentIndex = (currentIndex + 1) % flashcards[currentDeck].length; saveProgress(); updateFlashcard(); });
-  prevBtn?.addEventListener('click', (e) => { e.stopPropagation(); flashcard.classList.remove('flipped'); currentIndex = (currentIndex - 1 + flashcards[currentDeck].length) % flashcards[currentDeck].length; saveProgress(); updateFlashcard(); });
-  topicTags.forEach(tag => tag.addEventListener('click', () => {
-    const topic = tag.textContent.trim().toLowerCase();
-    if (flashcards[topic]) { currentDeck = topic; currentIndex = 0; updateActiveTopic(); saveProgress(); updateFlashcard(); flashcard.classList.remove('flipped'); }
-  }));
+  // Initial UI Update
+  updateFlashcard();
+
+  // Flip Logic
+  // Flip on click
+  flashcard.addEventListener('click', () => {
+    flashcard.classList.toggle('flipped');
+  });
+
+  // Navigation — always unflip first, wait for unflip to finish, then swap content
+  nextBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const wasFlipped = flashcard.classList.contains('flipped');
+    flashcard.classList.remove('flipped');
+    const delay = wasFlipped ? 350 : 0;
+    setTimeout(() => {
+      currentIndex = (currentIndex + 1) % flashcards[currentDeck].length;
+      swapCard('next');
+    }, delay);
+  });
+
+  prevBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const wasFlipped = flashcard.classList.contains('flipped');
+    flashcard.classList.remove('flipped');
+    const delay = wasFlipped ? 350 : 0;
+    setTimeout(() => {
+      currentIndex = (currentIndex - 1 + flashcards[currentDeck].length) % flashcards[currentDeck].length;
+      swapCard('prev');
+    }, delay);
+  });
+
+  // Topic Selection
+  topicTags.forEach(tag => {
+    tag.addEventListener('click', () => {
+      topicTags.forEach(t => t.classList.remove('active'));
+      tag.classList.add('active');
+      currentDeck = tag.textContent.trim().toLowerCase();
+      currentIndex = 0;
+      flashcard.classList.remove('flipped');
+      setTimeout(() => swapCard('next'), 50);
+    });
+  });
+
+  // Swap content with a fade on just the text, never touching inner's transform
+  function swapCard(direction) {
+    const front = flashcard.querySelector('.flashcard-front');
+    const back  = flashcard.querySelector('.flashcard-back');
+
+    // Fade out both faces
+    [front, back].forEach(el => {
+      el.style.transition = 'opacity 0.15s ease';
+      el.style.opacity = '0';
+    });
+
+    setTimeout(() => {
+      updateFlashcard();
+      // Fade back in
+      [front, back].forEach(el => {
+        el.style.transition = 'opacity 0.2s ease';
+        el.style.opacity = '1';
+      });
+      // Clean up inline styles so CSS takes over again
+      setTimeout(() => {
+        [front, back].forEach(el => {
+          el.style.transition = '';
+          el.style.opacity = '';
+        });
+      }, 220);
+    }, 160);
+  }
 
   function updateFlashcard() {
     const card = flashcards[currentDeck][currentIndex];
     if (!card) return;
+
     questionEl.textContent = card.question;
     answerEl.textContent = card.answer;
     if (explanationEl) explanationEl.textContent = card.explanation;
     if (currentCardEl) currentCardEl.textContent = currentIndex + 1;
     if (totalCardsEl) totalCardsEl.textContent = flashcards[currentDeck].length;
+
+    if (window.renderMathInElement) {
+      renderMathInElement(flashcard, {
+        delimiters: [{ left: '$', right: '$', display: false }]
+      });
+    }
   }
-  function updateActiveTopic() { topicTags.forEach(tag => tag.classList.toggle('active', tag.textContent.trim().toLowerCase() === currentDeck)); }
-  function saveProgress() { localStorage.setItem('brainhub-flashcards', JSON.stringify({ currentDeck, currentIndex })); }
 }
 
 // ==================== LIVE SEARCH ====================
@@ -1277,54 +1487,614 @@ async function showSkeletonWhile(container, skeletonType, asyncFn) {
 const CHALLENGES = [
   {
     week: 1,
-    title: "Cell Biology Basics",
-    desc: "Test your knowledge of cell structure and function from BI 110.",
-    question: "Which organelle is responsible for producing ATP through cellular respiration?",
-    options: ["Nucleus", "Mitochondria", "Ribosome", "Golgi apparatus"],
+    title: "Cell Structure",
+    desc: "BI 110: Biology fundamentals.",
+    question: "Which of the following is found in plant cells but NOT in animal cells?",
+    options: ["Mitochondria", "Cell Wall", "Ribosomes", "Cytoplasm"],
     correct: 1,
-    explanation: "The mitochondria is the powerhouse of the cell. It produces ATP via aerobic respiration through the processes of glycolysis, the Krebs cycle, and the electron transport chain.",
+    explanation: "Plant cells have a rigid cell wall made of cellulose that gives them structure and shape. Animal cells do not have one — they rely on the cell membrane alone.",
     course: "BI 110"
   },
   {
     week: 2,
-    title: "Newton's Laws of Motion",
-    desc: "A quick challenge from PH 110 — mechanics fundamentals.",
-    question: "A 10 kg object accelerates at 2 m/s². What net force is acting on it?",
-    options: ["5 N", "12 N", "20 N", "0.2 N"],
-    correct: 2,
-    explanation: "Using Newton's second law: F = ma. F = 10 kg × 2 m/s² = 20 N. Remember: force is always mass times acceleration.",
+    title: "Kinematics",
+    desc: "PH 110: Motion in a straight line.",
+    question: "An object starts from rest and accelerates at 3 m/s² for 4 seconds. What is its final velocity?",
+    options: ["7 m/s", "12 m/s", "1.33 m/s", "9 m/s"],
+    correct: 1,
+    explanation: "Using v = u + at: starting at 0 m/s, accelerating at 3 m/s² for 4 s gives v = 0 + (3 × 4) = 12 m/s.",
     course: "PH 110"
   },
   {
     week: 3,
-    title: "Chemical Bonding",
-    desc: "Test your understanding of atomic bonding from CH 110.",
-    question: "Which type of bond involves the complete transfer of electrons from one atom to another?",
-    options: ["Covalent bond", "Metallic bond", "Ionic bond", "Hydrogen bond"],
+    title: "Atomic Structure",
+    desc: "CH 110: Subatomic particles.",
+    question: "Which subatomic particle has a negative charge?",
+    options: ["Proton", "Neutron", "Electron", "Nucleus"],
     correct: 2,
-    explanation: "Ionic bonds form when one atom completely transfers one or more electrons to another atom, creating oppositely charged ions that attract each other. Example: NaCl (table salt).",
+    explanation: "Electrons carry a negative charge and orbit the nucleus. Protons are positive, and neutrons carry no charge at all.",
     course: "CH 110"
   },
   {
     week: 4,
-    title: "Calculus Fundamentals",
-    desc: "A quick differentiation challenge from MA 110.",
-    question: "What is the derivative of f(x) = x³ + 2x² - 5x + 7?",
-    options: ["3x² + 4x - 5", "x² + 2x - 5", "3x² + 4x + 7", "3x³ + 4x - 5"],
-    correct: 0,
-    explanation: "Using the power rule: d/dx(xⁿ) = nxⁿ⁻¹. So: d/dx(x³) = 3x², d/dx(2x²) = 4x, d/dx(-5x) = -5, d/dx(7) = 0. Combined: f'(x) = 3x² + 4x - 5.",
+    title: "Limits",
+    desc: "MA 110: Introduction to limits.",
+    question: "What is the limit of (x² − 1) ÷ (x − 1) as x approaches 1?",
+    options: ["0", "1", "2", "Undefined"],
+    correct: 2,
+    explanation: "Factor the top: (x − 1)(x + 1). The (x − 1) cancels, leaving x + 1. Plug in x = 1: 1 + 1 = 2.",
     course: "MA 110"
   },
   {
     week: 5,
-    title: "Zambian History & Context",
-    desc: "A general knowledge challenge for LA 111.",
-    question: "In what year did Zambia gain its independence from British colonial rule?",
-    options: ["1960", "1962", "1964", "1966"],
+    title: "Zambian Pre-Independence",
+    desc: "LA 111: History of Northern Rhodesia.",
+    question: "What was Zambia called before it gained independence in 1964?",
+    options: ["Nyasaland", "Southern Rhodesia", "Northern Rhodesia", "Basutoland"],
     correct: 2,
-    explanation: "Zambia gained independence on 24 October 1964, under the leadership of Kenneth Kaunda and the United National Independence Party (UNIP). October 24 is now celebrated as Zambia's Independence Day.",
+    explanation: "Zambia was a British protectorate known as Northern Rhodesia until it became independent on 24 October 1964.",
     course: "LA 111"
   },
+  {
+    week: 6,
+    title: "Enzyme Function",
+    desc: "BI 110: Biological catalysts.",
+    question: "What happens to an enzyme when exposed to extremely high temperatures?",
+    options: ["It speeds up", "It reproduces", "It denatures", "It turns into a substrate"],
+    correct: 2,
+    explanation: "High heat breaks the bonds holding the enzyme's 3D shape together. Once the shape is lost (denaturation), the enzyme can no longer bind its substrate and stops working.",
+    course: "BI 110"
+  },
+  {
+    week: 7,
+    title: "Newton's Third Law",
+    desc: "PH 110: Action and Reaction.",
+    question: "If a bird pushes down on the air with its wings, what is the reaction force?",
+    options: ["The air pushes up on the wings", "Gravity pulls the bird down", "The bird moves forward", "The air moves sideways"],
+    correct: 0,
+    explanation: "Newton's Third Law: every action has an equal and opposite reaction. Wings push air down → the air pushes the wings up with the same force.",
+    course: "PH 110"
+  },
+  {
+    week: 8,
+    title: "The Periodic Table",
+    desc: "CH 110: Groups and Periods.",
+    question: "Which group of elements is known for being chemically inert (unreactive)?",
+    options: ["Alkali Metals", "Halogens", "Noble Gases", "Transition Metals"],
+    correct: 2,
+    explanation: "Noble Gases (Group 18) have a completely full outer electron shell, so they have no need to bond with other atoms — making them almost completely unreactive.",
+    course: "CH 110"
+  },
+  {
+    week: 9,
+    title: "Differentiation — Chain Rule",
+    desc: "MA 110: Complex derivatives.",
+    question: "Find the derivative of  f(x) = (2x + 1)³",
+    options: ["3(2x + 1)²", "6(2x + 1)²", "2(2x + 1)²", "6x²"],
+    correct: 1,
+    explanation: "Chain Rule: differentiate the outer function first → 3(2x+1)², then multiply by the derivative of the inside, which is 2. Result: 3(2x+1)² × 2 = 6(2x+1)².",
+    course: "MA 110"
+  },
+  {
+    week: 10,
+    title: "The Federation Era",
+    desc: "LA 111: The CAF era.",
+    question: "Zambia was part of a Federation from 1953 to 1963 alongside which two countries?",
+    options: ["Malawi and Zimbabwe", "Botswana and Namibia", "Congo and Angola", "Tanzania and Kenya"],
+    correct: 0,
+    explanation: "The Central African Federation joined Northern Rhodesia (Zambia), Southern Rhodesia (Zimbabwe), and Nyasaland (Malawi) — strongly opposed by African nationalists.",
+    course: "LA 111"
+  },
+  {
+    week: 11,
+    title: "DNA Replication",
+    desc: "BI 110: Molecular basis of inheritance.",
+    question: "Which enzyme is responsible for 'unzipping' the DNA double helix during replication?",
+    options: ["DNA Polymerase", "Helicase", "Ligase", "Primase"],
+    correct: 1,
+    explanation: "Helicase breaks the hydrogen bonds between the two DNA strands, separating them like a zip so each strand can be used as a template for copying.",
+    course: "BI 110"
+  },
+  {
+    week: 12,
+    title: "Circular Motion",
+    desc: "PH 110: Centripetal forces.",
+    question: "In uniform circular motion, the acceleration always points in which direction?",
+    options: ["Tangent to the circle", "Away from the center", "Toward the center", "Opposite the velocity"],
+    correct: 2,
+    explanation: "Centripetal acceleration always points inward toward the center. It is what keeps changing the object's direction without changing its speed.",
+    course: "PH 110"
+  },
+  {
+    week: 13,
+    title: "Gas Laws — Boyle's Law",
+    desc: "CH 110: Behaviour of ideal gases.",
+    question: "According to Boyle's Law, if the volume of a gas decreases at constant temperature, the pressure will:",
+    options: ["Decrease", "Increase", "Stay the same", "Drop to zero"],
+    correct: 1,
+    explanation: "Boyle's Law: P₁V₁ = P₂V₂. Pressure and volume are inversely proportional — squeeze the gas into a smaller space and the pressure rises.",
+    course: "CH 110"
+  },
+  {
+    week: 14,
+    title: "Differentiation — Product Rule",
+    desc: "MA 110: Differentiating multiplied functions.",
+    question: "What is the derivative of  f(x) = x · sin(x)?",
+    options: ["cos(x)", "sin(x) + x·cos(x)", "x·cos(x)", "sin(x) − x·cos(x)"],
+    correct: 1,
+    explanation: "Product Rule: (u·v)' = u'v + uv'. Here u = x (derivative = 1) and v = sin(x) (derivative = cos(x)). So: 1·sin(x) + x·cos(x) = sin(x) + x·cos(x).",
+    course: "MA 110"
+  },
+  {
+    week: 15,
+    title: "Zambian National Symbols",
+    desc: "LA 111: Identity of the Republic.",
+    question: "What does the orange colour on the Zambian national flag represent?",
+    options: ["The lush flora", "The struggle for freedom", "The nation's mineral wealth", "The Zambezi river"],
+    correct: 2,
+    explanation: "Each colour has a meaning: green = agriculture/flora, red = the freedom struggle, black = the people, and orange = Zambia's mineral wealth, especially copper.",
+    course: "LA 111"
+  },
+  {
+    week: 16,
+    title: "Photosynthesis",
+    desc: "BI 110: Energy conversion in plants.",
+    question: "In which part of the chloroplast do the light-independent (Calvin Cycle) reactions occur?",
+    options: ["Thylakoid membrane", "Stroma", "Granum", "Outer membrane"],
+    correct: 1,
+    explanation: "Light-dependent reactions happen in the thylakoid membranes. The Calvin Cycle (light-independent) takes place in the stroma — the fluid-filled space surrounding the thylakoids.",
+    course: "BI 110"
+  },
+  {
+    week: 17,
+    title: "Ohm's Law",
+    desc: "PH 110: Basics of electricity.",
+    question: "A circuit has a resistance of 5Ω and a current of 2A. What is the voltage?",
+    options: ["2.5 V", "7 V", "10 V", "0.4 V"],
+    correct: 2,
+    explanation: "Ohm's Law: Voltage = Current × Resistance = 2A × 5Ω = 10V. Think of it like water: voltage is pressure, current is flow, resistance is how narrow the pipe is.",
+    course: "PH 110"
+  },
+  {
+    week: 18,
+    title: "Acids and Bases — pH Scale",
+    desc: "CH 110: Understanding the pH scale.",
+    question: "A solution with a hydrogen ion concentration of 1 × 10⁻³ mol/L has a pH of:",
+    options: ["3", "−10", "11", "7"],
+    correct: 0,
+    explanation: "pH = −log[H⁺]. log(10⁻³) = −3, so pH = −(−3) = 3. A pH below 7 is acidic; above 7 is basic; 7 is neutral.",
+    course: "CH 110"
+  },
+  {
+    week: 19,
+    title: "Concavity",
+    desc: "MA 110: The second derivative.",
+    question: "If the second derivative f''(x) > 0 on an interval, the graph of f(x) is:",
+    options: ["Increasing", "Decreasing", "Concave Up", "Concave Down"],
+    correct: 2,
+    explanation: "A positive second derivative means the slope is increasing — the curve bends upward like a bowl (concave up). Negative means it bends downward like a dome.",
+    course: "MA 110"
+  },
+  {
+    week: 20,
+    title: "The Copperbelt",
+    desc: "LA 111: Economic foundations of Zambia.",
+    question: "Which town is historically known as the hub of the Zambian Copperbelt?",
+    options: ["Lusaka", "Livingstone", "Kitwe", "Chipata"],
+    correct: 2,
+    explanation: "Kitwe sits at the heart of the Copperbelt Province and has served as the industrial and commercial centre of Zambia's copper mining industry since the colonial era.",
+    course: "LA 111"
+  },
+  {
+    week: 21,
+    title: "Cellular Respiration",
+    desc: "BI 110: ATP production stages.",
+    question: "Which stage of cellular respiration produces the most ATP?",
+    options: ["Glycolysis", "Krebs Cycle", "Electron Transport Chain", "Fermentation"],
+    correct: 2,
+    explanation: "The Electron Transport Chain produces approximately 32–34 ATP per glucose. Glycolysis makes only 2 ATP, and the Krebs Cycle makes 2 more — the ETC is where most energy is released.",
+    course: "BI 110"
+  },
+  {
+    week: 22,
+    title: "Conservation of Momentum",
+    desc: "PH 110: Collisions and impulses.",
+    question: "In an inelastic collision, which quantity is conserved?",
+    options: ["Kinetic Energy", "Momentum", "Both", "Neither"],
+    correct: 1,
+    explanation: "Momentum is always conserved in isolated collisions. In inelastic collisions, kinetic energy is NOT conserved — some is lost as heat, sound, or object deformation.",
+    course: "PH 110"
+  },
+  {
+    week: 23,
+    title: "Intermolecular Forces",
+    desc: "CH 110: Forces between molecules.",
+    question: "Which type of intermolecular force is generally the strongest?",
+    options: ["London Dispersion", "Dipole-Dipole", "Hydrogen Bonding", "Ion-Dipole"],
+    correct: 3,
+    explanation: "Ion-dipole forces (between a charged ion and a polar molecule) are the strongest. This is why ionic salts like NaCl dissolve so readily in water.",
+    course: "CH 110"
+  },
+  {
+    week: 24,
+    title: "Fundamental Theorem of Calculus",
+    desc: "MA 110: Connecting derivatives and integrals.",
+    question: "What is the result of the integral of 2x from x = 1 to x = 3?",
+    options: ["4", "8", "6", "12"],
+    correct: 1,
+    explanation: "Integrate 2x to get x². Evaluate from 1 to 3: (3²) − (1²) = 9 − 1 = 8. The integral gives the area under the curve 2x between those two points.",
+    course: "MA 110"
+  },
+  {
+    week: 25,
+    title: "Mendelian Genetics",
+    desc: "BI 110: Patterns of inheritance.",
+    question: "In a cross between two heterozygous tall plants (Tt × Tt), what fraction of offspring will be short (tt)?",
+    options: ["1/4", "1/2", "3/4", "0"],
+    correct: 0,
+    explanation: "A Punnett square for Tt × Tt gives: TT, Tt, Tt, tt. Only 1 of 4 offspring gets the recessive tt genotype and will be short — a 25% chance.",
+    course: "BI 110"
+  },
+  {
+    week: 26,
+    title: "Work and Energy",
+    desc: "PH 110: The work-energy theorem.",
+    question: "A force of 10N moves an object 5m in the direction of the force. How much work is done?",
+    options: ["2 J", "15 J", "50 J", "0.5 J"],
+    correct: 2,
+    explanation: "Work = Force × Distance = 10N × 5m = 50 Joules. Work is only done when the force has a component in the direction of movement.",
+    course: "PH 110"
+  },
+  {
+    week: 27,
+    title: "Chemical Bonding",
+    desc: "CH 110: Types of chemical bonds.",
+    question: "What type of bond forms when two non-metal atoms share electrons?",
+    options: ["Ionic", "Metallic", "Covalent", "Hydrogen"],
+    correct: 2,
+    explanation: "Covalent bonds form when two non-metals share pairs of electrons. For example, water (H₂O) has covalent bonds. Ionic bonds transfer electrons; covalent bonds share them.",
+    course: "CH 110"
+  },
+  {
+    week: 28,
+    title: "Integration by Substitution",
+    desc: "MA 110: Antidifferentiation technique.",
+    question: "Which technique is best for integrating a composite function like 2x·(x²+1)⁵?",
+    options: ["Integration by Parts", "U-Substitution", "Partial Fractions", "L'Hopital's Rule"],
+    correct: 1,
+    explanation: "U-Substitution reverses the chain rule. Let u = x²+1, then du = 2x dx. The 2x and dx are absorbed, leaving a simple integral of u⁵ du = u⁶/6.",
+    course: "MA 110"
+  },
+  {
+    week: 29,
+    title: "The MMD Era",
+    desc: "LA 111: Zambian political history.",
+    question: "Which president led Zambia's transition to multiparty democracy in 1991?",
+    options: ["Kenneth Kaunda", "Frederick Chiluba", "Levy Mwanawasa", "Rupiah Banda"],
+    correct: 1,
+    explanation: "Frederick Chiluba of the MMD defeated Kenneth Kaunda in Zambia's first multiparty elections in 1991, ending 27 years of one-party UNIP rule.",
+    course: "LA 111"
+  },
+  {
+    week: 30,
+    title: "Mitosis vs Meiosis",
+    desc: "BI 110: Cell division.",
+    question: "Which type of cell division produces genetically identical daughter cells?",
+    options: ["Meiosis", "Mitosis", "Both", "Neither"],
+    correct: 1,
+    explanation: "Mitosis produces 2 genetically identical daughter cells (used for growth and repair). Meiosis produces 4 genetically unique sex cells with half the chromosome number.",
+    course: "BI 110"
+  },
+  {
+    week: 31,
+    title: "Waves",
+    desc: "PH 110: Wave properties.",
+    question: "A wave has a frequency of 5 Hz and a wavelength of 2 m. What is its speed?",
+    options: ["2.5 m/s", "7 m/s", "10 m/s", "0.4 m/s"],
+    correct: 2,
+    explanation: "Wave speed = frequency × wavelength = 5 Hz × 2 m = 10 m/s. This formula applies to all waves: sound, light, and water.",
+    course: "PH 110"
+  },
+  {
+    week: 32,
+    title: "Redox Reactions",
+    desc: "CH 110: Oxidation and Reduction.",
+    question: "In a redox reaction, the substance that GAINS electrons is said to be:",
+    options: ["Oxidised", "Reduced", "Neutralised", "Precipitated"],
+    correct: 1,
+    explanation: "Remember OIL RIG: Oxidation Is Loss, Reduction Is Gain (of electrons). The substance gaining electrons is reduced; the one losing electrons is oxidised.",
+    course: "CH 110"
+  },
+  {
+    week: 33,
+    title: "Differential Equations",
+    desc: "MA 110: Introduction to ODEs.",
+    question: "What is the general solution of dy/dx = y?",
+    options: ["y = x + C", "y = Ce^x", "y = ln(x) + C", "y = x² + C"],
+    correct: 1,
+    explanation: "Separate variables: dy/y = dx. Integrate both sides: ln|y| = x + C. Raise e to both sides: y = Ce^x. This describes exponential growth.",
+    course: "MA 110"
+  },
+  {
+    week: 34,
+    title: "Zambia's Economy",
+    desc: "LA 111: Economic development.",
+    question: "What is Zambia's primary mineral export?",
+    options: ["Gold", "Diamonds", "Copper", "Coal"],
+    correct: 2,
+    explanation: "Copper accounts for the majority of Zambia's export earnings. The Copperbelt Province has been the centre of copper mining operations since the 1930s.",
+    course: "LA 111"
+  },
+  {
+    week: 35,
+    title: "The Nervous System",
+    desc: "BI 110: Neural signalling.",
+    question: "What is the name of the gap between two neurons where signals are transmitted chemically?",
+    options: ["Axon terminal", "Synapse", "Dendrite", "Myelin sheath"],
+    correct: 1,
+    explanation: "The synapse is the tiny gap between neurons. Since electrical signals cannot jump across, the sending neuron releases chemical messengers (neurotransmitters) that cross the gap and trigger the next neuron.",
+    course: "BI 110"
+  },
+  {
+    week: 36,
+    title: "Pressure",
+    desc: "PH 110: Fluid mechanics.",
+    question: "Pressure is defined as force per unit:",
+    options: ["Volume", "Mass", "Area", "Length"],
+    correct: 2,
+    explanation: "Pressure = Force ÷ Area (measured in Pascals). That is why a sharp knife cuts better — the same force over a smaller area creates much greater pressure.",
+    course: "PH 110"
+  },
+  {
+    week: 37,
+    title: "Moles and Avogadro's Number",
+    desc: "CH 110: Stoichiometry basics.",
+    question: "How many atoms are in 1 mole of any element?",
+    options: ["1,000", "6.02 × 10²³", "1.67 × 10⁻²⁴", "1 × 10¹⁰"],
+    correct: 1,
+    explanation: "One mole always contains 6.02 × 10²³ particles — Avogadro's number. It is chemistry's standard 'counting unit' for atoms and molecules.",
+    course: "CH 110"
+  },
+  {
+    week: 38,
+    title: "Vector Addition",
+    desc: "MA 110: Vectors and scalars.",
+    question: "Two forces of 3N and 4N act at right angles to each other. What is the resultant force?",
+    options: ["7 N", "1 N", "5 N", "12 N"],
+    correct: 2,
+    explanation: "For perpendicular vectors, use Pythagoras: √(3² + 4²) = √(9 + 16) = √25 = 5N. This is the classic 3-4-5 right triangle.",
+    course: "MA 110"
+  },
+  {
+    week: 39,
+    title: "Zambia's Geography",
+    desc: "LA 111: Physical geography.",
+    question: "Which river forms the natural boundary between Zambia and Zimbabwe?",
+    options: ["Congo River", "Kafue River", "Luangwa River", "Zambezi River"],
+    correct: 3,
+    explanation: "The Zambezi River forms the border between Zambia and Zimbabwe and flows through Victoria Falls (Mosi-oa-Tunya) — one of the Seven Natural Wonders of the World.",
+    course: "LA 111"
+  },
+  {
+    week: 40,
+    title: "Hormones",
+    desc: "BI 110: The endocrine system.",
+    question: "Which hormone lowers blood glucose levels after a meal?",
+    options: ["Glucagon", "Adrenaline", "Insulin", "Thyroxine"],
+    correct: 2,
+    explanation: "Insulin is released by the pancreas when blood glucose rises. It signals cells to absorb glucose, bringing levels back to normal. Glucagon does the opposite — it raises blood sugar.",
+    course: "BI 110"
+  },
+  {
+    week: 41,
+    title: "Series Circuits",
+    desc: "PH 110: Circuit analysis.",
+    question: "In a series circuit with a 12V battery and two identical resistors, what is the voltage across each resistor?",
+    options: ["12 V", "3 V", "6 V", "24 V"],
+    correct: 2,
+    explanation: "In a series circuit, voltage is shared equally across identical resistors. Total voltage = 12V ÷ 2 = 6V each.",
+    course: "PH 110"
+  },
+  {
+    week: 42,
+    title: "Chemical Equilibrium",
+    desc: "CH 110: Le Chatelier's Principle.",
+    question: "If pressure increases in a gas-phase equilibrium, the reaction will shift toward:",
+    options: ["The side with more gas moles", "The side with fewer gas moles", "Neither side", "The exothermic side"],
+    correct: 1,
+    explanation: "Le Chatelier's Principle: the system resists change. Higher pressure favours the side with fewer gas molecules, which reduces volume and relieves the pressure.",
+    course: "CH 110"
+  },
+  {
+    week: 43,
+    title: "Logarithms",
+    desc: "MA 110: Exponential and log functions.",
+    question: "What is log base 2 of 8?",
+    options: ["2", "3", "4", "16"],
+    correct: 1,
+    explanation: "log₂(8) asks: '2 raised to what power gives 8?' Since 2³ = 8, the answer is 3. Logarithms are simply the inverse operation of exponentiation.",
+    course: "MA 110"
+  },
+  {
+    week: 44,
+    title: "Zambia's Constitution",
+    desc: "LA 111: Governance and civic studies.",
+    question: "Under Zambia's constitution, how many terms can a president serve?",
+    options: ["One term", "Two terms", "Three terms", "Unlimited terms"],
+    correct: 1,
+    explanation: "The constitution limits the president to a maximum of two five-year terms. This limit was a key reform introduced during the 1991 transition to multiparty democracy.",
+    course: "LA 111"
+  },
+  {
+    week: 45,
+    title: "The Immune System",
+    desc: "BI 110: Defence mechanisms.",
+    question: "Which blood cells are the main soldiers of the adaptive immune response?",
+    options: ["Red blood cells", "Platelets", "Lymphocytes (White blood cells)", "Plasma cells"],
+    correct: 2,
+    explanation: "Lymphocytes (B-cells and T-cells) drive the adaptive immune response. B-cells produce antibodies that tag pathogens; T-cells directly kill infected cells.",
+    course: "BI 110"
+  },
+  {
+    week: 46,
+    title: "The Heart",
+    desc: "BI 110: The circulatory system.",
+    question: "Which chamber of the human heart pumps oxygenated blood to the rest of the body?",
+    options: ["Right Atrium", "Right Ventricle", "Left Atrium", "Left Ventricle"],
+    correct: 3,
+    explanation: "The left ventricle has the thickest walls because it pumps oxygenated blood through the aorta to the entire body — a far greater demand than the right side pumping to the lungs.",
+    course: "BI 110"
+  },
+  {
+    week: 47,
+    title: "Torque and Equilibrium",
+    desc: "PH 110: Rotational mechanics.",
+    question: "To maximise torque on a bolt using a wrench, where should you apply the force?",
+    options: ["At the pivot", "At the very end of the handle", "In the middle of the handle", "Parallel to the handle"],
+    correct: 1,
+    explanation: "Torque = Force × perpendicular distance from the pivot. The further from the pivot (longer lever arm), the greater the torque — that is why longer spanners feel easier to turn.",
+    course: "PH 110"
+  },
+  {
+    week: 48,
+    title: "Atomic Orbitals",
+    desc: "CH 110: Electron configuration.",
+    question: "What is the maximum number of electrons that can occupy a 'p' subshell?",
+    options: ["2", "6", "10", "14"],
+    correct: 1,
+    explanation: "A p subshell has 3 orbitals (pₓ, pᵧ, p₄), and each holds a maximum of 2 electrons. So 3 × 2 = 6 electrons total.",
+    course: "CH 110"
+  },
+  {
+    week: 49,
+    title: "Mean Value Theorem",
+    desc: "MA 110: Differentiability and slopes.",
+    question: "The Mean Value Theorem guarantees a point c where f'(c) equals:",
+    options: ["0", "The average rate of change over the interval", "The y-intercept", "The local maximum"],
+    correct: 1,
+    explanation: "The MVT says that somewhere between points a and b, the instantaneous slope (tangent line) must equal the average slope (secant line). Like a road trip: if your average speed was 100 km/h, your speedometer must have read exactly 100 at some moment.",
+    course: "MA 110"
+  },
+  {
+    week: 50,
+    title: "Regional Integration",
+    desc: "LA 111: Zambia in Africa.",
+    question: "Zambia is a member of COMESA. What does COMESA stand for?",
+    options: ["Community of Middle East and South Africa", "Common Market for Eastern and Southern Africa", "Commercial Market of East-South Africa", "Council of Mining Engineers in South Africa"],
+    correct: 1,
+    explanation: "COMESA (Common Market for Eastern and Southern Africa) is a regional economic bloc of 21 African countries, with its headquarters in Lusaka, Zambia.",
+    course: "LA 111"
+  },
+  {
+    week: 51,
+    title: "Ecology: Trophic Levels",
+    desc: "BI 110: Energy flow in ecosystems.",
+    question: "Approximately how much energy transfers from one trophic level to the next in an energy pyramid?",
+    options: ["1%", "10%", "50%", "90%"],
+    correct: 1,
+    explanation: "The 10% Rule: only about 10% of energy passes from one level to the next. The rest is lost as heat or used for the organism's own processes. This is why food chains rarely exceed 4-5 levels.",
+    course: "BI 110"
+  },
+  {
+    week: 52,
+    title: "Universal Gravitation",
+    desc: "PH 110: Forces between bodies.",
+    question: "If the distance between two objects is tripled, what happens to the gravitational force?",
+    options: ["It triples", "It becomes 1/3", "It becomes 1/9", "It stays the same"],
+    correct: 2,
+    explanation: "Gravity follows an inverse-square law. Triple the distance → force drops to 1/(3²) = 1/9 of the original. Double the distance → force drops to 1/4. It weakens very rapidly.",
+    course: "PH 110"
+  },
+  {
+    week: 53,
+    title: "Organic Chemistry: Alkanes",
+    desc: "CH 110: Hydrocarbon structures.",
+    question: "What is the general formula for an open-chain alkane with n carbon atoms?",
+    options: ["CnH2n", "CnH(2n+2)", "CnH(2n-2)", "CnHn"],
+    correct: 1,
+    explanation: "Alkanes are fully saturated (single bonds only). General formula: CnH(2n+2). Examples: methane = CH₄ (n=1), ethane = C₂H₆ (n=2), propane = C₃H₈ (n=3).",
+    course: "CH 110"
+  },
+  {
+    week: 54,
+    title: "Area Between Curves",
+    desc: "MA 110: Definite integrals application.",
+    question: "To find the area between f(x) on top and g(x) on bottom from a to b, you calculate:",
+    options: ["Integral of [f(x) + g(x)] dx", "Integral of [f(x) × g(x)] dx", "Integral of [f(x) − g(x)] dx", "Integral of [g(x) − f(x)] dx"],
+    correct: 2,
+    explanation: "Area between curves = integral of [top − bottom] dx. Subtracting g(x) from f(x) gives the height of the gap at each point x, and integrating sums all those heights.",
+    course: "MA 110"
+  },
+  {
+    week: 55,
+    title: "Zambian Wildlife",
+    desc: "LA 111: Tourism and Conservation.",
+    question: "Which Zambian National Park is world-renowned for its walking safaris?",
+    options: ["Kafue National Park", "Lower Zambezi National Park", "South Luangwa National Park", "Mosi-oa-Tunya National Park"],
+    correct: 2,
+    explanation: "South Luangwa National Park is widely credited as the birthplace of the walking safari. Norman Carr pioneered the concept there in the 1950s.",
+    course: "LA 111"
+  },
+  {
+    week: 56,
+    title: "Enzyme Inhibition",
+    desc: "BI 110: Factors affecting reaction rate.",
+    question: "In competitive inhibition, where does the inhibitor bind on the enzyme?",
+    options: ["Allosteric site", "Active site", "Substrate", "Product"],
+    correct: 1,
+    explanation: "A competitive inhibitor has a shape similar to the real substrate and 'competes' for the active site. If it binds first, the real substrate cannot enter and the reaction is blocked.",
+    course: "BI 110"
+  },
+  {
+    week: 57,
+    title: "Simple Harmonic Motion",
+    desc: "PH 110: Oscillatory systems.",
+    question: "The period of a simple pendulum depends primarily on which factor?",
+    options: ["The mass of the bob", "The amplitude of swing", "The length of the string", "The density of the bob"],
+    correct: 2,
+    explanation: "Period T = 2π × √(L ÷ g). Only the string length (L) and gravity (g) determine the period. The mass and amplitude do not matter for small swings.",
+    course: "PH 110"
+  },
+  {
+    week: 58,
+    title: "Molar Mass Calculations",
+    desc: "CH 110: Stoichiometry fundamentals.",
+    question: "What is the molar mass of Sodium Hydroxide (NaOH)? (Na=23, O=16, H=1)",
+    options: ["24 g/mol", "39 g/mol", "40 g/mol", "50 g/mol"],
+    correct: 2,
+    explanation: "Add the atomic masses: Na (23) + O (16) + H (1) = 40 g/mol. This means one mole of NaOH has a mass of 40 grams.",
+    course: "CH 110"
+  },
+  {
+    week: 59,
+    title: "L'Hopital's Rule",
+    desc: "MA 110: Solving indeterminate limits.",
+    question: "L'Hopital's Rule is applied when a limit gives which indeterminate form?",
+    options: ["1/0", "0/0 or ∞/∞", "∞ − 0", "1 to the power of ∞"],
+    correct: 1,
+    explanation: "When direct substitution gives 0/0 or ∞/∞ (meaningless), L'Hopital's Rule lets you differentiate the numerator and denominator separately, then re-evaluate the limit.",
+    course: "MA 110"
+  },
+  {
+    week: 60,
+    title: "The National Assembly",
+    desc: "LA 111: Zambian Government structure.",
+    question: "How many elected constituencies make up Zambia's National Assembly?",
+    options: ["150", "156", "160", "200"],
+    correct: 1,
+    explanation: "Zambia has 156 constituencies, each represented by one Member of Parliament. The National Assembly also includes 8 members nominated by the President.",
+    course: "LA 111"
+  },
+  {
+    week: 61,
+    title: "Zambian Symbols: The Eagle",
+    desc: "LA 111: National identity.",
+    question: "What does the African Fish Eagle on the Zambian flag represent?",
+    options: ["The people's freedom", "The ability to rise above the nation's problems", "The abundance of wildlife", "The strength of the military"],
+    correct: 1,
+    explanation: "The African Fish Eagle on the flag and Coat of Arms symbolises the Zambian people's ability to rise above challenges and adversity as a nation.",
+    course: "LA 111"
+  }
 ];
 
 function getCurrentChallenge() {
