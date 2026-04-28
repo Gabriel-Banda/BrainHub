@@ -29,7 +29,7 @@
   <li class="desktop-only"><a href="/pages/flashcards.html">Flashcards</a></li>
   <li class="desktop-only"><a href="/pages/about.html">About</a></li>
   <li data-auth-show="guest">
-    <a href="/pages/auth.html" class="btn-primary" style="padding:.4rem .9rem;border-radius:8px">Sign In</a>
+    <a href="/welcome.html" class="btn-primary" style="padding:.4rem .9rem;border-radius:8px">Sign In</a>
   </li>
   <li data-auth-show="authed" style="display:none">
     <a href="/pages/profile.html" style="display:flex;align-items:center;gap:.4rem">
@@ -141,7 +141,7 @@
             <div class="change-item">
               <div class="change-item-icon"><i class="fas fa-user-circle"></i></div>
               <div>
-                <strong>User Accounts — Supabase Auth</strong> — Full authentication system via <code>src/supabase.js</code>. Supports email/password sign-up and Google OAuth. User profiles, progress, bookmarks, and XP are synced to a PostgreSQL database (Supabase) on login and every 5 minutes. Includes a dedicated <code>/pages/auth.html</code> with sign-in, sign-up, password reset, and update password flows. Navbar dynamically shows Sign In or avatar based on session state.
+                <strong>User Accounts — Supabase Auth</strong> — Full authentication system via <code>src/supabase.js</code>. Supports email/password sign-up and Google OAuth. User profiles, progress, bookmarks, and XP are synced to a PostgreSQL database (Supabase) on login and every 5 minutes. Includes a dedicated <code>/welcome.html</code> with sign-in, sign-up, password reset, and update password flows. Navbar dynamically shows Sign In or avatar based on session state.
               </div>
             </div>
 
@@ -614,7 +614,7 @@
           <div class="mm-icon" style="background:#ede9fe;color:#7c3aed"><i class="fas fa-chart-bar"></i></div>
           <div class="mm-text"><span>My Dashboard</span><small>XP, badges &amp; progress</small></div>
         </a>
-        <a href="/pages/auth.html" class="mm-item" data-auth-show="guest">
+        <a href="/welcome.html" class="mm-item" data-auth-show="guest">
           <div class="mm-icon" style="background:#dbeafe;color:#1d4ed8"><i class="fas fa-sign-in-alt"></i></div>
           <div class="mm-text"><span>Sign In</span><small>Sync your progress</small></div>
         </a>

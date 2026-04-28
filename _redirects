@@ -1,3 +1,6 @@
+# Root → welcome page 
+/   /welcome.html   200
+
 # Cloudflare Pages Redirects
 
 # Old doc page URLs → new doc.html system

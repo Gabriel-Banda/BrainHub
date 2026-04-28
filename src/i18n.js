@@ -1,14 +1,6 @@
 /* ============================================================
    BrainHub — i18n (Internationalisation) Engine
    Supports: English, Français, Ichibemba, Chinyanja, Chitonga
-   ============================================================
-
-   HOW TO USE ON ANY PAGE:
-   1. Add data-i18n="key" to any element whose text should translate
-      e.g. <span data-i18n="nav_home">Home</span>
-   2. Add data-i18n-placeholder="key" for input placeholders
-   3. Add data-i18n-title="key" for title attributes
-   The engine finds all these elements and swaps text on language change.
    ============================================================ */
 
 (function() {

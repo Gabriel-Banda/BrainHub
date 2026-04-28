@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Download BrainHub App | Windows & Android</title>
+  <meta name="description" content="Download the BrainHub desktop and mobile apps. Study smarter with offline access, AI tutor, and all your notes in one place.">
+  
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="icon" type="image/x-icon" href="/public/assets/images/down.jpeg" />
+  
+  <!-- Existing BrainHub styles (assumes style.css is in /src/) -->
+  <link rel="stylesheet" href="/src/style.css">
+  
+  <style>
+    /* Page‑specific enhancements – keeps the download page extra polished */
+    .download-hero {
+      padding: 5rem 0 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .download-hero::before {
+      content: '';
+      position: absolute;
+      width: 1000px;
+      height: 1000px;
+      background: radial-gradient(circle, rgba(37,99,235,0.12) 0%, transparent 70%);
+      top: -400px;
+      right: -300px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    
+    .download-hero::after {
+      content: '';
+      position: absolute;
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(6,182,212,0.08) 0%, transparent 70%);
+      bottom: -300px;
+      left: -200px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .hero-badge-large {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--primary-light);
+      color: var(--primary);
+      padding: 0.5rem 1.2rem;
+      border-radius: 60px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      border: 1px solid rgba(37,99,235,0.2);
+      backdrop-filter: blur(4px);
+      animation: float 4s ease-in-out infinite;
+    }
+    
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 5vw, 3.8rem);
+      font-weight: 800;
+      color: var(--text-900);
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+    }
+    
+    .hero-title .highlight {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .hero-description {
+      font-size: 1.1rem;
+      color: var(--text-500);
+      margin-bottom: 2rem;
+      max-width: 500px;
+      line-height: 1.7;
+    }
+    
+    .version-showcase {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+    }
+    
+    .latest-pill {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 60px;
+      padding: 0.5rem 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      box-shadow: var(--shadow-sm);
+      backdrop-filter: blur(8px);
+    }
+    
+    .latest-pill .version {
+      font-family: var(--font-display);
+      font-weight: 800;
+      color: var(--primary);
+      font-size: 1.1rem;
+    }
+    
+    .latest-pill .tag {
+      background: var(--primary);
+      color: white;
+      padding: 0.2rem 0.7rem;
+      border-radius: 40px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .release-meta {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      color: var(--text-500);
+      font-size: 0.9rem;
+    }
+    
+    .release-meta i {
+      color: var(--primary);
+      margin-right: 0.4rem;
+    }
+    
+    .download-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+    
+    .download-btn-large {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--primary);
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 60px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      text-decoration: none;
+      transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+      box-shadow: 0 8px 24px rgba(37,99,235,0.25);
+      border: none;
+      cursor: pointer;
+    }
+    
+    .download-btn-large i {
+      font-size: 1.3rem;
+    }
+    
+    .download-btn-large:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(37,99,235,0.35);
+      background: var(--primary-dark);
+    }
+    
+    .download-btn-large.secondary {
+      background: var(--bg-muted);
+      color: var(--text-900);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+    
+    .download-btn-large.secondary:hover {
+      background: var(--card);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    
+    .other-links {
+      display: flex;
+      gap: 1.5rem;
+      font-size: 0.9rem;
+    }
+    
+    .other-links a {
+      color: var(--text-500);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: color 0.2s;
+    }
+    
+    .other-links a:hover {
+      color: var(--primary);
+    }
+    
+    /* App mockup / visual area */
+    .app-showcase {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .mockup-container {
+      position: relative;
+      width: 100%;
+      max-width: 420px;
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    .mockup-card {
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: 36px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow-lg);
+      backdrop-filter: blur(12px);
+      transform: perspective(1000px) rotateY(-5deg) rotateX(2deg);
+      transition: transform 0.3s ease;
+    }
+    
+    .mockup-card:hover {
+      transform: perspective(1000px) rotateY(-2deg) rotateX(1deg);
+    }
+    
+    .mockup-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .mockup-logo {
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.2rem;
+    }
+    
+    .mockup-title {
+      font-family: var(--font-display);
+      font-weight: 800;
+      color: var(--text-900);
+    }
+    
+    .mockup-title small {
+      display: block;
+      font-size: 0.7rem;
+      color: var(--text-500);
+      font-weight: 400;
+    }
+    
+    .mockup-content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    
+    .mockup-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.6rem 0.8rem;
+      background: var(--bg-subtle);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+    }
+    
+    .mockup-item i {
+      width: 24px;
+      color: var(--primary);
+    }
+    
+    .progress-ring {
+      margin-top: 1rem;
+      height: 6px;
+      background: var(--bg-muted);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    
+    .progress-ring-fill {
+      width: 68%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      border-radius: 6px;
+      animation: shimmer 2s infinite;
+    }
+    
+    /* Version history section */
+    .version-section {
+      padding: 4rem 0 5rem;
+      background: var(--bg-subtle);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin-top: 2rem;
+    }
+    
+    .section-header-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    
+    .version-table {
+      background: var(--card);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    
+    .version-row {
+      display: grid;
+      grid-template-columns: 120px 1fr 100px 100px;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.2s;
+    }
+    
+    .version-row:last-child {
+      border-bottom: none;
+    }
+    
+    .version-row.header {
+      background: var(--bg-muted);
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-500);
+      padding: 0.8rem 1.5rem;
+    }
+    
+    .version-row:hover:not(.header) {
+      background: var(--bg-subtle);
+    }
+    
+    .version-tag-cell {
+      font-family: var(--font-display);
+      font-weight: 700;
+      color: var(--text-900);
+    }
+    
+    .version-badge {
+      display: inline-block;
+      background: var(--primary-light);
+      color: var(--primary);
+      padding: 0.15rem 0.6rem;
+      border-radius: 30px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      margin-left: 0.5rem;
+    }
+    
+    .version-badge.old {
+      background: var(--bg-muted);
+      color: var(--text-500);
+    }
+    
+    .download-link-cell a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: gap 0.2s;
+    }
+    
+    .download-link-cell a:hover {
+      gap: 0.7rem;
+    }
+    
+    .changelog-link {
+      color: var(--text-500);
+      text-decoration: none;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    
+    .changelog-link:hover {
+      color: var(--primary);
+    }
+    
+    /* Animations */
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+    
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+    
+    .pulse-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: #10b981;
+      border-radius: 50%;
+      margin-right: 6px;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.2); }
+    }
+    
+    /* Responsive */
+    @media (max-width: 900px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        text-align: center;
+      }
+      
+      .hero-description {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      
+      .version-showcase {
+        justify-content: center;
+      }
+      
+      .download-actions {
+        justify-content: center;
+      }
+      
+      .other-links {
+        justify-content: center;
+      }
+      
+      .version-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+        padding: 1rem;
+      }
+      
+      .version-row.header {
+        display: none;
+      }
+      
+      .version-row .os-cell::before {
+        content: "OS: ";
+        font-weight: 600;
+        color: var(--text-500);
+      }
+      
+      .version-row .size-cell::before {
+        content: "Size: ";
+        font-weight: 600;
+        color: var(--text-500);
+      }
+    }
+    
+    /* Dark mode adjustments */
+    [data-theme="dark"] .mockup-card {
+      background: rgba(30,41,59,0.9);
+      backdrop-filter: blur(16px);
+    }
+    
+    [data-theme="dark"] .version-table {
+      background: var(--card);
+    }
+    
+    /* Feature highlights grid */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin: 3rem 0;
+    }
+    
+    .feature-item {
+      text-align: center;
+      padding: 1.5rem;
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      transition: transform 0.2s;
+    }
+    
+    .feature-item:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+    }
+    
+    .feature-icon {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 1rem;
+      background: var(--primary-light);
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: var(--primary);
+    }
+    
+    .feature-item h4 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--text-900);
+    }
+    
+    .feature-item p {
+      font-size: 0.9rem;
+      color: var(--text-500);
+    }
+  </style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<button class="back-to-top" aria-label="Back to top"><i class="fas fa-arrow-up"></i></button>
+
+<!-- Navbar (consistent with BrainHub) -->
+<nav class="navbar">
+  <div class="container nav-container">
+    <a href="/index.html" class="logo">
+      <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;color:var(--primary)"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M9 13a4.5 4.5 0 0 0 3-4"/><path d="M12 13h4"/><path d="M12 18h6a2 2 0 0 1 2 2v1"/><path d="M12 8h8"/><path d="M16 8V5a2 2 0 0 1 2-2"/><circle cx="16" cy="13" r=".5"/><circle cx="18" cy="3" r=".5"/><circle cx="20" cy="21" r=".5"/><circle cx="20" cy="8" r=".5"/></svg>
+      BrainHub<span class="dot">.</span>
+    </a>
+    <button class="mobile-menu-btn" aria-label="Toggle navigation"><i class="fas fa-bars"></i></button>
+    <ul class="nav-links">
+      <li><a href="/pages/universities.html">Universities</a></li>
+      <li><a href="/pages/quizzes.html">Quizzes</a></li>
+      <li><a href="/pages/flashcards.html">Flashcards</a></li>
+      <li><a href="/pages/about.html">About</a></li>
+      <li><button id="theme-toggle" class="btn-primary theme-toggle"><i class="fas fa-moon" id="theme-icon"></i></button></li>
+      <li><button class="nav-menu-btn" id="navMenuBtn"><i class="fas fa-grid"></i> Menu</button></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+  <!-- Hero Section -->
+  <section class="download-hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div class="hero-content">
+          <div class="hero-badge-large reveal">
+            <span class="pulse-dot"></span>
+            <i class="fas fa-download"></i> 
+            <span>Offline access · No login required</span>
+          </div>
+          
+          <h1 class="hero-title reveal" style="animation-delay:0.1s">
+            Download <span class="highlight">BrainHub</span><br>
+            for desktop & mobile
+          </h1>
+          
+          <p class="hero-description reveal" style="animation-delay:0.2s">
+            Take your study materials everywhere. Full offline support, AI tutor, flashcards, and all your notes — completely free.
+          </p>
+          
+          <div class="version-showcase reveal" style="animation-delay:0.25s">
+            <div class="latest-pill">
+              <span class="version">v1.0.0</span>
+              <span class="tag">Latest</span>
+            </div>
+            <div class="release-meta">
+              <span><i class="far fa-calendar-alt"></i> April 15, 2026</span>
+              <span><i class="far fa-hdd"></i> 16.36 MB (Win) / ~50 MB (Android)</span>
+            </div>
+          </div>
+          
+          <div class="download-actions reveal" style="animation-delay:0.3s">
+            <a href="https://pub-6d950f0ce158450888bf5c541b7f035c.r2.dev/BrainHub-Windows.zip" class="download-btn-large" id="primaryDownloadBtn">
+              <i class="fab fa-windows"></i>
+              Download for Windows
+            </a>
+            <a href="https://pub-6d950f0ce158450888bf5c541b7f035c.r2.dev/Android/app-release.apk" class="download-btn-large secondary" id="androidDownloadBtn">
+              <i class="fab fa-android"></i>
+              Download for Android
+            </a>
+          </div>
+          
+          <div class="other-links reveal" style="animation-delay:0.35s">
+            <a href="#version-history"><i class="fas fa-history"></i> Previous versions</a>
+            <a href="/pages/changelog.html"><i class="fas fa-code-branch"></i> Changelog</a>
+            <a href="#"><i class="fas fa-shield-alt"></i> Checksums</a>
+          </div>
+        </div>
+        
+        <div class="app-showcase reveal" style="animation-delay:0.4s">
+          <div class="mockup-container">
+            <div class="mockup-card">
+              <div class="mockup-header">
+                <div class="mockup-logo">
+                  <i class="fas fa-brain"></i>
+                </div>
+                <div class="mockup-title">
+                  BrainHub
+                  <small>v1.0.0 · Ready</small>
+                </div>
+              </div>
+              <div class="mockup-content">
+                <div class="mockup-item">
+                  <i class="fas fa-book-open"></i>
+                  <span>BI 110 - Cell Biology</span>
+                </div>
+                <div class="mockup-item">
+                  <i class="fas fa-calculator"></i>
+                  <span>MA 110 - Calculus I</span>
+                </div>
+                <div class="mockup-item">
+                  <i class="fas fa-flask"></i>
+                  <span>CH 110 - Chemistry</span>
+                </div>
+                <div class="progress-ring">
+                  <div class="progress-ring-fill"></div>
+                </div>
+                <div style="display:flex; justify-content:space-between; margin-top:0.25rem; font-size:0.8rem; color:var(--text-500);">
+                  <span><i class="fas fa-download"></i> Offline ready</span>
+                  <span><i class="fas fa-sync-alt"></i> Auto-update</span>
+                </div>
+              </div>
+            </div>
+            <!-- Decorative floating elements -->
+            <div style="position:absolute; top:-20px; right:-30px; width:60px; height:60px; background:var(--primary-light); border-radius:20px; opacity:0.6; z-index:-1; animation:float 5s ease-in-out infinite; animation-delay:1s;"></div>
+            <div style="position:absolute; bottom:-15px; left:-25px; width:45px; height:45px; background:var(--accent); border-radius:16px; opacity:0.3; z-index:-1; animation:float 4s ease-in-out infinite; animation-delay:0.5s;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Feature highlights -->
+  <section class="container">
+    <div class="feature-grid">
+      <div class="feature-item reveal">
+        <div class="feature-icon"><i class="fas fa-wifi-slash"></i></div>
+        <h4>100% Offline</h4>
+        <p>Download notes once, study anywhere without internet.</p>
+      </div>
+      <div class="feature-item reveal">
+        <div class="feature-icon"><i class="fas fa-robot"></i></div>
+        <h4>AI Tutor Built-in</h4>
+        <p>Get instant explanations and answers while studying.</p>
+      </div>
+      <div class="feature-item reveal">
+        <div class="feature-icon"><i class="fas fa-sync-alt"></i></div>
+        <h4>Auto Updates</h4>
+        <p>Always have the latest notes and features.</p>
+      </div>
+      <div class="feature-item reveal">
+        <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
+        <h4>Cross‑Platform</h4>
+        <p>Seamless experience on Windows, Android, and Web.</p>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Version History Section -->
+  <section class="version-section" id="version-history">
+    <div class="container">
+      <div class="section-header-wrapper">
+        <div>
+          <span class="section-tag reveal">Release archive</span>
+          <h2 style="font-family:var(--font-display); font-size:2rem; font-weight:800; color:var(--text-900); margin-top:0.5rem;" class="reveal">Previous versions</h2>
+        </div>
+        <a href="/pages/changelog.html" class="btn-secondary reveal" style="gap:0.5rem;">
+          <i class="fas fa-list-ul"></i> Full changelog
+        </a>
+      </div>
+      
+      <div class="version-table reveal">
+        <div class="version-row header">
+          <div>Version</div>
+          <div>Release date</div>
+          <div>Windows</div>
+          <div>Android</div>
+        </div>
+        
+       <!-- v2.0.1 -->
+<!--         <div class="version-row">
+          <div class="version-tag-cell">
+            v2.0.1
+            <span class="version-badge old">Stable</span>
+          </div>
+          <div class="date-cell">March 20, 2026</div>
+          <div class="download-link-cell">
+            <a href="#"><i class="fab fa-windows"></i> .exe (84 MB)</a>
+          </div>
+          <div class="download-link-cell">
+            <a href="#"><i class="fab fa-android"></i> .apk (41 MB)</a>
+          </div>
+        </div>
+        
+        <!-- v2.0.0 -->
+<!--        <div class="version-row">
+          <div class="version-tag-cell">
+            v2.0.0
+            <span class="version-badge old">Major</span>
+          </div>
+          <div class="date-cell">March 1, 2026</div>
+          <div class="download-link-cell">
+            <a href="#"><i class="fab fa-windows"></i> .exe (82 MB)</a>
+          </div>
+          <div class="download-link-cell">
+            <a href="#"><i class="fab fa-android"></i> .apk (40 MB)</a>
+          </div>
+        </div>
+        
+        <!-- v1.5.0 -->
+ <!--       <div class="version-row">
+          <div class="version-tag-cell">
+            v1.5.0
+            <span class="version-badge old">Feature</span>
+          </div>
+          <div class="date-cell">February 10, 2026</div>
+          <div class="download-link-cell">
+            <a href="#"><i class="fab fa-windows"></i> .exe (78 MB)</a>
+          </div>
+          <div class="download-link-cell">
+            <a href="#"><i class="fab fa-android"></i> .apk (38 MB)</a>
+          </div>
+        </div>
+-->        
+        <!-- v1.0.0 -->
+        <div class="version-row">
+          <div class="version-tag-cell">
+            v1.0.0
+            <span class="version-badge old">Initial</span>
+          </div>
+          <div class="date-cell">April 28, 2026</div>
+          <div class="download-link-cell">
+            <a href="https://pub-6d950f0ce158450888bf5c541b7f035c.r2.dev/BrainHub-Windows.zip"><i class="fab fa-windows"></i> <div class="zip"></div> (16.36 MB)</a>
+          </div>
+          <div class="download-link-cell">
+            <a href="https://pub-6d950f0ce158450888bf5c541b7f035c.r2.dev/Android/app-release.apk"><i class="fab fa-android"></i> .apk (~50 MB)</a>
+          </div>
+        </div>
+      </div>
+      
+      <p style="text-align:center; margin-top:2rem; color:var(--text-500); font-size:0.9rem;" class="reveal">
+        <i class="fas fa-shield-alt"></i> All downloads are signed and verified. Need an older version? <a href="/pages/contact.html" style="color:var(--primary);">Contact us</a>.
+      </p>
+    </div>
+  </section>
+</main>
+
+<!-- Footer (simplified) -->
+<footer>
+  <div class="container footer-content">
+    <div class="footer-col">
+      <h3>BrainHub<span class="dot">.</span></h3>
+      <p>Free study platform for Zambian university students.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Platform</h4>
+      <a href="/index.html">Home</a>
+      <a href="/pages/universities.html">Universities</a>
+      <a href="/download.html" style="color:var(--primary);font-weight:700">Download App</a>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <a href="/pages/about.html">About</a>
+      <a href="/pages/contact.html">Contact</a>
+      <a href="/pages/changelog.html">Changelog</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 BrainHub. All rights reserved.</p>
+    <p id="realtime-clock" class="clock-text"></p>
+  </div>
+</footer>
+
+<!-- Mega Menu (consistent) -->
+<div class="mega-menu-overlay" id="megaMenuOverlay">
+  <div class="mega-menu">
+    <div class="mega-menu-header">
+      <div class="mega-menu-logo">BrainHub<span class="dot">.</span></div>
+      <button class="mega-menu-close" id="megaMenuClose"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="mega-menu-body">
+      <!-- abbreviated mega menu items -->
+      <div class="mm-group">
+        <div class="mm-group-label">📚 Study</div>
+        <a href="/pages/universities.html" class="mm-item"><div class="mm-icon" style="background:#dbeafe;color:#1d4ed8"><i class="fas fa-university"></i></div><div class="mm-text"><span>Universities</span></div></a>
+        <a href="/pages/quizzes.html" class="mm-item"><div class="mm-icon" style="background:#ede9fe;color:#6d28d9"><i class="fas fa-brain"></i></div><div class="mm-text"><span>Quizzes</span></div></a>
+        <a href="/download.html" class="mm-item"><div class="mm-icon" style="background:#dcfce7;color:#15803d"><i class="fas fa-download"></i></div><div class="mm-text"><span>Download App</span></div></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script src="/src/i18n.js"></script>
+<script src="/src/main.js"></script>
+<script src="/src/gamification.js"></script>
+<script>
+  // Platform detection to suggest correct download
+  (function() {
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    const primaryBtn = document.getElementById('primaryDownloadBtn');
+    
+    if (/android/i.test(userAgent)) {
+      primaryBtn.innerHTML = '<i class="fab fa-android"></i> Download for Android';
+      primaryBtn.href = '#android-download';
+    } else if (/windows/i.test(userAgent)) {
+      primaryBtn.innerHTML = '<i class="fab fa-windows"></i> Download for Windows';
+      primaryBtn.href = 'https://pub-6d950f0ce158450888bf5c541b7f035c.r2.dev/BrainHub-Windows.zip';
+    }
+    
+    // Simple download tracking (placeholder)
+    document.querySelectorAll('.download-btn-large, .download-link-cell a').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        if (!btn.href || btn.href === '#') {
+          e.preventDefault();
+          // Simulate download start (in production, link to actual files)
+          alert('📥 Download starting... (demo — actual file would download)');
+        }
+      });
+    });
+  })();
+  
+  // Mega menu toggle
+  (function() {
+    const btn     = document.getElementById('navMenuBtn');
+    const overlay = document.getElementById('megaMenuOverlay');
+    const close   = document.getElementById('megaMenuClose');
+    function openMenu()  { overlay.classList.add('open'); document.body.style.overflow = 'hidden'; }
+    function closeMenu() { overlay.classList.remove('open'); document.body.style.overflow = ''; }
+    btn?.addEventListener('click', openMenu);
+    close?.addEventListener('click', closeMenu);
+    overlay?.addEventListener('click', e => { if (e.target === overlay) closeMenu(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+  })();
+  
+  // Clock update (footer)
+  function updateClock() {
+    const el = document.getElementById('realtime-clock');
+    if (el) {
+      const now = new Date();
+      el.textContent = `${now.toLocaleDateString('en-US', {weekday:'short',year:'numeric',month:'short',day:'numeric'})} | ${now.toLocaleTimeString('en-US', {hour:'2-digit',minute:'2-digit',second:'2-digit'})}`;
+    }
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+</script>
+
+</body>
+</html>

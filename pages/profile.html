@@ -348,7 +348,7 @@
   <li class="desktop-only"><a href="/pages/flashcards.html">Flashcards</a></li>
   <li class="desktop-only"><a href="/pages/about.html">About</a></li>
   <li data-auth-show="guest">
-    <a href="/pages/auth.html" class="btn-primary" style="padding:.4rem .9rem;border-radius:8px">Sign In</a>
+    <a href="/welcome.html" class="btn-primary" style="padding:.4rem .9rem;border-radius:8px">Sign In</a>
   </li>
   <li data-auth-show="authed" style="display:none">
     <a href="/pages/profile.html" style="display:flex;align-items:center;gap:.4rem">
@@ -591,7 +591,7 @@
           <div><i class="fas fa-envelope" style="color:var(--primary);width:18px"></i> <span id="accountEmail">Not signed in</span></div>
           <div><i class="fas fa-user" style="color:var(--primary);width:18px"></i> <span id="accountProvider">—</span></div>
           <div style="margin-top:1rem">
-            <a href="/pages/auth.html?action=update-password" class="btn-secondary" style="padding:.55rem 1.1rem;font-size:.82rem;display:inline-flex;align-items:center;gap:.4rem;text-decoration:none">
+            <a href="/welcome.html?action=update-password" class="btn-secondary" style="padding:.55rem 1.1rem;font-size:.82rem;display:inline-flex;align-items:center;gap:.4rem;text-decoration:none">
               <i class="fas fa-key"></i> Change Password
             </a>
           </div>
@@ -927,7 +927,7 @@ function signOutUser() {
   if (window.BrainHubAuth?.signOut) {
     window.BrainHubAuth.signOut().then(() => { window.location.href = '/index.html'; });
   } else {
-    window.location.href = '/pages/auth.html';
+    window.location.href = '/welcome.html';
   }
 }
 
@@ -997,7 +997,7 @@ function confirmReset() {
           <div class="mm-icon" style="background:#ede9fe;color:#7c3aed"><i class="fas fa-chart-bar"></i></div>
           <div class="mm-text"><span>My Dashboard</span><small>XP, badges &amp; progress</small></div>
         </a>
-        <a href="/pages/auth.html" class="mm-item" data-auth-show="guest">
+        <a href="/welcome.html" class="mm-item" data-auth-show="guest">
           <div class="mm-icon" style="background:#dbeafe;color:#1d4ed8"><i class="fas fa-sign-in-alt"></i></div>
           <div class="mm-text"><span>Sign In</span><small>Sync your progress</small></div>
         </a>

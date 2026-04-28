@@ -7,6 +7,31 @@ document.addEventListener('DOMContentLoaded', () => {
   initBackToTop();
   initProgressBar();
   initAnnounceBanner();
+
+  // Check if user entered via guest mode
+  if (localStorage.getItem('brainhub-guest') === 'true') {
+  // Hide auth-only elements (they have data-auth-show="authed")
+  document.querySelectorAll('[data-auth-show="authed"]').forEach(el => el.style.display = 'none');
+  // Optionally show a guest badge
+  const nav = document.querySelector('.nav-links');
+  if (nav) {
+    const badge = document.createElement('span');
+    badge.className = 'guest-badge';
+    badge.style.cssText = 'margin-left:1rem;padding:0.25rem 0.75rem;background:var(--bg-muted);border-radius:60px;font-size:0.75rem;color:var(--text-500);';
+    badge.innerHTML = '<i class="fas fa-user-astronaut"></i> Guest';
+    nav.appendChild(badge);
+  }
+}
+
+// Clear guest flag on sign out )
+window.addEventListener('brainhub:signout', () => {
+  localStorage.removeItem('brainhub-guest');
+});
+
+window.addEventListener('brainhub:signin', () => {
+  document.querySelector('.guest-badge')?.remove();
+  localStorage.removeItem('brainhub-guest');
+});
   // Study tools
   initFlashcards();
   initLiveSearch();

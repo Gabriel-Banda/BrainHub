@@ -71,7 +71,7 @@
 
 <!-- Announcement Banner -->
 <div class="announce-banner" id="announceBanner">
-  🎉 New courses added for ZUT COMS & SE — <a href="/pages/universities.html">Explore now →</a>
+  🎉 Android & Windows apps available — <a href="/pages/download.html">Download now!! →</a>
   <button class="announce-close" id="announceClose" aria-label="Close"><i class="fas fa-times"></i></button>
 </div>
 
@@ -129,9 +129,9 @@
   <li class="desktop-only"><a href="/pages/universities.html">Universities</a></li>
   <li class="desktop-only"><a href="/pages/quizzes.html">Quizzes</a></li>
   <li class="desktop-only"><a href="/pages/flashcards.html">Flashcards</a></li>
-  <li class="desktop-only"><a href="/pages/about.html">About</a></li>
+  <li class="desktop-only"><a href="/pages/download.html">Download App</a></li>
   <li data-auth-show="guest">
-    <a href="/pages/auth.html" class="btn-primary" style="padding:.4rem .9rem;border-radius:8px">Sign In</a>
+    <a href="" class="btn-primary" style="padding:.4rem .9rem;border-radius:8px">Sign In</a>
   </li>
   <li data-auth-show="authed" style="display:none">
     <a href="/pages/profile.html" style="display:flex;align-items:center;gap:.4rem">
@@ -150,10 +150,10 @@
   <div class="container hero-content">
     <div class="hero-badge">
       <span class="badge-dot"></span>
-      Free · No login required · Always updated
+      Free · Always updated
     </div>
     <h1>Study smarter with<br><span class="highlight">everything in one place.</span></h1>
-    <p class="hero-sub">Access university notes, past papers, quizzes, flashcards and an AI tutor — completely free, no account needed.</p>
+    <p class="hero-sub">Access university notes, past papers, quizzes, flashcards and an AI tutor — completely free.</p>
     <div class="search-box">
       <i class="fas fa-search search-icon"></i>
       <input type="text" id="searchInput" placeholder="Search for courses, universities, or topics…" onkeydown="if(event.key==='Enter') searchMaterials()" />
@@ -168,7 +168,7 @@
     <div class="stats-bar-divider"></div>
     <div class="stats-bar-item"><i class="fas fa-user-graduate" style="color:#10b981"></i><span><strong>50+</strong> Students helped</span></div>
     <div class="stats-bar-divider"></div>
-    <div class="stats-bar-item"><i class="fas fa-check-circle" style="color:#f59e0b"></i><span><strong>No</strong> Login Needed </span></div>
+    <div class="stats-bar-item"><i class="fas fa-bolt" style="color:#f59e0b"></i><span><strong>Application</strong> Now Available </span></div>
     <div class="stats-bar-divider"></div>
     <div class="stats-bar-item"><i class="fas fa-wifi" style="color:#ef4444"></i><span><strong>Works</strong> Offline</span></div>
   </div>
@@ -719,6 +719,10 @@ window.addEventListener('appinstalled', () => {
           <div class="mm-icon" style="background:#fff7ed;color:#c2410c"><i class="fas fa-users"></i></div>
           <div class="mm-text"><span>Contributors</span><small>The team</small></div>
         </a>
+        <a href="/pages/download.html" class="mm-item">
+          <div class="mm-icon" style="background:#e0f2fe;color:#0369a1"><i class="fas fa-download"></i></div>
+          <div class="mm-text"><span>Download App</span><small>Use BrainHub offline</small></div>
+        </a>
         <a href="/pages/changelog.html" class="mm-item">
           <div class="mm-icon" style="background:#f0fdf4;color:#15803d"><i class="fas fa-code-branch"></i></div>
           <div class="mm-text"><span>Changelog</span><small>What's new</small></div>
@@ -731,7 +735,7 @@ window.addEventListener('appinstalled', () => {
           <div class="mm-icon" style="background:#ede9fe;color:#7c3aed"><i class="fas fa-chart-bar"></i></div>
           <div class="mm-text"><span>My Dashboard</span><small>XP, badges &amp; progress</small></div>
         </a>
-        <a href="/pages/auth.html" class="mm-item" data-auth-show="guest">
+        <a href="welcome.html" class="mm-item" data-auth-show="guest">
           <div class="mm-icon" style="background:#dbeafe;color:#1d4ed8"><i class="fas fa-sign-in-alt"></i></div>
           <div class="mm-text"><span>Sign In</span><small>Sync your progress</small></div>
         </a>
