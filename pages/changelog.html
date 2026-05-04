@@ -64,7 +64,12 @@
     <aside class="changelog-sidebar">
       <div class="sidebar-title">Releases</div>
       <div class="sidebar-links">
-        <a class="sidebar-link active" href="#v41">
+
+        <a class="sidebar-link active" href="#5">
+          <span class="sl-version">v5.0</span>
+          <span class="sl-date">Apr 2026</span>
+        </a>
+        <a class="sidebar-link" href="#v41">
           <span class="sl-version">v4.1</span>
           <span class="sl-date">Mar 2026</span>
         </a>
@@ -96,6 +101,83 @@
 
     <!-- Entries -->
     <div class="changelog-entries">
+      <!-- ── v5.0 ── -->
+      <div class="changelog-entry" id="5">
+        <div class="entry-header">
+          <div class="entry-version-wrap">
+            <div class="entry-version">
+              v5.0
+              <span class="version-tag tag-latest">Latest</span>
+              <span class="version-tag tag-major">Major</span>
+            </div>
+            <div class="entry-date">
+              <i class="fas fa-calendar-alt"></i>
+              April 17, 2026
+            </div>
+          </div>
+        </div>
+
+        <p class="entry-summary">
+          Major Bug Fixes and Updates.
+        </p>
+
+        <!-- New Features -->
+         <div class="change-section type-feat">
+          <div class="change-section-title">
+            <div class="dot"></div>
+            New Features
+         </div>
+
+         <div class="change-list">
+            <div class="change-item">
+              <div class="change-item-icon"><i class="fab fa-windows"></i></div>
+              <div>
+                <strong>Android & Windows Apps</strong> — New <code>/pages/download.html</code> page with direct download links for the mobile and desktop applications that we had created for easier, cleaner and faster access.
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Fixes -->
+        <div class="change-section type-fix">
+          <div class="change-section-title">
+            <div class="dot"></div>
+            Bug Fixes
+          </div>
+         <div class="change-list">
+            <div class="change-item">
+              <div class="change-item-icon"><i class="fas fa-bug"></i></div>
+              <div>
+                <strong>Critical Bug Fixes</strong> — Resolved several critical bugs affecting home page/landing page responses, and service worker caching.
+              </div>
+            </div>
+          </div>
+          </div>
+          
+
+        <!-- Improvements -->
+        <div class="change-section type-improve">
+          <div class="change-section-title">
+            <div class="dot"></div>
+            Improvements
+          </div>
+            <div class="change-item">
+              <div class="change-item-icon"><i class="fas fa-lock"></i></div>
+              <div>
+                <strong>Authentication Functionality Restored</strong> — The Authentication system at <code>/pages/auth.html</code> was completely non-functional due to a JavaScript crash caused by a broken regular expression. With the regex fixed, login and registration are now fully operational again with proper validation and error handling and added some improvements to the loading screen animation.
+              </div>
+          </div>
+         </div>
+
+          <div class="entry-footer">
+            <div class="entry-contributors">
+              <div class="contributor-avatar">G</div>
+              <span>Gabriel J. Banda</span>
+            </div>
+            <a href="https://github.com/Gabriel-Banda/BrainHub" class="entry-github-link" target="_blank" rel="noopener">
+              <i class="fab fa-github"></i> View on GitHub
+            </a>
+          </div>
+        </div>
       <!-- ── v4.1 ── -->
       <div class="changelog-entry" id="v41">
         <div class="entry-header">
