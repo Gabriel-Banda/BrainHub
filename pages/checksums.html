@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checksums | BrainHub Download Verification</title>
+    <meta name="description" content="Verify your BrainHub downloads with SHA-256 checksums. Ensure file integrity and security for Windows and Android apps.">
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="/public/assets/images/down.jpeg" />
+
+    <!-- Existing BrainHub styles -->
+    <link rel="stylesheet" href="/src/style.css">
+
+    <style>
+        /* ── Page‑Specific Enhancements ──────────────────────── */
+        :root {
+            --shield-glow: rgba(37, 99, 235, 0.35);
+            --hash-bg: #f8fafc;
+        }
+        [data-theme="dark"] {
+            --shield-glow: rgba(59, 130, 246, 0.45);
+            --hash-bg: #0f172a;
+        }
+
+        /* ── Checksum Hero ── */
+        .checksum-hero {
+            padding: 5rem 0 3rem;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .checksum-hero::before {
+            content: '';
+            position: absolute;
+            width: 900px;
+            height: 900px;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.10) 0%, transparent 68%);
+            top: -350px;
+            left: 50%;
+            transform: translateX(-50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .checksum-hero::after {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.07) 0%, transparent 68%);
+            bottom: -200px;
+            right: -100px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .shield-icon-hero {
+            position: relative;
+            z-index: 2;
+            display: inline-block;
+            animation: shieldFloat 4s ease-in-out infinite;
+            margin-bottom: 2rem;
+        }
+
+        .shield-icon-hero .shield-outer {
+            width: 100px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--primary), #1e40af);
+            clip-path: polygon(50% 0%, 100% 20%, 100% 60%, 50% 100%, 0% 60%, 0% 20%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 60px var(--shield-glow), 0 20px 50px rgba(37, 99, 235, 0.3);
+            position: relative;
+            animation: shieldPulse 3s ease-in-out infinite;
+        }
+
+        .shield-icon-hero .shield-inner {
+            font-size: 2.5rem;
+            color: white;
+            animation: shieldCheckPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes shieldFloat {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-16px);
+            }
+        }
+
+        @keyframes shieldPulse {
+            0%,
+            100% {
+                box-shadow: 0 0 40px var(--shield-glow), 0 20px 50px rgba(37, 99, 235, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 80px var(--shield-glow), 0 30px 70px rgba(37, 99, 235, 0.5);
+            }
+        }
+
+        @keyframes shieldCheckPulse {
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.18);
+                opacity: 0.85;
+            }
+        }
+
+        .checksum-hero .hero-badge-large {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 0.5rem 1.2rem;
+            border-radius: 60px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            position: relative;
+            z-index: 2;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .checksum-hero .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.2rem, 5vw, 3.4rem);
+            font-weight: 800;
+            color: var(--text-900);
+            line-height: 1.15;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.25rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .checksum-hero .hero-title .highlight {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .checksum-hero .hero-description {
+            font-size: 1.1rem;
+            color: var(--text-500);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ── Hash Cards ── */
+        .hash-cards-section {
+            padding: 2rem 0 4rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hash-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1.5rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 500px) {
+            .hash-cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .hash-card {
+            background: var(--card);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .hash-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            opacity: 0;
+            transition: opacity 0.35s ease;
+        }
+
+        .hash-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-lg);
+            border-color: rgba(37, 99, 235, 0.3);
+        }
+        .hash-card:hover::before {
+            opacity: 1;
+        }
+
+        .hash-card-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            margin-bottom: 1.25rem;
+            transition: transform 0.35s ease;
+        }
+        .hash-card:hover .hash-card-icon {
+            transform: scale(1.1) rotate(-5deg);
+        }
+        .icon-windows {
+            background: #eff6ff;
+            color: #2563eb;
+        }
+        .icon-android {
+            background: #ecfdf5;
+            color: #10b981;
+        }
+
+        .hash-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--text-900);
+            margin-bottom: 0.4rem;
+            letter-spacing: -0.01em;
+        }
+        .hash-card .file-meta {
+            font-size: 0.85rem;
+            color: var(--text-500);
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .hash-card .file-meta .algo-badge {
+            display: inline-block;
+            background: var(--bg-muted);
+            color: var(--text-700);
+            padding: 0.2rem 0.7rem;
+            border-radius: 30px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border: 1px solid var(--border);
+        }
+
+        .hash-display {
+            background: var(--hash-bg);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1rem 1.15rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            position: relative;
+            transition: all 0.3s ease;
+            word-break: break-all;
+        }
+        .hash-display:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.06);
+        }
+
+        .hash-display code {
+            font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+            font-size: 0.78rem;
+            color: var(--text-700);
+            line-height: 1.55;
+            flex: 1;
+            word-break: break-all;
+            letter-spacing: 0.01em;
+        }
+
+        .copy-hash-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: 1.5px solid var(--border);
+            background: var(--card);
+            color: var(--text-500);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            flex-shrink: 0;
+            position: relative;
+        }
+        .copy-hash-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--primary-light);
+            transform: scale(1.08);
+        }
+        .copy-hash-btn.copied {
+            border-color: var(--success);
+            color: var(--success);
+            background: #dcfce7;
+            animation: copyPop 0.5s ease;
+        }
+        .copy-hash-btn.copied i {
+            animation: copyCheckBounce 0.5s ease;
+        }
+
+        @keyframes copyPop {
+            0% {
+                transform: scale(1);
+            }
+            40% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        @keyframes copyCheckBounce {
+            0% {
+                transform: scale(0) rotate(-90deg);
+                opacity: 0;
+            }
+            60% {
+                transform: scale(1.3) rotate(10deg);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        .copy-toast {
+            position: fixed;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(-120px);
+            background: var(--text-900);
+            color: #fff;
+            padding: 0.7rem 1.5rem;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            z-index: 9999;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+            pointer-events: none;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .copy-toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ── What Are Checksums Section ── */
+        .info-section {
+            padding: 4rem 0;
+            background: var(--bg-subtle);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-section::before {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.05) 0%, transparent 70%);
+            bottom: -100px;
+            right: -80px;
+            pointer-events: none;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 800px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+
+        .info-text h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 4vw, 2.2rem);
+            font-weight: 800;
+            color: var(--text-900);
+            letter-spacing: -0.03em;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+        .info-text p {
+            color: var(--text-500);
+            font-size: 1rem;
+            line-height: 1.75;
+            margin-bottom: 1rem;
+        }
+        .info-text .info-highlight {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .info-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .animated-diagram {
+            position: relative;
+            width: 280px;
+            height: 280px;
+        }
+
+        .diagram-circle {
+            position: absolute;
+            border-radius: 50%;
+            border: 2px dashed var(--border);
+            animation: diagramSpin 20s linear infinite;
+        }
+        .diagram-circle:nth-child(1) {
+            inset: 0;
+            animation-duration: 20s;
+        }
+        .diagram-circle:nth-child(2) {
+            inset: 35px;
+            animation-duration: 15s;
+            animation-direction: reverse;
+        }
+        .diagram-circle:nth-child(3) {
+            inset: 70px;
+            animation-duration: 10s;
+        }
+
+        .diagram-node {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 800;
+            font-family: var(--font-display);
+            color: white;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            animation: nodeFloat 3s ease-in-out infinite;
+        }
+        .node-file {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation-delay: 0s;
+        }
+        .node-hash {
+            background: linear-gradient(135deg, #10b981, #059669);
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation-delay: 1.5s;
+        }
+        .node-center {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            animation-delay: 0.75s;
+            box-shadow: 0 0 50px rgba(139, 92, 246, 0.4);
+        }
+
+        @keyframes diagramSpin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        @keyframes nodeFloat {
+            0%,
+            100% {
+                transform: translate(-50%, -50%) translateY(0);
+            }
+            50% {
+                transform: translate(-50%, -50%) translateY(-10px);
+            }
+        }
+        .node-file {
+            animation: nodeFloatFile 3s ease-in-out infinite;
+        }
+        @keyframes nodeFloatFile {
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            50% {
+                transform: translateX(-50%) translateY(-8px);
+            }
+        }
+        .node-hash {
+            animation: nodeFloatHash 3s ease-in-out infinite;
+        }
+        @keyframes nodeFloatHash {
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            50% {
+                transform: translateX(-50%) translateY(8px);
+            }
+        }
+
+        /* ── Verification Steps ── */
+        .verify-section {
+            padding: 4rem 0;
+        }
+        .verify-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.25rem;
+            max-width: 1000px;
+            margin: 2rem auto 0;
+        }
+
+        .verify-step-card {
+            background: var(--card);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.75rem;
+            position: relative;
+            transition: all 0.3s ease;
+            counter-increment: step;
+        }
+        .verify-step-card::after {
+            content: counter(step);
+            position: absolute;
+            top: -18px;
+            right: 1.5rem;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.9rem;
+            font-family: var(--font-display);
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.35);
+        }
+        .verify-step-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: rgba(37, 99, 235, 0.25);
+        }
+
+        .verify-step-card .step-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            transition: transform 0.3s ease;
+        }
+        .verify-step-card:hover .step-icon {
+            transform: scale(1.1);
+        }
+        .step-icon.win {
+            background: #eff6ff;
+            color: #2563eb;
+        }
+        .step-icon.mac {
+            background: #f5f3ff;
+            color: #7c3aed;
+        }
+        .step-icon.android {
+            background: #ecfdf5;
+            color: #10b981;
+        }
+
+        .verify-step-card h4 {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-900);
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.01em;
+        }
+        .verify-step-card p {
+            font-size: 0.875rem;
+            color: var(--text-500);
+            line-height: 1.6;
+            margin-bottom: 0.75rem;
+        }
+        .verify-step-card .terminal-cmd {
+            display: block;
+            background: #1e293b;
+            color: #e2e8f0;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.78rem;
+            padding: 0.6rem 0.9rem;
+            border-radius: 8px;
+            margin-top: 0.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            letter-spacing: 0.02em;
+        }
+        .verify-step-card .terminal-cmd .prompt {
+            color: #4ade80;
+        }
+        .verify-step-card .terminal-cmd .cmd-text {
+            color: #e2e8f0;
+        }
+        .verify-step-card .terminal-cmd .output {
+            color: #94a3b8;
+            display: block;
+            margin-top: 0.3rem;
+            font-size: 0.7rem;
+            word-break: break-all;
+            white-space: normal;
+        }
+
+        /* ── Particle background ── */
+        .particles-container {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--primary);
+            opacity: 0.15;
+            animation: particleDrift linear infinite;
+        }
+        @keyframes particleDrift {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.2;
+            }
+            90% {
+                opacity: 0.15;
+            }
+            100% {
+                transform: translateY(-10vh) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* ── FAQ mini ── */
+        .faq-mini {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 0;
+        }
+        .faq-item {
+            background: var(--card);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 0.75rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .faq-item:hover {
+            border-color: rgba(37, 99, 235, 0.25);
+            box-shadow: var(--shadow);
+        }
+        .faq-item summary {
+            font-weight: 700;
+            color: var(--text-900);
+            font-size: 0.95rem;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+        }
+        .faq-item summary::-webkit-details-marker {
+            display: none;
+        }
+        .faq-item summary .faq-arrow {
+            transition: transform 0.3s ease;
+            color: var(--text-500);
+            flex-shrink: 0;
+        }
+        .faq-item[open] summary .faq-arrow {
+            transform: rotate(180deg);
+            color: var(--primary);
+        }
+        .faq-item .faq-answer {
+            margin-top: 0.75rem;
+            font-size: 0.9rem;
+            color: var(--text-500);
+            line-height: 1.65;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--border);
+        }
+
+        /* ── Glow ring ── */
+        .glow-ring {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            animation: glowRingPulse 4s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .glow-ring:nth-child(2) {
+            width: 400px;
+            height: 400px;
+            animation-delay: 1.5s;
+            animation-duration: 5s;
+        }
+        .glow-ring:nth-child(3) {
+            width: 500px;
+            height: 500px;
+            animation-delay: 3s;
+            animation-duration: 6s;
+        }
+
+        @keyframes glowRingPulse {
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.5;
+                border-color: rgba(37, 99, 235, 0.15);
+            }
+            50% {
+                transform: scale(1.15);
+                opacity: 0.8;
+                border-color: rgba(37, 99, 235, 0.35);
+            }
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .hash-cards-grid {
+                grid-template-columns: 1fr;
+            }
+            .info-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .info-visual {
+                order: -1;
+            }
+            .animated-diagram {
+                width: 200px;
+                height: 200px;
+            }
+            .diagram-circle:nth-child(2) {
+                inset: 25px;
+            }
+            .diagram-circle:nth-child(3) {
+                inset: 50px;
+            }
+            .diagram-node {
+                width: 38px;
+                height: 38px;
+                font-size: 0.9rem;
+                border-radius: 10px;
+            }
+            .node-center {
+                width: 48px;
+                height: 48px;
+                font-size: 0.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="progress-bar"></div>
+    <button class="back-to-top" aria-label="Back to top"><i class="fas fa-arrow-up"></i></button>
+
+    <!-- Particle Background -->
+    <div class="particles-container" id="particlesContainer" aria-hidden="true"></div>
+
+    <!-- Copy Toast -->
+    <div class="copy-toast" id="copyToast">
+        <i class="fas fa-check-circle"></i> Checksum copied!
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="/index.html" class="logo">
+                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;color:var(--primary)"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M9 13a4.5 4.5 0 0 0 3-4"/><path d="M12 13h4"/><path d="M12 18h6a2 2 0 0 1 2 2v1"/><path d="M12 8h8"/><path d="M16 8V5a2 2 0 0 1 2-2"/><circle cx="16" cy="13" r=".5"/><circle cx="18" cy="3" r=".5"/><circle cx="20" cy="21" r=".5"/><circle cx="20" cy="8" r=".5"/></svg>
+                BrainHub<span class="dot">.</span>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Toggle navigation"><i class="fas fa-bars"></i></button>
+            <ul class="nav-links">
+                <li><a href="/pages/universities.html">Universities</a></li>
+                <li><a href="/pages/quizzes.html">Quizzes</a></li>
+                <li><a href="/pages/flashcards.html">Flashcards</a></li>
+                <li><a href="/pages/about.html">About</a></li>
+                <li><button id="theme-toggle" class="btn-primary theme-toggle"><i class="fas fa-moon" id="theme-icon"></i></button></li>
+                <li><button class="nav-menu-btn" id="navMenuBtn"><i class="fas fa-grid"></i> Menu</button></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="checksum-hero">
+            <div class="container" style="position:relative;z-index:2">
+                <div class="shield-icon-hero reveal">
+                    <div class="shield-outer">
+                        <span class="shield-inner"><i class="fas fa-shield-check"></i></span>
+                    </div>
+                    <!-- Glow rings -->
+                    <div class="glow-ring" style="top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+                    <div class="glow-ring" style="top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+                    <div class="glow-ring" style="top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+                </div>
+
+                <div class="hero-badge-large reveal" style="animation-delay:0.1s">
+                    <i class="fas fa-lock"></i>
+                    <span>SHA-256 · File Integrity</span>
+                </div>
+
+                <h1 class="hero-title reveal" style="animation-delay:0.15s">
+                    Verify your <span class="highlight">downloads</span>
+                </h1>
+
+                <p class="hero-description reveal" style="animation-delay:0.2s">
+                    Checksums let you confirm that your downloaded file is exactly what we published —
+                    not corrupted in transit and not tampered with. Compare the hash below with the one
+                    you compute locally. They must match <strong>exactly</strong>.
+                </p>
+
+                <div class="release-meta reveal" style="animation-delay:0.25s;display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;color:var(--text-500);font-size:0.9rem">
+                    <span><i class="fas fa-calendar-alt" style="color:var(--primary);margin-right:0.4rem"></i> Published: April 28, 2026</span>
+                    <span><i class="fas fa-code" style="color:var(--primary);margin-right:0.4rem"></i> Algorithm: SHA-256</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Hash Cards Section -->
+        <section class="hash-cards-section">
+            <div class="container">
+                <div class="hash-cards-grid">
+                    <!-- Windows Card -->
+                    <div class="hash-card reveal">
+                        <div class="hash-card-icon icon-windows">
+                            <i class="fab fa-windows"></i>
+                        </div>
+                        <h3>BrainHub for Windows</h3>
+                        <div class="file-meta">
+                            <span>BrainHub-Windows.zip</span>
+                            <span>·</span>
+                            <span>16.36 MB</span>
+                            <span class="algo-badge">SHA-256</span>
+                        </div>
+                        <div class="hash-display">
+                            <code id="windowsHash">B59CBFCFFDFE109D7309AED298B958F31B6C0ADB4DAB5116BBD67D2F78F9B131</code>
+                            <button class="copy-hash-btn" onclick="copyHash('windowsHash', this)" title="Copy checksum" aria-label="Copy Windows checksum">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Android Card -->
+                    <div class="hash-card reveal" style="animation-delay:0.1s">
+                        <div class="hash-card-icon icon-android">
+                            <i class="fab fa-android"></i>
+                        </div>
+                        <h3>BrainHub for Android</h3>
+                        <div class="file-meta">
+                            <span>app-release.apk</span>
+                            <span>·</span>
+                            <span>~50 MB</span>
+                            <span class="algo-badge">SHA-256</span>
+                        </div>
+                        <div class="hash-display">
+                            <code id="androidHash">4229DB76B469D262CC47B7E9CA2426510C4142413895DD88178D2B86594DAA1E</code>
+                            <button class="copy-hash-btn" onclick="copyHash('androidHash', this)" title="Copy checksum" aria-label="Copy Android checksum">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="reveal" style="text-align:center;margin-top:2rem;color:var(--text-500);font-size:0.85rem;max-width:700px;margin-left:auto;margin-right:auto">
+                    <i class="fas fa-info-circle" style="color:var(--primary);margin-right:0.4rem"></i>
+                    <strong>Note:</strong> The checksums above are placeholders. To get the actual values, run
+                    <code style="background:var(--bg-muted);padding:2px 6px;border-radius:4px;font-size:0.8rem">sha256sum</code>
+                    on your local copy of the published files and update this page accordingly.
+                </p>
+            </div>
+        </section>
+
+        <!-- What Are Checksums Section -->
+        <section class="info-section">
+            <div class="container">
+                <div class="info-grid">
+                    <div class="info-text reveal">
+                        <span class="section-tag" style="margin-bottom:0.75rem">File Integrity 101</span>
+                        <h2>What is a checksum?</h2>
+                        <p>
+                            A <span class="info-highlight">checksum</span> (or hash) is like a digital fingerprint
+                            of a file. It's a short string of letters and numbers produced by running the file through
+                            a mathematical formula — in our case,
+                            <span class="info-highlight">SHA-256</span>.
+                        </p>
+                        <p>
+                            If even <strong>one single bit</strong> of the file changes — whether from corruption
+                            during download, a network error, or malicious tampering — the checksum will be
+                            <strong style="color:#ef4444">completely different</strong>.
+                        </p>
+                        <p>
+                            By comparing the checksum you compute on your downloaded file with the one we publish
+                            here, you can be 100% certain the file is <span class="info-highlight">authentic and intact</span>.
+                        </p>
+                    </div>
+                    <div class="info-visual reveal">
+                        <div class="animated-diagram">
+                            <div class="diagram-circle"></div>
+                            <div class="diagram-circle"></div>
+                            <div class="diagram-circle"></div>
+                            <div class="diagram-node node-file" title="Your downloaded file">
+                                <i class="fas fa-file-zipper"></i>
+                            </div>
+                            <div class="diagram-node node-center" title="SHA-256 algorithm">
+                                SHA-256
+                            </div>
+                            <div class="diagram-node node-hash" title="Resulting checksum">
+                                <i class="fas fa-fingerprint"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How to Verify Section -->
+        <section class="verify-section">
+            <div class="container">
+                <div class="section-header reveal" style="text-align:center;margin-bottom:1rem">
+                    <span class="section-tag">Step by Step</span>
+                    <h2 style="font-family:var(--font-display);font-size:clamp(1.6rem,4vw,2rem);font-weight:800;color:var(--text-900)">
+                        How to verify on your device
+                    </h2>
+                </div>
+                <div class="verify-steps" style="counter-reset:step">
+                    <!-- Windows -->
+                    <div class="verify-step-card reveal">
+                        <div class="step-icon win">
+                            <i class="fab fa-windows"></i>
+                        </div>
+                        <h4>Windows (PowerShell)</h4>
+                        <p>Open PowerShell in the folder where you downloaded the file and run:</p>
+                        <span class="terminal-cmd">
+                            <span class="prompt">PS&gt; </span><span class="cmd-text">Get-FileHash .\BrainHub-Windows.zip -Algorithm SHA256</span>
+                            <span class="output">→ Compare the "Hash" value with the one above</span>
+                        </span>
+                    </div>
+
+                    <!-- macOS / Linux -->
+                    <!--<div class="verify-step-card reveal" style="animation-delay:0.1s">
+                        <div class="step-icon mac">
+                            <i class="fab fa-apple"></i>
+                        </div>
+                        <h4>macOS / Linux (Terminal)</h4>
+                        <p>Open Terminal, navigate to your download folder, and run:</p>
+                        <span class="terminal-cmd">
+                            <span class="prompt">$ </span><span class="cmd-text">sha256sum BrainHub-Windows.zip</span>
+                            <span class="output">→ Or on macOS: <span class="cmd-text">shasum -a 256 BrainHub-Windows.zip</span></span>
+                        </span>
+                    </div>-->
+
+                    <!-- Android -->
+                    <div class="verify-step-card reveal" style="animation-delay:0.2s">
+                        <div class="step-icon android">
+                            <i class="fab fa-android"></i>
+                        </div>
+                        <h4>Android</h4>
+                        <p>Use a free hash checker app like <strong>Hash Checker</strong> or <strong>Hash Droid</strong> from the Play Store. Open the app, select the APK file, and compare the SHA-256 value.</p>
+                        <p style="font-size:0.8rem;color:var(--text-500);font-style:italic">
+                            <i class="fas fa-lightbulb" style="color:#f59e0b;margin-right:0.3rem"></i>
+                            Always download hash-checking apps from trusted sources.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Mini -->
+        <section class="container" style="padding-bottom:4rem">
+            <div class="section-header reveal" style="text-align:center;margin-bottom:1.5rem">
+                <span class="section-tag">Quick FAQ</span>
+                <h2 style="font-family:var(--font-display);font-size:clamp(1.5rem,3vw,1.9rem);font-weight:800;color:var(--text-900)">
+                    Common questions
+                </h2>
+            </div>
+            <div class="faq-mini">
+                <details class="faq-item reveal">
+                    <summary>
+                        <span>Why should I bother verifying a checksum?</span>
+                        <i class="fas fa-chevron-down faq-arrow"></i>
+                    </summary>
+                    <div class="faq-answer">
+                        <p>Verifying a checksum protects you against <strong>file corruption</strong> (incomplete
+                        downloads, storage errors) and <strong>supply-chain attacks</strong> where a malicious actor
+                        might replace the legitimate file with a tampered version. It takes 10 seconds and gives
+                        you peace of mind.</p>
+                    </div>
+                </details>
+                <details class="faq-item reveal" style="animation-delay:0.1s">
+                    <summary>
+                        <span>What if the checksums don't match?</span>
+                        <i class="fas fa-chevron-down faq-arrow"></i>
+                    </summary>
+                    <div class="faq-answer">
+                        <p><strong>Do not run or install the file.</strong> Delete it immediately and download a fresh
+                        copy from our official download page. If the mismatch persists,
+                        <a href="/pages/contact.html" style="color:var(--primary);font-weight:600">contact us</a>
+                        so we can investigate.</p>
+                    </div>
+                </details>
+                <details class="faq-item reveal" style="animation-delay:0.2s">
+                    <summary>
+                        <span>Is SHA-256 secure enough?</span>
+                        <i class="fas fa-chevron-down faq-arrow"></i>
+                    </summary>
+                    <div class="faq-answer">
+                        <p>Yes. SHA-256 is the industry standard for file verification and is used by governments,
+                        banks, and software companies worldwide. It's cryptographically secure — finding two different
+                        files with the same SHA-256 hash is computationally infeasible with today's technology.</p>
+                    </div>
+                </details>
+                <details class="faq-item reveal" style="animation-delay:0.3s">
+                    <summary>
+                        <span>Where can I download the apps?</span>
+                        <i class="fas fa-chevron-down faq-arrow"></i>
+                    </summary>
+                    <div class="faq-answer">
+                        <p>Head over to our <a href="/pages/download.html" style="color:var(--primary);font-weight:600">Download
+                        page</a> for the latest Windows and Android builds. Always download BrainHub from our official
+                        website to ensure you're getting the genuine, unmodified app.</p>
+                    </div>
+                </details>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-col">
+                <h3>BrainHub<span class="dot">.</span></h3>
+                <p>Free study platform for Zambian university students.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Platform</h4>
+                <a href="/index.html">Home</a>
+                <a href="/pages/universities.html">Universities</a>
+                <a href="/pages/download.html">Download App</a>
+                <a href="/pages/checksums.html" style="color:var(--primary);font-weight:700">Checksums</a>
+            </div>
+            <div class="footer-col">
+                <h4>Support</h4>
+                <a href="/pages/about.html">About</a>
+                <a href="/pages/contact.html">Contact</a>
+                <a href="/pages/changelog.html">Changelog</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 BrainHub. All rights reserved.</p>
+            <p id="realtime-clock" class="clock-text"></p>
+        </div>
+    </footer>
+
+    <!-- Mega Menu -->
+    <div class="mega-menu-overlay" id="megaMenuOverlay">
+        <div class="mega-menu">
+            <div class="mega-menu-header">
+                <div class="mega-menu-logo">BrainHub<span class="dot">.</span></div>
+                <button class="mega-menu-close" id="megaMenuClose"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="mega-menu-body">
+                <div class="mm-group">
+                    <div class="mm-group-label">📚 Study</div>
+                    <a href="/pages/universities.html" class="mm-item"><div class="mm-icon" style="background:#dbeafe;color:#1d4ed8"><i class="fas fa-university"></i></div><div class="mm-text"><span>Universities</span></div></a>
+                    <a href="/pages/quizzes.html" class="mm-item"><div class="mm-icon" style="background:#ede9fe;color:#6d28d9"><i class="fas fa-brain"></i></div><div class="mm-text"><span>Quizzes</span></div></a>
+                    <a href="/download.html" class="mm-item"><div class="mm-icon" style="background:#dcfce7;color:#15803d"><i class="fas fa-download"></i></div><div class="mm-text"><span>Download App</span></div></a>
+                    <a href="/pages/checksums.html" class="mm-item"><div class="mm-icon" style="background:#fef2f2;color:#dc2626"><i class="fas fa-shield-halved"></i></div><div class="mm-text"><span>Checksums</span></div></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/src/i18n.js"></script>
+    <script src="/src/main.js"></script>
+    <script src="/src/gamification.js"></script>
+    <script>
+        // ── Particle background ──────────────────────────────
+        (function initParticles() {
+            const container = document.getElementById('particlesContainer');
+            if (!container) return;
+            const particleCount = 25;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                const size = Math.random() * 6 + 2;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (Math.random() * 18 + 12) + 's';
+                particle.style.animationDelay = (Math.random() * 15) + 's';
+                particle.style.opacity = (Math.random() * 0.12 + 0.04);
+                container.appendChild(particle);
+            }
+        })();
+
+        // ── Copy Hash Function ──────────────────────────────
+        function copyHash(elementId, btnElement) {
+            const codeEl = document.getElementById(elementId);
+            if (!codeEl) return;
+
+            const hashText = codeEl.textContent.trim();
+            navigator.clipboard.writeText(hashText).then(() => {
+                // Visual feedback on button
+                btnElement.classList.add('copied');
+                const icon = btnElement.querySelector('i');
+                if (icon) {
+                    icon.className = 'fas fa-check';
+                }
+                setTimeout(() => {
+                    btnElement.classList.remove('copied');
+                    if (icon) {
+                        icon.className = 'fas fa-copy';
+                    }
+                }, 2200);
+
+                // Toast notification
+                const toast = document.getElementById('copyToast');
+                if (toast) {
+                    toast.classList.add('show');
+                    setTimeout(() => toast.classList.remove('show'), 2500);
+                }
+            }).catch(() => {
+                // Fallback: select text
+                const range = document.createRange();
+                range.selectNodeContents(codeEl);
+                const selection = window.getSelection();
+                selection.removeAllRanges();
+                selection.addRange(range);
+                const toast = document.getElementById('copyToast');
+                if (toast) {
+                    toast.innerHTML = '<i class="fas fa-info-circle"></i> Text selected — press Ctrl+C';
+                    toast.classList.add('show');
+                    setTimeout(() => {
+                        toast.classList.remove('show');
+                        toast.innerHTML = '<i class="fas fa-check-circle"></i> Checksum copied!';
+                    }, 2500);
+                }
+            });
+        }
+
+        // ── Mega menu toggle ────────────────────────────────
+        (function() {
+            const btn = document.getElementById('navMenuBtn');
+            const overlay = document.getElementById('megaMenuOverlay');
+            const close = document.getElementById('megaMenuClose');
+
+            function openMenu() {
+                overlay.classList.add('open');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeMenu() {
+                overlay.classList.remove('open');
+                document.body.style.overflow = '';
+            }
+            btn?.addEventListener('click', openMenu);
+            close?.addEventListener('click', closeMenu);
+            overlay?.addEventListener('click', e => { if (e.target === overlay) closeMenu(); });
+            document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+        })();
+
+        // ── Footer clock ────────────────────────────────────
+        function updateClock() {
+            const el = document.getElementById('realtime-clock');
+            if (el) {
+                const now = new Date();
+                el.textContent =
+                    `${now.toLocaleDateString('en-US',{weekday:'short',year:'numeric',month:'short',day:'numeric'})} | ${now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}`;
+            }
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+    </script>
+</body>
+</html>
