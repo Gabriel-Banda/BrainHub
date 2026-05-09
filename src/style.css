@@ -517,7 +517,6 @@ footer { background: var(--bg-subtle); border-top: 1px solid var(--border); padd
 .download-btn:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 15px 30px -8px rgba(37,99,235,0.4); }
 
 /* ── Flashcards ── */
-/* ── Flashcards ── */
 .flashcards-section { padding: 4rem 0; }
 .flashcards-container { max-width: 600px; margin: 0 auto; }
 
@@ -1070,7 +1069,6 @@ footer { background: var(--bg-subtle); border-top: 1px solid var(--border); padd
 }
 
 /* ── Offline Library Banner ─────────────────────────────── */
-/* Shows at top of doc pages when user is offline */
 .offline-banner {
   display: none;
   align-items: center;
@@ -1095,7 +1093,6 @@ footer { background: var(--bg-subtle); border-top: 1px solid var(--border); padd
 }
 
 /* ── Search Page ─────────────────────────────────────────── */
-/* Color classes for search result icons (matches uni-card bg classes) */
 .bg-bio     { background: linear-gradient(135deg, #059669, #34d399); }
 .bg-chem    { background: linear-gradient(135deg, #7c3aed, #a78bfa); }
 .bg-physics { background: linear-gradient(135deg, #2563eb, #60a5fa); }
@@ -1104,7 +1101,6 @@ footer { background: var(--bg-subtle); border-top: 1px solid var(--border); padd
 .logo-blue  { background: linear-gradient(135deg, #0284c7, #38bdf8); }
 .logo-orange{ background: linear-gradient(135deg, #ea580c, #fb923c); }
 
-/* Search result highlight */
 mark {
   background: rgba(245,158,11,0.25);
   color: inherit;
@@ -1819,12 +1815,9 @@ mark {
 @media (max-width: 768px) {
   .mobile-bottom-nav { display: flex; align-items: stretch; }
   body { padding-bottom: 64px; }
-  /* Hide hamburger and nav-links on mobile — bottom nav handles navigation */
   .mobile-menu-btn { display: none !important; }
   .nav-links { display: none !important; }
-  /* But keep the Menu button visible in top navbar on mobile */
   .nav-menu-btn { display: inline-flex !important; }
-  /* Re-show theme toggle somewhere visible */
   .navbar .theme-toggle { display: flex !important; }
 }
 
@@ -2603,8 +2596,6 @@ kbd {
 [data-theme="dark"] ::-webkit-scrollbar-thumb:hover { background: #475569; }
 
 /* ── 2. BETTER MOBILE EXPERIENCE ────────────────────────── */
-
-/* Larger tap targets */
 @media (max-width: 768px) {
   .btn-primary, .btn-secondary, .timer-btn,
   .filter-pill, .popular-tag, .topic-tag {
@@ -2612,57 +2603,31 @@ kbd {
     padding-top: 0.6rem;
     padding-bottom: 0.6rem;
   }
-
-  /* Better mobile nav */
   .mobile-menu-btn { min-width: 44px; min-height: 44px; }
-
-  /* Cards stack better on small screens */
   .grid-container { grid-template-columns: 1fr 1fr; gap: 0.875rem; }
   .uni-grid { grid-template-columns: 1fr; }
-
-  /* Doc viewer goes vertical on mobile */
   .doc-viewer { flex-direction: column; }
   .doc-list-panel { width: 100%; max-height: 280px; border-right: none; border-bottom: 1px solid var(--border); }
   .doc-preview-panel { min-height: 300px; }
-
-  /* Flashcard full width */
   .flashcard { width: 100%; max-width: 100%; }
-
-  /* Search box full width */
   .search-main-box { max-width: 100%; }
-
-  /* Profile hero stacks */
   .profile-hero { flex-direction: column; text-align: center; }
   .profile-hero-xp { margin-top: 0.5rem; }
-
-  /* Stats grid 2 col on mobile */
   .stats-grid { grid-template-columns: 1fr 1fr; }
   .badges-grid { grid-template-columns: 1fr 1fr; }
-
-  /* HUD smaller on mobile */
   #bhHUD { width: 160px; }
   .bh-hud { padding: 0.65rem 0.85rem; }
   .hud-level-icon { font-size: 1.1rem; }
   .hud-level-name { font-size: 0.72rem; }
   .hud-xp { font-size: 0.65rem; }
-
-  /* Bottom nav safe area */
   .mobile-bottom-nav { padding-bottom: env(safe-area-inset-bottom, 0); }
   body { padding-bottom: calc(64px + env(safe-area-inset-bottom, 0)); }
-
-  /* Hero text smaller */
   .hero h1 { font-size: clamp(1.75rem, 7vw, 2.5rem); }
   .hero-sub { font-size: 0.95rem; }
-
-  /* Search box in hero */
   .search-box { flex-direction: column; border-radius: var(--radius-lg); }
   .search-box input { border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
   .search-box button { border-radius: 0 0 var(--radius-lg) var(--radius-lg); width: 100%; }
-
-  /* Breadcrumbs scroll horizontal */
   .breadcrumbs { overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; padding-bottom: 4px; }
-
-  /* Toast bottom center on mobile */
   .toast-container { left: 50%; right: auto; transform: translateX(-50%); bottom: 80px; }
 }
 
@@ -2674,19 +2639,13 @@ kbd {
 }
 
 /* ── 3. ACCESSIBILITY ───────────────────────────────────── */
-
-/* Focus rings — visible but beautiful */
 :focus-visible {
   outline: 2.5px solid var(--primary);
   outline-offset: 3px;
   border-radius: 4px;
 }
 button:focus-visible, a:focus-visible { outline: 2.5px solid var(--primary); outline-offset: 3px; }
-
-/* Remove focus ring for mouse users */
 :focus:not(:focus-visible) { outline: none; }
-
-/* Skip to main content link */
 .skip-link {
   position: absolute;
   top: -100%;
@@ -2703,7 +2662,6 @@ button:focus-visible, a:focus-visible { outline: 2.5px solid var(--primary); out
 }
 .skip-link:focus { top: 1rem; }
 
-/* Reduce motion */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -2713,218 +2671,236 @@ button:focus-visible, a:focus-visible { outline: 2.5px solid var(--primary); out
   html { scroll-behavior: auto; }
 }
 
-/* Better contrast on text */
-.card p, .uni-card p, .resource-card p { color: var(--text-500); }
-
-/* Aria-hidden decorative icons */
-.icon-decorative { aria-hidden: true; }
-
-/* Sufficient color contrast for badges */
-.result-tag, .badge-earned-tag, .doc-done-badge { font-weight: 800; }
-
-/* Loading states */
-[aria-busy="true"] { cursor: wait; opacity: 0.7; }
-
-/* ── 4. PAGE LOAD PERFORMANCE ───────────────────────────── */
-
-/* Lazy load images */
-img { loading: lazy; }
-
-/* Font display swap already handled by Google Fonts ?display=swap */
-
-/* Contain layout repaints */
-.card, .uni-card, .doc-card, .result-card { contain: layout style; }
-
-/* GPU-accelerate animations */
-.reveal, .xp-popup, .badge-toast, .ai-chat-window {
-  will-change: transform, opacity;
-}
-/* Remove will-change after animation completes */
-.reveal.visible { will-change: auto; }
-
-/* Skeleton loading shimmer */
-@keyframes shimmer {
-  0%   { background-position: -600px 0; }
-  100% { background-position: 600px 0; }
-}
-.skeleton {
-  background: linear-gradient(90deg, var(--bg-muted) 25%, var(--border) 50%, var(--bg-muted) 75%);
-  background-size: 600px 100%;
-  animation: shimmer 1.4s ease infinite;
-  border-radius: var(--radius-sm);
-  color: transparent !important;
-}
-.skeleton * { visibility: hidden; }
-
-/* ── 5. ENHANCED ANIMATIONS ─────────────────────────────── */
-
-/* Staggered card entrance */
-.grid-container .card:nth-child(1) { animation-delay: 0.05s; }
-.grid-container .card:nth-child(2) { animation-delay: 0.10s; }
-.grid-container .card:nth-child(3) { animation-delay: 0.15s; }
-.grid-container .card:nth-child(4) { animation-delay: 0.20s; }
-
-/* Reveal animation improved */
-.reveal {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.5s cubic-bezier(0.4,0,0.2,1), transform 0.5s cubic-bezier(0.4,0,0.2,1);
-}
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
+/* Floating motion for subtle background elements */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-12px); }
 }
 
-/* Hover lift on all interactive cards */
-.card:hover, .uni-card:hover, .resource-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
+/* Glowing pulse for interactive elements */
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(37,99,235,0.4); }
+  50%      { box-shadow: 0 0 25px rgba(37,99,235,0.8); }
 }
 
-/* Hero badge pulse */
-@keyframes badgePulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(37,99,235,0.3); }
-  50%       { box-shadow: 0 0 0 8px rgba(37,99,235,0); }
-}
-.hero-badge { animation: badgePulse 2.5s ease infinite; }
-
-/* Chat status dot pulse */
-@keyframes statusPulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.5; transform: scale(0.8); }
-}
-.chat-status-dot {
-  display: inline-block;
-  width: 7px; height: 7px;
-  background: #10b981;
-  border-radius: 50%;
-  margin-right: 4px;
-  animation: statusPulse 2s ease infinite;
+/* Shimmer effect moving across card edges */
+@keyframes borderShimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
-/* Progress bar gradient */
+/* Button ripple on active (CSS only) */
+.btn-primary:active::after,
+.btn-secondary:active::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.3);
+  border-radius: inherit;
+  animation: ripple 0.6s ease-out forwards;
+}
+@keyframes ripple {
+  0%   { transform: scale(0); opacity: 1; }
+  100% { transform: scale(4); opacity: 0; }
+}
+
+/* Hero title text glow */
+.hero h1 {
+  animation: heroTextGlow 4s ease-in-out infinite alternate, fadeSlideDown 0.7s ease 0.1s both;
+}
+@keyframes heroTextGlow {
+  0%   { text-shadow: 0 0 15px rgba(37,99,235,0.25); }
+  100% { text-shadow: 0 0 35px rgba(37,99,235,0.5); }
+}
+
+/* Hero decorative circles floating */
+.hero::before {
+  animation: floatLarge 10s ease-in-out infinite;
+}
+.hero::after {
+  animation: floatLarge 12s ease-in-out infinite reverse;
+}
+@keyframes floatLarge {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(-30px, -20px) scale(1.05); }
+}
+
+/* Hover tilt for cards */
+.card:hover {
+  transform: translateY(-6px) rotate(1deg);
+}
+.uni-card:hover {
+  transform: translateY(-4px) rotate(0.5deg);
+}
+.resource-card:hover {
+  transform: translateY(-5px) rotate(-0.5deg);
+}
+
+/* Shimmer on card hover pseudo */
+.card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(37,99,235,0.06), transparent);
+  transition: left 0.6s ease;
+  pointer-events: none;
+  border-radius: inherit;
+}
+.card:hover::after {
+  left: 100%;
+}
+
+/* Floating icons on features */
+.icon-box {
+  animation: float 3s ease-in-out infinite;
+}
+.icon-box:nth-child(2) { animation-delay: 0.5s; }
+.icon-box:nth-child(4) { animation-delay: 1s; }
+
+/* Glowing buttons on hover */
+.btn-primary:hover, .download-btn:hover {
+  animation: glowPulse 1.5s infinite alternate;
+}
+
+/* Search box focus glow */
+.search-box:focus-within {
+  animation: glowPulse 2s infinite alternate;
+}
+
+/* Back to top rotate */
+.back-to-top:hover i {
+  animation: spin 0.6s linear;
+}
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Pomodoro timer pulse when active */
+.pomodoro-widget.show .timer-display {
+  animation: timerPulse 1s infinite alternate;
+}
+@keyframes timerPulse {
+  0% { text-shadow: 0 0 10px rgba(37,99,235,0.6); }
+  100% { text-shadow: 0 0 25px rgba(37,99,235,0.9); }
+}
+
+/* Toast slide in variations */
+.toast.show {
+  animation: toastPop 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+}
+@keyframes toastPop {
+  0% { opacity: 0; transform: translateY(100%) scale(0.8); }
+  60% { transform: translateY(-10%) scale(1.02); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Modal bounce in */
+.modal-container {
+  animation: modalBounce 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+@keyframes modalBounce {
+  0%   { opacity: 0; transform: scale(0.8); }
+  60%  { opacity: 1; transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+/* Scroll down indicator arrow bounce (if any arrow exists, we generalize) */
+.scroll-indicator i {
+  animation: bounce 1.5s infinite;
+}
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(10px); }
+}
+
+/* Progress bar moving gradient enhancement */
 #progress-bar {
-  background: linear-gradient(90deg, var(--primary), var(--accent), var(--primary));
-  background-size: 200% 100%;
-  animation: progressShimmer 2s linear infinite;
+  animation: progressGradient 2s linear infinite;
 }
-@keyframes progressShimmer {
+@keyframes progressGradient {
   0%   { background-position: 0% 0%; }
   100% { background-position: 200% 0%; }
 }
 
-/* Smooth scroll behavior */
-html { scroll-behavior: smooth; }
-
-/* Button press effect */
-.btn-primary:active, .btn-secondary:active, .timer-btn:active { transform: scale(0.97); }
-
-/* Page transition fade-in */
-@keyframes pageFadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
+/* Floating dots on flashcard back */
+.flashcard-back::before {
+  animation: float 4s ease-in-out infinite;
 }
-main { animation: pageFadeIn 0.35s ease forwards; }
-
-/* ── 6. SEARCH PAGE EXTRAS ──────────────────────────────── */
-
-/* Highlight in search results */
-mark {
-  background: #fef9c3;
-  color: inherit;
-  border-radius: 3px;
-  padding: 0 2px;
-}
-[data-theme="dark"] mark { background: #422006; color: #fef3c7; }
-
-/* ── 7. IMPROVED NAVBAR ──────────────────────────────────── */
-.navbar {
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+.flashcard-back::after {
+  animation: float 5s ease-in-out infinite reverse;
 }
 
-/* Active nav link indicator */
-.nav-links a.active {
-  color: var(--primary);
-  font-weight: 700;
-  position: relative;
+/* AI chat / toggle button pulsing glow */
+.chat-toggle-btn {
+  animation: chatbotPulse 2.5s ease-in-out infinite;
 }
-.nav-links a.active::after {
-  content: '';
-  position: absolute;
-  bottom: -4px; left: 0; right: 0;
-  height: 2px;
-  background: var(--primary);
-  border-radius: 2px;
+@keyframes chatbotPulse {
+  0%, 100% { box-shadow: 0 8px 24px rgba(37,99,235,0.35); }
+  50%      { box-shadow: 0 12px 32px rgba(37,99,235,0.6); }
 }
 
-/* ── 8. STATS BAR ────────────────────────────────────────── */
-.stats-bar {
-  background: var(--card);
-  border-bottom: 1px solid var(--border);
-  padding: 0.75rem 0;
-}
-.stats-bar-inner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0;
-  flex-wrap: wrap;
-  overflow: hidden;
-}
-.stats-bar-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.25rem 1.5rem;
-  font-size: 0.85rem;
-  color: var(--text-700);
-}
-.stats-bar-item strong { color: var(--text-900); font-weight: 800; }
-.stats-bar-divider { width: 1px; height: 20px; background: var(--border); flex-shrink: 0; }
-@media (max-width: 640px) {
-  .stats-bar-item { padding: 0.25rem 0.85rem; font-size: 0.78rem; }
-  .stats-bar-divider:nth-child(n+5) { display: none; }
+/* Input focus gradient border */
+input:focus, textarea:focus, select:focus {
+  border-image: linear-gradient(90deg, var(--primary), var(--accent)) 1;
 }
 
-/* ── 9. TESTIMONIALS SECTION ─────────────────────────────── */
-.testimonials-section {
-  padding: 4rem 0;
-  background: var(--bg-subtle);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
+/* Staggered entrance for sections (use .reveal with different directions) */
+.reveal[data-animate="left"] { transform: translateX(-30px); }
+.reveal[data-animate="right"] { transform: translateX(30px); }
+.reveal[data-animate="zoom"] { transform: scale(0.95); }
+.reveal.visible {
+  transform: none;
 }
-.testimonials-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.25rem;
-  margin-top: 2rem;
+
+/* Add a gentle pulse to CTA buttons */
+.btn-primary, .download-btn, .brick-btn, .newsletter-btn, .donate-btn {
+  animation: ctaPulse 2s infinite alternate;
 }
-.testimonial-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 1.5rem;
-  transition: var(--transition);
+@keyframes ctaPulse {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.02); }
 }
-.testimonial-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
-.testimonial-stars { color: #f59e0b; font-size: 0.85rem; margin-bottom: 0.75rem; letter-spacing: 2px; }
-.testimonial-text { font-size: 0.92rem; color: var(--text-700); line-height: 1.7; margin-bottom: 1rem; font-style: italic; }
-.testimonial-text::before { content: '"'; font-size: 1.5rem; color: var(--primary); line-height: 0; vertical-align: -0.4em; margin-right: 2px; }
-.testimonial-author { display: flex; align-items: center; gap: 0.75rem; }
-.testimonial-avatar {
-  width: 40px; height: 40px;
-  border-radius: 50%;
-  background: var(--primary-light);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.1rem;
-  font-weight: 800;
-  color: var(--primary);
-  font-family: var(--font-display);
-  flex-shrink: 0;
+
+/* Smooth rotation on hover for icons in navigation */
+.nav-links a i {
+  transition: transform 0.3s ease;
 }
-.testimonial-name { font-weight: 700; font-size: 0.875rem; color: var(--text-900); }
-.testimonial-role { font-size: 0.78rem; color: var(--text-500); }
+.nav-links a:hover i {
+  transform: rotate(15deg);
+}
+
+/* Mega menu item slide in */
+.mm-item {
+  animation: slideInRight 0.4s ease both;
+}
+.mm-item:nth-child(1) { animation-delay: 0.1s; }
+.mm-item:nth-child(2) { animation-delay: 0.15s; }
+.mm-item:nth-child(3) { animation-delay: 0.2s; }
+.mm-item:nth-child(4) { animation-delay: 0.25s; }
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Mobile bottom nav active indicator glow */
+.mobile-bottom-nav a.active i {
+  filter: drop-shadow(0 0 6px var(--primary));
+}
+
+/* Ensure all new animations respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .hero h1, .hero::before, .hero::after, .icon-box,
+  .back-to-top:hover i, .chat-toggle-btn, .btn-primary,
+  .pomodoro-widget.show .timer-display, .search-box:focus-within,
+  .card:hover::after, .flashcard-back::before, .flashcard-back::after,
+  .toast.show, .modal-container, .mm-item {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
 /* ══════════════════════════════════════════════════════════
    MEGA MENU — slide-in panel from right
    ══════════════════════════════════════════════════════════ */

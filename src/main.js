@@ -2795,7 +2795,7 @@ window.BrainHubOffline = (function() {
 
 // ==================== PUSH NOTIFICATIONS (CLIENT) ====================
 window.BrainHubNotifications = (function() {
-  const VAPID_PUBLIC_KEY = 'BNfPyqxX4bPh_ZW49oFHv4KmF2z8Ad6xalQ_P7Wsm8G_lXiStqCTqJSV8DHdoBpNlJnmqku8me-ZPCrFKEFgDgM'; // Add your VAPID public key here when ready
+  const VAPID_PUBLIC_KEY = 'BNfPyqxX4bPh_ZW49oFHv4KmF2z8Ad6xalQ_P7Wsm8G_lXiStqCTqJSV8DHdoBpNlJnmqku8me-ZPCrFKEFgDgM'; // VAPID public key
 
   async function requestPermission() {
     if (!('Notification' in window)) return 'unsupported';
