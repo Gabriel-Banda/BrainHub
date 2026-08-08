@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Core
   initMobileMenu();
   initScrollEffects();
+  initMegaMenu();
   initDarkMode();
   initScrollReveal();
   initBackToTop();
@@ -73,6 +74,33 @@ function initMobileMenu() {
       if (icon) icon.className = 'fas fa-bars';
     }
   });
+}
+
+// ==================== MEGA MENU ====================
+function initMegaMenu() {
+  const btn     = document.querySelector('.nav-menu-btn');
+  const overlay = document.querySelector('.mega-menu-overlay');
+  const closeBtn = document.querySelector('.mega-menu-close');
+  if (!btn || !overlay) return; // markup not present on this page
+
+  function open() {
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    btn.setAttribute('aria-expanded', 'true');
+  }
+  function close() {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+    btn.setAttribute('aria-expanded', 'false');
+  }
+
+  btn.addEventListener('click', open);
+  closeBtn?.addEventListener('click', close);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+
+  // Close automatically if the viewport grows back to desktop width
+  window.addEventListener('resize', () => { if (window.innerWidth > 768) close(); });
 }
 
 // ==================== SCROLL EFFECTS ====================
