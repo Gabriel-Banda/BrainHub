@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CS110 Lecture Notes | CBU | BrainHub</title>
   <meta name="description" content="Free CS110 Computer Science lecture notes for CBU Natural Sciences students. Download PDFs and study resources." />
-  <meta name="course-context" content="BIO110 Biology at CBU - Cell structure, genetics, cellular biology for Zambian university students" />
+  <meta name="course-context" content="CS110 Biology at CBU - Cell structure, genetics, cellular biology for Zambian university students" />
   <link rel="stylesheet" href="/src/style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <link rel="icon" type="image/x-icon" href="/public/assets/images/favicon.png" />
@@ -65,12 +65,12 @@
       <a href="/pages/universities.html">Universities</a><i class="fas fa-chevron-right"></i>
       <a href="/pages/universities/cbu.html">CBU</a><i class="fas fa-chevron-right"></i>
       <a href="/pages/universities/cbu/programs/natural-sciences.html">Natural Sciences</a><i class="fas fa-chevron-right"></i>
-      <a href="/pages/universities/cbu/programs/natural-sciences/bio110/index.html">BIO110</a><i class="fas fa-chevron-right"></i>
+      <a href="/pages/universities/cbu/programs/natural-sciences/cs110/index.html">CS110</a><i class="fas fa-chevron-right"></i>
       <span>Lecture Notes</span>
     </div>
 
     <div class="title-group">
-      <h1>BIO110 Lecture Notes</h1>
+      <h1>CS110 Lecture Notes</h1>
       <p class="subtitle">Select a document to read or download.</p>
       <span class="last-updated"><i class="far fa-clock"></i> Last updated: January 2026</span>
     </div>
@@ -89,7 +89,7 @@
   </div>
 
   <!-- Completion certificate trigger (auto-shows when all done) -->
-  <div class="cert-trigger-wrap" id="certTrigger" data-course="BIO110 — Cell Biology, CBU">
+  <div class="cert-trigger-wrap" id="certTrigger" data-course="CS110 — Computer Science, CBU">
     <div style="font-size:2rem;margin-bottom:0.5rem">🎓</div>
     <h4>You've completed all resources!</h4>
     <p>Download your personalised study completion certificate.</p>
@@ -110,7 +110,7 @@
         <i class="fas fa-plus-circle"></i> Load More
       </button>
       <!-- Suggest a resource -->
-      <button class="suggest-btn suggest-resource-btn" data-course="BIO 110" data-university="CBU">
+      <button class="suggest-btn suggest-resource-btn" data-course="CS 110" data-university="CBU">
         <i class="fas fa-plus-circle"></i> Suggest a resource for this course
       </button>
     </div>
@@ -169,7 +169,7 @@
     <div class="chat-avatar"><i class="fas fa-robot"></i></div>
     <div class="chat-header-info">
       <h4>BrainHub AI Tutor</h4>
-      <span><span class="chat-status-dot"></span> Ask me about BIO110</span>
+      <span><span class="chat-status-dot"></span> Ask me about CS110</span>
     </div>
     <button class="chat-close-btn" id="chatCloseBtn"><i class="fas fa-times"></i></button>
   </div>
@@ -206,23 +206,133 @@
   const documents = [
     {
       id: 1,
-      title: 'Cell Biology – Structure and Function',
+      title: '01 - Basics of Computer',
       type: 'PDF',
-      size: '14.8 MB',
+      size: '224 KB',
       icon: 'fa-file-pdf',
       iconClass: 'pdf',
       badges: ['verified', 'popular'],
-      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/BI%20110/BI110_%20CELL%20STRUCTURE%20AND%20FUNCTION%20NOTES%20BY%20NEWSTONE..pdf'
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/CS%20110/UNITS/01%20-%20Basics%20of%20Computer.pdf'
     },
     {
       id: 2,
-      title: 'Biology – Raven, Johnson, Mason – 11th Edition',
+      title: '02 - Computer System Hardware',
       type: 'PDF',
-      size: '237 MB',
-      icon: 'fa-book',
+      size: '827 KB',
+      icon: 'fa-file-pdf',
       iconClass: 'pdf',
       badges: ['student'],
-      url: '/assets/documents/cbu/BI 110/Peter_H._Raven,_George_B._Johnson)_Kenneth_A_M.pdf'
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/CS%20110/UNITS/02%20-%20Computer%20System%20%20Hardware_114429_044247.pdf'
+    },
+    {
+      id: 3,
+      title: '03 - Memory',
+      type: 'PDF',
+      size: '378 KB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/CS%20110/UNITS/03%20-%20Memory.pdf'
+    },
+    {
+      id: 4,
+      title: '04 - Input & Output Unit',
+      type: 'PDF',
+      size: '299 KB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/CS%20110/UNITS/04%20-%20Input%20%26%20Output%20Unit.pdf'
+    },
+    {
+      id: 5,
+      title: '05 - Data Representation',
+      type: 'PDF',
+      size: '547 KB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/CS%20110/UNITS/05%20-%20Data%20Representation.pdf'
+    },
+    {
+      id: 6,
+      title: '06 - User Computer Interface',
+      type: 'PDF',
+      size: '358 KB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/CS%20110/UNITS/06%20-%20User%20Computer%20Interface.pdf'
+    },
+    {
+      id: 7,
+      title: '07 - Operating Systems',
+      type: 'PDF',
+      size: '267 KB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/CS%20110/UNITS/07%20-%20Operating%20Systems.pdf'
+    },
+    {
+      id: 8,
+      title: '08 - Networks',
+      type: 'PDF',
+      size: '482 KB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/CS%20110/UNITS/08%20-%20Networks.pdf'
+    },
+    {
+      id: 9,
+      title: '09 - Internet Basics',
+      type: 'PDF',
+      size: '482 KB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/CS%20110/UNITS/09%20-%20Internet%20Basics.pdf'
+    },
+    {
+      id: 10,
+      title: '10 - Security',
+      type: 'PDF',
+      size: '399 KB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/CS%20110/UNITS/10%20-%20Security.pdf'
+    },
+    {
+      id: 11,
+      title: '11 - Multimedia',
+      type: 'PDF', 
+      size: '367 KB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/CS%20110/UNITS/11%20-%20Multimedia.pdf'
+    },
+    {
+      id: 12,
+      title: '12 - Information Systems',
+      type: 'PDF', 
+      size: '363 KB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/CS%20110/UNITS/12%20-%20Information%20Systems.pdf'
+    },
+    {
+      id: 13,
+      title: '13 - Database',
+      type: 'PDF', 
+      size: '502 KB',
+      icon: 'fa-file-pdf',
+      iconClass: 'pdf',
+      badges: ['student'],
+      url: 'https://pub-77e8c9a874374a75b212f4fc51d1d859.r2.dev/CS%20110/UNITS/13%20-%20Database.pdf'
     },
   ];
   if (typeof initDocumentViewer === 'function') initDocumentViewer(documents, 'notes');
