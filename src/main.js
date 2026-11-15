@@ -2945,3 +2945,38 @@ window.BrainHubNotifications = (function() {
 
   return { requestPermission, subscribe, unsubscribe, isSubscribed };
 })();
+
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxNm_1aGmMWp9desORtM3pxMkqGU4tuPLGu55inC_8uxXT5hshGp-uPZ3knFlwe22bV7Q/exec";
+
+// Fetch user study progress & XP
+async function fetchUserProgress(email) {
+  try {
+    const response = await fetch(`${SCRIPT_URL}?action=getProgress&email=${encodeURIComponent(email)}`);
+    const result = await response.json();
+    if (result.status === "success") {
+      console.log("User Data:", result.data);
+      return result.data;
+    }
+  } catch (error) {
+    console.error("Failed to fetch progress:", error);
+  }
+}
+
+// Sync user XP / badges on activity completion
+async function syncUserProgress(email, xp, badges, bookmarks) {
+  try {
+    await fetch(SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" }, // avoids CORS preflight issues with Apps Script
+      body: JSON.stringify({
+        action: "syncProgress",
+        email: email,
+        xp: xp,
+        badges: badges,
+        bookmarks: bookmarks
+      })
+    });
+  } catch (error) {
+    console.error("Sync failed:", error);
+  }
+}
