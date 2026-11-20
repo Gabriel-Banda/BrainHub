@@ -1,12 +1,11 @@
+# robots.txt for BrainHub (https://brainhub.pages.dev)
+
 User-agent: *
 Allow: /
 
-# Disallow admin/private paths if any are added in future
-Disallow: /admin/
-Disallow: /private/
+# Prevent indexing of authentication/user-private pages while still allowing asset rendering
+Disallow: /pages/auth.html
+Disallow: /pages/profile.html
 
 # Sitemap location
 Sitemap: https://brainhub.pages.dev/sitemap.xml
-
-# Crawl delay for courtesy
-Crawl-delay: 2
