@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-  <!-- ── Core Pages ── -->
+  <!-- Core Pages -->
   <url>
     <loc>https://brainhub.pages.dev/</loc>
     <lastmod>2026-11-20</lastmod>
@@ -105,87 +105,78 @@
     <priority>0.3</priority>
   </url>
 
-  <!-- ── University Hubs ── -->
+  <!-- University Hubs -->
   <url><loc>https://brainhub.pages.dev/pages/universities/cbu.html</loc><lastmod>2026-11-20</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://brainhub.pages.dev/pages/universities/unza.html</loc><lastmod>2026-11-20</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://brainhub.pages.dev/pages/universities/zut.html</loc><lastmod>2026-11-20</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
 
-  <!-- ── CBU Programs & Courses ── -->
+  <!-- CBU Programs & Course Hubs -->
   <url><loc>https://brainhub.pages.dev/pages/universities/cbu/programs/natural-sciences.html</loc><lastmod>2026-11-20</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
   <url><loc>https://brainhub.pages.dev/pages/universities/cbu/programs/engineering-drawing.html</loc><lastmod>2026-11-20</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
-
-  <!-- CBU: BIO110 -->
   <url><loc>https://brainhub.pages.dev/pages/universities/cbu/programs/natural-sciences/bio110/index.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.85</priority></url>
-  <url><loc>https://brainhub.pages.dev/pages/universities/cbu/programs/natural-sciences/bio110/notes.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://brainhub.pages.dev/pages/universities/cbu/programs/natural-sciences/bio110/exams.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://brainhub.pages.dev/pages/universities/cbu/programs/natural-sciences/bio110/tests.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-
-  <!-- CBU: CH110 -->
   <url><loc>https://brainhub.pages.dev/pages/universities/cbu/programs/natural-sciences/ch110/index.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.85</priority></url>
-  <url><loc>https://brainhub.pages.dev/pages/universities/cbu/programs/natural-sciences/ch110/notes.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://brainhub.pages.dev/pages/universities/cbu/programs/natural-sciences/ch110/exams.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://brainhub.pages.dev/pages/universities/cbu/programs/natural-sciences/ch110/tests.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-
-  <!-- CBU: CS110 -->
   <url><loc>https://brainhub.pages.dev/pages/universities/cbu/programs/natural-sciences/cs110/index.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.85</priority></url>
-  <url><loc>https://brainhub.pages.dev/pages/universities/cbu/programs/natural-sciences/cs110/notes.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://brainhub.pages.dev/pages/universities/cbu/programs/natural-sciences/cs110/exams.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://brainhub.pages.dev/pages/universities/cbu/programs/natural-sciences/cs110/tests.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-
-  <!-- CBU: LA111 -->
   <url><loc>https://brainhub.pages.dev/pages/universities/cbu/programs/natural-sciences/la111/index.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.85</priority></url>
-  <url><loc>https://brainhub.pages.dev/pages/universities/cbu/programs/natural-sciences/la111/notes.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://brainhub.pages.dev/pages/universities/cbu/programs/natural-sciences/la111/exams.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://brainhub.pages.dev/pages/universities/cbu/programs/natural-sciences/la111/tests.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-
-  <!-- CBU: MA110 -->
   <url><loc>https://brainhub.pages.dev/pages/universities/cbu/programs/natural-sciences/ma110/index.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.85</priority></url>
-  <url><loc>https://brainhub.pages.dev/pages/universities/cbu/programs/natural-sciences/ma110/notes.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://brainhub.pages.dev/pages/universities/cbu/programs/natural-sciences/ma110/exams.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://brainhub.pages.dev/pages/universities/cbu/programs/natural-sciences/ma110/tests.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-
-  <!-- CBU: PH110 -->
   <url><loc>https://brainhub.pages.dev/pages/universities/cbu/programs/natural-sciences/ph110/index.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.85</priority></url>
-  <url><loc>https://brainhub.pages.dev/pages/universities/cbu/programs/natural-sciences/ph110/notes.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://brainhub.pages.dev/pages/universities/cbu/programs/natural-sciences/ph110/exams.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://brainhub.pages.dev/pages/universities/cbu/programs/natural-sciences/ph110/tests.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-
-  <!-- CBU: Engineering Drawing (ED) -->
   <url><loc>https://brainhub.pages.dev/pages/universities/cbu/programs/engineering-drawing/ed/index.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.85</priority></url>
-  <url><loc>https://brainhub.pages.dev/pages/universities/cbu/programs/engineering-drawing/ed/notes.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://brainhub.pages.dev/pages/universities/cbu/programs/engineering-drawing/ed/exams.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://brainhub.pages.dev/pages/universities/cbu/programs/engineering-drawing/ed/tests.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
 
-  <!-- ── UNZA Programs & Courses ── -->
+  <!-- CBU Canonical Document Pages -->
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=cbu&amp;course=bio110&amp;type=notes</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=cbu&amp;course=bio110&amp;type=exams</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=cbu&amp;course=bio110&amp;type=tests</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=cbu&amp;course=ch110&amp;type=notes</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=cbu&amp;course=ch110&amp;type=exams</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=cbu&amp;course=ch110&amp;type=tests</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=cbu&amp;course=cs110&amp;type=notes</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=cbu&amp;course=cs110&amp;type=exams</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=cbu&amp;course=cs110&amp;type=tests</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=cbu&amp;course=la111&amp;type=notes</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=cbu&amp;course=la111&amp;type=exams</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=cbu&amp;course=la111&amp;type=tests</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=cbu&amp;course=ma110&amp;type=notes</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=cbu&amp;course=ma110&amp;type=exams</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=cbu&amp;course=ma110&amp;type=tests</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=cbu&amp;course=ph110&amp;type=notes</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=cbu&amp;course=ph110&amp;type=exams</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=cbu&amp;course=ph110&amp;type=tests</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=cbu&amp;course=ed&amp;type=notes</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=cbu&amp;course=ed&amp;type=exams</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=cbu&amp;course=ed&amp;type=tests</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+
+  <!-- UNZA Programs & Course Hubs -->
   <url><loc>https://brainhub.pages.dev/pages/universities/unza/programs/natural-sciences.html</loc><lastmod>2026-11-20</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
-
-  <!-- UNZA: BIO1400 -->
   <url><loc>https://brainhub.pages.dev/pages/universities/unza/programs/natural-sciences/BIO1400/index.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.85</priority></url>
-  <url><loc>https://brainhub.pages.dev/pages/universities/unza/programs/natural-sciences/BIO1400/notes.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://brainhub.pages.dev/pages/universities/unza/programs/natural-sciences/BIO1400/exams.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://brainhub.pages.dev/pages/universities/unza/programs/natural-sciences/BIO1400/tests.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-
-  <!-- UNZA: CHE1000 -->
   <url><loc>https://brainhub.pages.dev/pages/universities/unza/programs/natural-sciences/CHE1000/index.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.85</priority></url>
-  <url><loc>https://brainhub.pages.dev/pages/universities/unza/programs/natural-sciences/CHE1000/notes.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://brainhub.pages.dev/pages/universities/unza/programs/natural-sciences/CHE1000/exams.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://brainhub.pages.dev/pages/universities/unza/programs/natural-sciences/CHE1000/tests.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-
-  <!-- UNZA: MAT1100 -->
   <url><loc>https://brainhub.pages.dev/pages/universities/unza/programs/natural-sciences/MAT1100/index.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.85</priority></url>
-  <url><loc>https://brainhub.pages.dev/pages/universities/unza/programs/natural-sciences/MAT1100/notes.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://brainhub.pages.dev/pages/universities/unza/programs/natural-sciences/MAT1100/exams.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://brainhub.pages.dev/pages/universities/unza/programs/natural-sciences/MAT1100/tests.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-
-  <!-- UNZA: PHY1010 -->
   <url><loc>https://brainhub.pages.dev/pages/universities/unza/programs/natural-sciences/PHY1010/index.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.85</priority></url>
-  <url><loc>https://brainhub.pages.dev/pages/universities/unza/programs/natural-sciences/PHY1010/notes.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://brainhub.pages.dev/pages/universities/unza/programs/natural-sciences/PHY1010/exams.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://brainhub.pages.dev/pages/universities/unza/programs/natural-sciences/PHY1010/tests.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
 
-  <!-- ── ZUT Programs & Courses ── -->
+  <!-- UNZA Canonical Document Pages -->
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=unza&amp;course=bio1400&amp;type=notes</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=unza&amp;course=bio1400&amp;type=exams</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=unza&amp;course=bio1400&amp;type=tests</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=unza&amp;course=che1000&amp;type=notes</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=unza&amp;course=che1000&amp;type=exams</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=unza&amp;course=che1000&amp;type=tests</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=unza&amp;course=mat1100&amp;type=notes</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=unza&amp;course=mat1100&amp;type=exams</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=unza&amp;course=mat1100&amp;type=tests</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=unza&amp;course=phy1010&amp;type=notes</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=unza&amp;course=phy1010&amp;type=exams</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=unza&amp;course=phy1010&amp;type=tests</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+
+  <!-- ZUT Programs & Course Hubs -->
   <url><loc>https://brainhub.pages.dev/pages/universities/zut/programs/communication-skills.html</loc><lastmod>2026-11-20</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
   <url><loc>https://brainhub.pages.dev/pages/universities/zut/programs/software-engineering.html</loc><lastmod>2026-11-20</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/universities/zut/programs/communication-skills/cs/index.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/universities/zut/programs/sowftware-engineering/se/index.html</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.85</priority></url>
 
-  <!-- ZUT: Communication Skills (CS) -->
-  <url><loc>
+  <!-- ZUT Canonical Document Pages -->
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=zut&amp;course=com&amp;type=notes</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=zut&amp;course=com&amp;type=exams</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=zut&amp;course=com&amp;type=tests</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=zut&amp;course=se&amp;type=notes</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=zut&amp;course=se&amp;type=exams</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://brainhub.pages.dev/pages/doc.html?uni=zut&amp;course=se&amp;type=tests</loc><lastmod>2026-11-20</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+
+</urlset>
