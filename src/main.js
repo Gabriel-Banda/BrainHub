@@ -709,61 +709,148 @@ function sharePage(platform) {
 
 // ==================== AI CHATBOT TUTOR ====================
 function initAIChatbot() {
-  const toggleBtn = document.getElementById('chatToggleBtn');
-  const closeBtn = document.getElementById('chatCloseBtn');
+  const cfg = window.BrainHubConfig || {};
+  if (cfg.features && cfg.features.aiChatbot === false) return;
+
+  const toggleBtn  = document.getElementById('chatToggleBtn');
+  const closeBtn   = document.getElementById('chatCloseBtn');
   const chatWindow = document.getElementById('aiChatWindow');
-  const sendBtn = document.getElementById('chatSendBtn');
-  const inputEl = document.getElementById('chatInput');
+  const sendBtn    = document.getElementById('chatSendBtn');
+  const inputEl    = document.getElementById('chatInput');
   const messagesEl = document.getElementById('chatMessages');
   if (!toggleBtn || !chatWindow) return;
 
+  const workerUrl = cfg.workers?.ai || 'https://brainhub-ai.gabrieljoshuabanda81.workers.dev';
   let history = [];
-  const context = document.querySelector('meta[name="course-context"]')?.content ||
-    'BrainHub study platform for Zambian university students';
+  let isSending = false;
+  let lastFailedPrompt = '';
+
+  const context =
+    document.querySelector('meta[name="course-context"]')?.content ||
+    `${cfg.app?.name || 'BrainHub'} study platform for Zambian university students`;
 
   toggleBtn.addEventListener('click', () => {
     chatWindow.classList.toggle('open');
     if (chatWindow.classList.contains('open') && !history.length) {
-      appendMessage('bot', "👋 Hi! I'm your BrainHub AI tutor. Ask me anything about your course material, and I'll do my best to help you understand it.");
+      appendMessage(
+        'bot',
+        "👋 Hi! I'm your BrainHub AI tutor. Ask me anything about your course material, and I'll do my best to help you understand it."
+      );
+    }
+    if (chatWindow.classList.contains('open')) {
+      setTimeout(() => inputEl?.focus(), 50);
     }
   });
 
   closeBtn?.addEventListener('click', () => chatWindow.classList.remove('open'));
 
-  async function sendMessage() {
-    const text = inputEl.value.trim();
-    if (!text) return;
-    inputEl.value = '';
-    appendMessage('user', text);
-    history.push({ role: 'user', content: text });
+  function setSendingState(sending) {
+    isSending = sending;
+    if (sendBtn) sendBtn.disabled = sending;
+    if (inputEl) inputEl.disabled = sending;
+  }
 
-    const typingId = appendMessage('bot', '<span class="typing-dots"><span></span><span></span><span></span></span>', true);
+  async function sendMessage(overrideText = null) {
+    if (isSending) return;
+    const text = (typeof overrideText === 'string' ? overrideText : inputEl?.value || '').trim();
+    if (!text) return;
+
+    if (typeof overrideText !== 'string' && inputEl) {
+      inputEl.value = '';
+    }
+
+    lastFailedPrompt = '';
+    appendMessage('user', text);
+
+    const nextHistory = [...history, { role: 'user', content: text }];
+    const typingId = appendMessage(
+      'bot',
+      '<span class="typing-dots"><span></span><span></span><span></span></span>',
+      true
+    );
+
+    setSendingState(true);
 
     try {
-      const response = await fetch('https://brainhub-ai.gabrieljoshuabanda81.workers.dev', {
+      const response = await fetch(workerUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model: 'claude-haiku-4-5-20251001',
-          max_tokens: 4000,
-          system: `You are a helpful, friendly AI tutor on BrainHub, a free study platform for Zambian university students. Context: ${context}. Format your responses in clean HTML only — never use markdown symbols like **, ##, --, or ---. Use <strong> for bold, <em> for italic, <h4> for headings, <ul>/<li> for bullet lists, <ol>/<li> for numbered lists, <table><thead><tbody><tr><th><td> for tables, <br> for line breaks, and <p> for paragraphs. Keep answers clear and encouraging. Use simple language suitable for university students. Use examples relevant to Zambia where possible.`,
-          messages: history
-        })
+          model: 'openrouter/free',
+          max_tokens: 1000,
+          system:
+            `You are a helpful, friendly AI tutor on BrainHub, a free study platform for Zambian university students. ` +
+            `Context: ${context}. Format your responses in clean HTML only — never use markdown symbols like **, ##, --, or ---. ` +
+            `Use <strong> for bold, <em> for italic, <h4> for headings, <ul>/<li> for bullet lists, <ol>/<li> for numbered lists, ` +
+            `<table><thead><tbody><tr><th><td> for tables, <br> for line breaks, and <p> for paragraphs. ` +
+            `Keep answers clear and encouraging. Use simple language suitable for university students. ` +
+            `Use examples relevant to Zambia where possible.`,
+          messages: nextHistory,
+        }),
       });
-      const data = await response.json();
-      const reply = data.content?.map(c => c.text || '').join('') || 'Sorry, I could not get a response. Please try again.';
-      history.push({ role: 'assistant', content: reply });
+
+      const data = await response.json().catch(() => ({}));
+      const reply = Array.isArray(data.content)
+        ? data.content.map((c) => c?.text || '').join('').trim()
+        : '';
+
+      if (!response.ok || data.error || !reply) {
+        lastFailedPrompt = text;
+        const friendlyError =
+          response.status === 429
+            ? 'The free AI tutor is currently rate-limited due to high traffic. Please wait a few seconds and try again.'
+            : data.error
+              ? `Could not generate a response (${data.error}).`
+              : 'Sorry, I could not generate a response right now.';
+
+        updateMessage(
+          typingId,
+          `<p>${escapeHtml(friendlyError)}</p><button type="button" class="chat-retry-btn" style="margin-top:0.5rem;padding:0.35rem 0.75rem;border-radius:8px;border:1px solid var(--border);background:var(--bg-muted);color:var(--text-900);cursor:pointer;font-size:0.8rem;font-weight:600">↻ Retry</button>`,
+          true
+        );
+
+        document.getElementById(typingId)?.querySelector('.chat-retry-btn')?.addEventListener('click', () => {
+          if (lastFailedPrompt) sendMessage(lastFailedPrompt);
+        });
+        return;
+      }
+
+      history = [...nextHistory, { role: 'assistant', content: reply }];
       updateMessage(typingId, reply);
     } catch (err) {
-      updateMessage(typingId, 'Network error. Please check your connection and try again.');
+      lastFailedPrompt = text;
+      updateMessage(
+        typingId,
+        `<p>Network error. Please check your connection and try again.</p><button type="button" class="chat-retry-btn" style="margin-top:0.5rem;padding:0.35rem 0.75rem;border-radius:8px;border:1px solid var(--border);background:var(--bg-muted);color:var(--text-900);cursor:pointer;font-size:0.8rem;font-weight:600">↻ Retry</button>`,
+        true
+      );
+      document.getElementById(typingId)?.querySelector('.chat-retry-btn')?.addEventListener('click', () => {
+        if (lastFailedPrompt) sendMessage(lastFailedPrompt);
+      });
+    } finally {
+      setSendingState(false);
+      inputEl?.focus();
     }
   }
 
-  sendBtn?.addEventListener('click', sendMessage);
-  inputEl?.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
+  sendBtn?.addEventListener('click', () => sendMessage());
+  inputEl?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
 
   function appendMessage(role, content, raw = false) {
-    const id = 'msg-' + Date.now() + Math.random();
+    const id = 'msg-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
     const div = document.createElement('div');
     div.className = `chat-msg chat-${role}`;
     div.id = id;
@@ -773,58 +860,46 @@ function initAIChatbot() {
     return id;
   }
 
-  function updateMessage(id, content) {
+  function updateMessage(id, content, raw = false) {
     const el = document.getElementById(id);
-    if (el) el.innerHTML = `<div class="chat-html">${renderChatContent(content)}</div>`;
+    if (el) {
+      el.innerHTML = raw ? content : `<div class="chat-html">${renderChatContent(content)}</div>`;
+    }
     messagesEl.scrollTop = messagesEl.scrollHeight;
   }
 
-  // Renders bot response — accepts HTML from AI, also converts any
-  // stray markdown as a fallback in case the AI slips back into it
   function renderChatContent(content) {
-    // If content looks like HTML already (AI followed instructions), use it directly
     if (/<[a-z][\s\S]*>/i.test(content)) {
-      // Sanitise — only allow safe tags
-      const allowed = /^(p|br|strong|em|b|i|h[1-6]|ul|ol|li|table|thead|tbody|tr|th|td|hr|blockquote|code|pre|span|div)$/i;
       const tmp = document.createElement('div');
       tmp.innerHTML = content;
-      // Remove any script/style tags
-      tmp.querySelectorAll('script,style,iframe,img,a[href^="javascript"]').forEach(el => el.remove());
+      tmp.querySelectorAll('script,style,iframe,img,object,embed,link,meta').forEach((el) => el.remove());
+      tmp.querySelectorAll('*').forEach((el) => {
+        [...el.attributes].forEach((attr) => {
+          const name = attr.name.toLowerCase();
+          const val = attr.value.trim().toLowerCase();
+          if (name.startsWith('on') || ((name === 'href' || name === 'src') && val.startsWith('javascript:'))) {
+            el.removeAttribute(attr.name);
+          }
+        });
+      });
       return tmp.innerHTML;
     }
 
-    // Fallback: convert markdown to HTML
     let html = content
-      // Escape HTML entities first
-      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-      // Headers
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
       .replace(/^### (.+)$/gm, '<h4>$1</h4>')
-      .replace(/^## (.+)$/gm,  '<h3>$1</h3>')
-      .replace(/^# (.+)$/gm,   '<h3>$1</h3>')
-      // Bold + italic
+      .replace(/^## (.+)$/gm, '<h3>$1</h3>')
+      .replace(/^# (.+)$/gm, '<h3>$1</h3>')
       .replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>')
-      .replace(/\*\*(.+?)\*\*/g,      '<strong>$1</strong>')
-      .replace(/__(.+?)__/g,           '<strong>$1</strong>')
-      .replace(/\*(.+?)\*/g,           '<em>$1</em>')
-      .replace(/_(.+?)_/g,             '<em>$1</em>')
-      // Inline code
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/__(.+?)__/g, '<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g, '<em>$1</em>')
+      .replace(/_(.+?)_/g, '<em>$1</em>')
       .replace(/`(.+?)`/g, '<code style="background:var(--bg-muted);padding:1px 5px;border-radius:4px;font-family:monospace;font-size:0.85em">$1</code>')
-      // Horizontal rule
       .replace(/^(-{3,}|\*{3,})$/gm, '<hr style="border:none;border-top:1px solid var(--border);margin:0.75rem 0">')
-      // Unordered lists
       .replace(/^\s*[-*+] (.+)$/gm, '<li>$1</li>')
       .replace(/(<li>[\s\S]+?<\/li>)(?!\s*<li>)/g, '<ul>$1</ul>')
-      // Ordered lists
       .replace(/^\s*\d+\. (.+)$/gm, '<li>$1</li>')
-      // Simple table (pipe-separated)
-      .replace(/^\|(.+)\|$/gm, (match, row) => {
-        const cells = row.split('|').map(c => c.trim());
-        if (cells.every(c => /^[-:]+$/.test(c))) return ''; // skip separator row
-        const tag = match.includes('---') ? 'th' : 'td';
-        return '<tr>' + cells.map(c => `<${tag}>${c}</${tag}>`).join('') + '</tr>';
-      })
-      .replace(/(<tr>[\s\S]+?<\/tr>)/g, '<table style="width:100%;border-collapse:collapse;font-size:0.85em;margin:0.5rem 0">$1</table>')
-      // Line breaks
       .replace(/\n\n/g, '</p><p>')
       .replace(/\n/g, '<br>');
 
