@@ -6,7 +6,7 @@ import {
 import {
   AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
 } from 'recharts';
-import { supabase } from '../supabaseClient';
+import { supabase } from '../../supabaseClient';
 
 const NAV_ITEMS = [
   { id: 'overview', label: 'Overview', icon: LayoutDashboard },
@@ -60,11 +60,14 @@ export default function AdminDashboard() {
   // ── Auth gate ────────────────────────────────────────────
   useEffect(() => {
     (async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) { setAuthState('denied'); return; }
-      const { data: profile } = await supabase
-        .from('profiles').select('full_name, role').eq('id', user.id).single();
-      if (profile?.role !== 'admin') { setAuthState('denied'); return; }
+      const { data: { user }, error: authError } = await supabase.auth.getUser();
+      if (authError || !user) { setAuthState('denied'); return; }
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles').select('full_name, role, status').eq('id', user.id).single();
+      if (profileError || profile?.role !== 'admin' || profile?.status === 'suspended') {
+        setAuthState('denied');
+        return;
+      }
       setAdminName(profile.full_name || 'Admin');
       setAuthState('ok');
     })();
@@ -83,35 +86,44 @@ export default function AdminDashboard() {
 
   async function loadOverview() {
     setLoading(true);
-    const { data, error: err } = await supabase.from('v_admin_overview').select('*').single();
-    if (err) setError(err.message); else setOverview(data);
+    const { data, error: err } = await supabase.rpc('admin_dashboard_overview');
+    if (err) setError(err.message);
+    else setOverview(data || null);
     setLoading(false);
   }
 
   async function loadSignupSeries() {
-    const { data, error: err } = await supabase.from('v_signups_by_day').select('*').order('day', { ascending: true }).limit(30);
+    const { data, error: err } = await supabase.rpc('admin_dashboard_signups');
     if (err) setError(err.message);
-    else setSignupSeries((data || []).map(d => ({ day: d.day?.slice(5), signups: d.signups })));
+    else setSignupSeries((data || []).map(d => ({
+      day: d.day?.slice(5),
+      signups: Number(d.signups || 0),
+    })));
   }
 
   async function loadUsers() {
     setLoading(true);
-    const { data, error: err } = await supabase
-      .from('profiles')
-      .select('id, full_name, email, role, status, university, created_at')
-      .order('created_at', { ascending: false })
-      .limit(200);
-    if (err) setError(err.message); else setUsers(data || []);
+    const { data, error: err } = await supabase.rpc('admin_list_users', {
+      p_search: null,
+      p_role_filter: null,
+      p_limit: 200,
+      p_offset: 0,
+    });
+    if (err) setError(err.message);
+    else setUsers(data || []);
     setLoading(false);
   }
 
   async function loadAmbassadors() {
     setLoading(true);
-    const { data, error: err } = await supabase
-      .from('v_ambassador_summary')
-      .select('*')
-      .order('total_referrals', { ascending: false });
-    if (err) setError(err.message); else setAmbassadors(data || []);
+    const { data, error: err } = await supabase.rpc('admin_list_users', {
+      p_search: null,
+      p_role_filter: 'ambassador',
+      p_limit: 200,
+      p_offset: 0,
+    });
+    if (err) setError(err.message);
+    else setAmbassadors(data || []);
     setLoading(false);
   }
 
@@ -251,6 +263,7 @@ export default function AdminDashboard() {
                 >
                   <option value="all">All roles</option>
                   <option value="student">Student</option>
+                  <option value="lecturer">Lecturer</option>
                   <option value="ambassador">Ambassador</option>
                   <option value="admin">Admin</option>
                 </select>
@@ -327,34 +340,35 @@ export default function AdminDashboard() {
           )}
 
           {activeTab === 'ambassadors' && (
-            <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm animate-[fadeIn_0.3s_ease]">
-              <table className="w-full text-sm">
-                <thead className="bg-slate-50 text-slate-500 text-xs uppercase tracking-wide">
-                  <tr>
-                    <th className="text-left font-semibold px-5 py-3">Ambassador</th>
-                    <th className="text-left font-semibold px-5 py-3">Code</th>
-                    <th className="text-left font-semibold px-5 py-3">Referrals</th>
-                    <th className="text-left font-semibold px-5 py-3">Verified</th>
-                    <th className="text-left font-semibold px-5 py-3">Paid</th>
-                    <th className="text-left font-semibold px-5 py-3">Pending</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {ambassadors.map(a => (
-                    <tr key={a.ambassador_id} className="hover:bg-slate-50 transition-colors">
-                      <td className="px-5 py-3 font-semibold text-slate-800">{a.full_name}</td>
-                      <td className="px-5 py-3 font-mono text-xs text-blue-600">{a.referral_code}</td>
-                      <td className="px-5 py-3">{a.total_referrals}</td>
-                      <td className="px-5 py-3">{a.verified_referrals}</td>
-                      <td className="px-5 py-3">K{Number(a.total_paid).toFixed(2)}</td>
-                      <td className="px-5 py-3">K{Number(a.total_pending).toFixed(2)}</td>
+            <div className="space-y-3 animate-[fadeIn_0.3s_ease]">
+              <p className="text-sm text-slate-500">
+                Ambassador accounts are listed here. Referral codes, commissions and payouts are not yet stored in this database.
+              </p>
+              <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                <table className="w-full text-sm">
+                  <thead className="bg-slate-50 text-slate-500 text-xs uppercase tracking-wide">
+                    <tr>
+                      <th className="text-left font-semibold px-5 py-3">Ambassador</th>
+                      <th className="text-left font-semibold px-5 py-3">Email</th>
+                      <th className="text-left font-semibold px-5 py-3">University</th>
+                      <th className="text-left font-semibold px-5 py-3">Joined</th>
                     </tr>
-                  ))}
-                  {!loading && ambassadors.length === 0 && (
-                    <tr><td colSpan={6} className="text-center text-slate-400 py-10">No ambassadors yet.</td></tr>
-                  )}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {ambassadors.map(a => (
+                      <tr key={a.id} className="hover:bg-slate-50 transition-colors">
+                        <td className="px-5 py-3 font-semibold text-slate-800">{a.full_name || 'Unnamed'}</td>
+                        <td className="px-5 py-3 text-slate-500">{a.email || '—'}</td>
+                        <td className="px-5 py-3 text-slate-500">{a.university || '—'}</td>
+                        <td className="px-5 py-3 text-slate-500">{a.created_at?.slice(0, 10) || '—'}</td>
+                      </tr>
+                    ))}
+                    {!loading && ambassadors.length === 0 && (
+                      <tr><td colSpan={4} className="text-center text-slate-400 py-10">No ambassador accounts yet.</td></tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
 
