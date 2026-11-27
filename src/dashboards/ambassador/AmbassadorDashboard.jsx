@@ -45,7 +45,7 @@ export default function AmbassadorDashboard() {
 
       const { data: amb, error: ambErr } = await supabase
         .from('ambassadors').select('*').eq('user_id', user.id).single();
-      if (ambErr || !amb) { setError('No ambassador record found for this account yet.'); setAuthState('ok'); return; }
+      if (ambErr || !amb) { setAuthState('ok'); return; }
       setAmbassador(amb);
       setAuthState('ok');
       loadReferrals(amb.id);
