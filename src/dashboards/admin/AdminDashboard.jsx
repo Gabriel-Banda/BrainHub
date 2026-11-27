@@ -302,6 +302,7 @@ export default function AdminDashboard() {
                               className="appearance-none text-xs font-semibold border border-slate-200 rounded-full pl-3 pr-7 py-1 bg-white"
                             >
                               <option value="student">student</option>
+                              <option value="lecturer">lecturer</option>
                               <option value="ambassador">ambassador</option>
                               <option value="admin">admin</option>
                             </select>
