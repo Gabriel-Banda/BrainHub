@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import {
   Rocket, Wallet, Copy, Check, Loader2, LogOut, Users, TrendingUp,
 } from 'lucide-react';
-import { supabase } from '../supabaseClient';
+import { supabase } from '../../supabaseClient';
 
 const TABS = [
   { id: 'performance', label: 'Performance', icon: TrendingUp },
