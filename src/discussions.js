@@ -417,7 +417,12 @@
     const initials  = getInitials(name);
     const sClass    = size ? ` disc-avatar-${size}` : '';
     if (avatarUrl && session?.user?.user_metadata?.full_name === name) {
-      return `<div class="disc-avatar${sClass}"><img src="${avatarUrl}" alt="${initials}"></div>`;
+      try {
+        const parsedAvatarUrl = new URL(avatarUrl);
+        if (parsedAvatarUrl.protocol === 'https:') {
+          return `<div class="disc-avatar${sClass}"><img src="${escHtml(parsedAvatarUrl.href)}" alt="${initials}"></div>`;
+        }
+      } catch {}
     }
     return `<div class="disc-avatar${sClass}">${initials}</div>`;
   }
@@ -432,10 +437,32 @@
   let sortBy    = 'newest';
   let showCount = 10;
 
+  // Delegate comment actions instead of interpolating user-controlled values
+  // into inline JavaScript event-handler attributes.
+  function bindCommentActions(container) {
+    if (container.dataset.discActionsBound === 'true') return;
+    container.dataset.discActionsBound = 'true';
+
+    container.addEventListener('click', (event) => {
+      const target = event.target instanceof Element
+        ? event.target.closest('[data-disc-action]')
+        : null;
+      if (!target || !container.contains(target)) return;
+
+      const { discAction, discId, discAuthor } = target.dataset;
+      if (!discId) return;
+
+      if (discAction === 'like') likeComment(discId);
+      else if (discAction === 'delete') deleteComment(discId);
+      else if (discAction === 'reply') window._discReply(discId, discAuthor || '');
+    });
+  }
+
   function renderComments() {
     const container = document.getElementById('discList');
     const countEl   = document.getElementById('discCount');
     if (!container) return;
+    bindCommentActions(container);
 
     // Build top-level + replies map
     const topLevel = comments.filter(c => !c.parent_id);
@@ -507,11 +534,11 @@
           </div>
           <p class="disc-text">${escHtml(r.text)}</p>
           <div class="disc-actions">
-            <button class="disc-action-btn ${liked ? 'liked' : ''}" onclick="window._discLike('${r.id}')">
+            <button class="disc-action-btn ${liked ? 'liked' : ''}" data-disc-action="like" data-disc-id="${escHtml(r.id)}">
               <i class="fas fa-heart"></i> ${r.likes || 0}
             </button>
-            ${!isReply ? `<button class="disc-action-btn" onclick="window._discReply('${c.id}','${escHtml(c.author)}')"><i class="fas fa-reply"></i> Reply</button>` : ''}
-            ${canDelete ? `<button class="disc-action-btn" onclick="window._discDelete('${r.id}')"><i class="fas fa-trash"></i></button>` : ''}
+            ${!isReply ? `<button class="disc-action-btn" data-disc-action="reply" data-disc-id="${escHtml(c.id)}" data-disc-author="${escHtml(c.author)}"><i class="fas fa-reply"></i> Reply</button>` : ''}
+            ${canDelete ? `<button class="disc-action-btn" data-disc-action="delete" data-disc-id="${escHtml(r.id)}"><i class="fas fa-trash"></i></button>` : ''}
           </div>
         </div>
       </div>`).join('');
@@ -528,13 +555,13 @@
           </div>
           <p class="disc-text">${escHtml(c.text)}</p>
           <div class="disc-actions">
-            <button class="disc-action-btn ${liked ? 'liked' : ''}" onclick="window._discLike('${c.id}')">
+            <button class="disc-action-btn ${liked ? 'liked' : ''}" data-disc-action="like" data-disc-id="${escHtml(c.id)}">
               <i class="fas fa-heart"></i> ${c.likes || 0}
             </button>
-            <button class="disc-action-btn" onclick="window._discReply('${c.id}','${escHtml(c.author)}')">
+            <button class="disc-action-btn" data-disc-action="reply" data-disc-id="${escHtml(c.id)}" data-disc-author="${escHtml(c.author)}">
               <i class="fas fa-reply"></i> Reply
             </button>
-            ${canDelete ? `<button class="disc-action-btn" onclick="window._discDelete('${c.id}')"><i class="fas fa-trash"></i></button>` : ''}
+            ${canDelete ? `<button class="disc-action-btn" data-disc-action="delete" data-disc-id="${escHtml(c.id)}"><i class="fas fa-trash"></i></button>` : ''}
           </div>
           ${threadReplies.length ? `<div class="disc-replies">${repliesHtml}</div>` : ''}
         </div>
