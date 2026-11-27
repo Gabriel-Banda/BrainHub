@@ -1,7 +1,5 @@
 /* ============================================================
    BrainHub — Discussion / Comments System
-   Works on any page that has a <div id="discussionSection">
-   Backed by Supabase — falls back to localStorage when offline
    ============================================================ */
 
 (function () {
