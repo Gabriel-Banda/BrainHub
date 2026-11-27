@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import AdminDashboard from './dashboards/admin/AdminDashboard';
 import AmbassadorDashboard from './dashboards/ambassador/AmbassadorDashboard';
-import { supabase } from './dashboards/supabaseClient';
+import { supabase } from './supabaseClient';
 
 const App = () => {
   const [role, setRole] = useState(null); // null while loading

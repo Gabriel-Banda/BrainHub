@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import {
   Rocket, Wallet, Copy, Check, Loader2, LogOut, Users, TrendingUp,
 } from 'lucide-react';
-import { supabase } from '../supabaseClient';
+import { supabase } from '../../supabaseClient';
 
 const TABS = [
   { id: 'performance', label: 'Performance', icon: TrendingUp },
@@ -35,13 +35,17 @@ export default function AmbassadorDashboard() {
     (async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { setAuthState('denied'); return; }
-      const { data: p } = await supabase.from('profiles').select('full_name, role').eq('id', user.id).single();
-      if (!p || (p.role !== 'ambassador' && p.role !== 'admin')) { setAuthState('denied'); return; }
+      const { data: p, error: profileError } = await supabase
+        .from('profiles').select('full_name, role, status').eq('id', user.id).single();
+      if (profileError || !p || p.status === 'suspended' || (p.role !== 'ambassador' && p.role !== 'admin')) {
+        setAuthState('denied');
+        return;
+      }
       setProfile(p);
 
       const { data: amb, error: ambErr } = await supabase
         .from('ambassadors').select('*').eq('user_id', user.id).single();
-      if (ambErr || !amb) { setError('No ambassador record found for this account yet.'); setAuthState('ok'); return; }
+      if (ambErr || !amb) { setAuthState('ok'); return; }
       setAmbassador(amb);
       setAuthState('ok');
       loadReferrals(amb.id);
@@ -180,7 +184,15 @@ export default function AmbassadorDashboard() {
             </div>
           )}
 
-          {!ambassador ? null : (
+          {!ambassador ? (
+            <div className="max-w-2xl mx-auto rounded-2xl border border-amber-200 bg-amber-50 p-6">
+              <h2 className="text-base font-bold text-amber-900">Ambassador dashboard is not configured yet</h2>
+              <p className="mt-2 text-sm text-amber-800">
+                Your account has ambassador access, but the referral, earnings and payout tables are not present in the database.
+                The dashboard will become available once the ambassador programme data model is set up.
+              </p>
+            </div>
+          ) : (
             <>
               {activeTab === 'performance' && (
                 <div className="space-y-6 animate-[fadeIn_0.3s_ease]">
